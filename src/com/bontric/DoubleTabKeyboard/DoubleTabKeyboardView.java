@@ -23,6 +23,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+	
 	}
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs,
@@ -35,8 +36,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
-		paint.setTextSize(40);
-		paint.setColor(Color.WHITE);
+		paint.setTextSize(40);//murks
+		paint.setColor(Color.WHITE);//murks
 		paint.setFakeBoldText(true);
 		paint.setTextAlign(Align.CENTER);
 		this.pressedKey = 0;// key that was pressed before switch to lower layer
@@ -173,5 +174,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 	public void setCharset(String cs) {
 		this.charset = cs;
+	}
+	public String getCharset(){
+		return this.charset;
 	}
 }

@@ -1,14 +1,19 @@
 package com.bontric.DoubleTabKeyboard;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+
 import com.bontric.DoubleTab.R;
+import com.bontric.DtSettings.DtSettingsMain;
 
 public class SoftKeyboard extends InputMethodService implements
 		KeyboardView.OnKeyboardActionListener {
@@ -22,6 +27,12 @@ public class SoftKeyboard extends InputMethodService implements
 	private DoubleTabKeyboard mCurKeyboard;
 	private int mLastDisplayWidth;
 	private String charset;
+
+	private final int KEYCODE_ENTER = -13;
+	private final int KEYCODE_SPACE = -11;
+	private final int KEYCODE_DELETE = -12;
+	private final int KEYCODE_SHIFT = -10;
+	private final int KEYCODE_SYM = -6;
 
 	public SoftKeyboard() {
 	}
@@ -91,17 +102,7 @@ public class SoftKeyboard extends InputMethodService implements
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
 		this.mCurKeyboard = this.mQwertyKeyboard;
-		this.mCurKeyboard.setImeOptions(getResources(),
-				attribute.imeOptions);
-//		switch (attribute.inputType & EditorInfo.TYPE_MASK_CLASS) {
-//		case EditorInfo.TYPE_CLASS_NUMBER: // 2
-//			this.mCurKeyboard.setImeOptions(getResources(),
-//					attribute.imeOptions);
-//			
-//		default:
-//			this.mCurKeyboard = this.mQwertyKeyboard;
-//			break;
-//		}
+		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
 	@Override
@@ -147,7 +148,15 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onRelease(int primaryCode) {
-		Log.d("Main", "" + primaryCode);
+		/*
+		 * This assumes that  that  keycodes from 0... charset.length represent the
+		 * "tap n swype" area. 
+		 */
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean syncConnPref = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+		Log.d("Main",""+syncConnPref);
+		
 		if (0 <= primaryCode && charset.length() > primaryCode) {
 			sendKey((int) charset.charAt(mInputView.getCharCode(primaryCode)));
 			if (mShiftState) {
@@ -157,30 +166,36 @@ public class SoftKeyboard extends InputMethodService implements
 		} else {
 			// note to myself: bad programming style!
 			switch (primaryCode) {
-			case (-12):
+			case KEYCODE_DELETE:
 				handleBackspace();
 
 				break;
 
-			case -10:
-				mShiftState = true;
+			case KEYCODE_SHIFT:
+				mShiftState = !mShiftState;
 				handleShift();
 				break;
-			case -11:
-				sendKey(' ');
+			case KEYCODE_SPACE:
+				sendKey(KeyEvent.KEYCODE_SPACE);
 				break;
-			case -13:
+			case KEYCODE_ENTER:
 				keyDownUp(KeyEvent.KEYCODE_ENTER);
 				break;
-			case -6:
-				charset = (String) this.getResources().getText(R.string.Sym);
-				mInputView.setCharset(charset);
+			case KEYCODE_SYM:
+				Key k = getKey(primaryCode);
+				if (k.label.equals(new String("SYM"))) {
+					charset = (String) this.getResources()
+							.getText(R.string.Sym);
+					mInputView.setCharset(charset);
+					k.label = "QWERZ";
+				} else {
+					charset = (String) this.getResources().getText(
+							R.string.charset);
+					mInputView.setCharset(charset);
+					k.label = "SYM";
+				}
 				break;
-			case -1:
-				charset = (String) this.getResources()
-						.getText(R.string.charset);
-				mInputView.setCharset(charset);
-				break;
+
 			}
 		}
 		mInputView.setLevelDownState(false);
@@ -197,16 +212,33 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	private void handleShift() {
-		if (mShiftState) {
-			charset = (String) this.getResources().getText(R.string.CHARSET);
-			mInputView.setCharset(charset);
-			mInputView.invalidate();
-		} else {
-			charset = (String) this.getResources().getText(R.string.charset);
-			mInputView.setCharset(charset);
-			mInputView.invalidate();
+		/*
+		 * This feels bad.. does not allow multiple charsets for now. Will be
+		 * changed soon
+		 */
+		if (mInputView.getCharset() != (String) this.getResources().getText(
+				R.string.Sym)) {
+			if (mShiftState) {
+				charset = (String) this.getResources()
+						.getText(R.string.CHARSET);
+				mInputView.setCharset(charset);
+				mInputView.invalidate();
+			} else {
+				charset = (String) this.getResources()
+						.getText(R.string.charset);
+				mInputView.setCharset(charset);
+				mInputView.invalidate();
+			}
 		}
+	}
 
+	private Key getKey(int primaryCode) {
+		for (Key k : mCurKeyboard.getKeys()) {
+			if (k.codes[0] == primaryCode) {
+				return k;
+			}
+		}
+		return null;
 	}
 
 	@Override
