@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="charset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
+	<string name="CHARSET">"QWEASDRTUFGHIOPJKLYXCÄÖÜVBN@!?MZß,.-"</string>
+	<string name="Sym">    "123^#/456^$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/"</string>
+</resources>

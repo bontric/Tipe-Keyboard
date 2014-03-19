@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bontric.DoubleTabKeyboard.DoubleTabKeyboardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/keyboard" 
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content" 
+	android:layout_alignParentBottom="true"
+	android:keyTextColor="@color/textColor"
+	android:keyBackground="@drawable/default_bg"
+	>
+	
+</com.bontric.DoubleTabKeyboard.DoubleTabKeyboardView>
+
