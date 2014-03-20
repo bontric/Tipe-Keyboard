@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Dt Settings">
+
+    <CheckBoxPreference
+       android:key="startWithShift"
+       android:defaultValue="true"
+       android:title="Start with Shift (ingnore)"
+       />
+
+</PreferenceScreen>
