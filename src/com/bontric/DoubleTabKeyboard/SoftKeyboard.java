@@ -59,7 +59,7 @@ public class SoftKeyboard extends InputMethodService implements
 				.inflate(R.layout.input, null);
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
-		this.charset = (String) this.getResources().getText(R.string.charset);
+		this.charset = (String) this.getResources().getText(R.string.defaultCharset);
 		this.mInputView.init(charset);
 		mInputView.setPreviewEnabled(false);
 
@@ -176,7 +176,7 @@ public class SoftKeyboard extends InputMethodService implements
 				handleShift();
 				break;
 			case KEYCODE_SPACE:
-				sendKey(KeyEvent.KEYCODE_SPACE);
+				sendKey(32);
 				break;
 			case KEYCODE_ENTER:
 				keyDownUp(KeyEvent.KEYCODE_ENTER);
@@ -185,12 +185,12 @@ public class SoftKeyboard extends InputMethodService implements
 				Key k = getKey(primaryCode);
 				if (k.label.equals(new String("SYM"))) {
 					charset = (String) this.getResources()
-							.getText(R.string.Sym);
+							.getText(R.string.SymbolSet);
 					mInputView.setCharset(charset);
 					k.label = "QWERZ";
 				} else {
 					charset = (String) this.getResources().getText(
-							R.string.charset);
+							R.string.defaultCharset);
 					mInputView.setCharset(charset);
 					k.label = "SYM";
 				}
@@ -217,15 +217,15 @@ public class SoftKeyboard extends InputMethodService implements
 		 * changed soon
 		 */
 		if (mInputView.getCharset() != (String) this.getResources().getText(
-				R.string.Sym)) {
+				R.string.SymbolSet)) {
 			if (mShiftState) {
 				charset = (String) this.getResources()
-						.getText(R.string.CHARSET);
+						.getText(R.string.defaultCharsetShift);
 				mInputView.setCharset(charset);
 				mInputView.invalidate();
 			} else {
 				charset = (String) this.getResources()
-						.getText(R.string.charset);
+						.getText(R.string.defaultCharset);
 				mInputView.setCharset(charset);
 				mInputView.invalidate();
 			}
@@ -243,24 +243,20 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void swipeDown() {
-		// this.handleClose();
 	}
 
 	@Override
 	public void swipeLeft() {
-		Log.d("Main", "swipe left");
 
 	}
 
 	@Override
 	public void swipeRight() {
-		Log.d("Main", "swipe right");
 
 	}
 
 	@Override
 	public void swipeUp() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -1,6 +1,5 @@
 package com.bontric.DoubleTabKeyboard;
 
-
 import com.bontric.DoubleTab.R;
 
 import android.content.Context;
@@ -23,7 +22,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-	
+
 	}
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs,
@@ -36,11 +35,13 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
-		paint.setTextSize(40);//murks
-		paint.setColor(Color.WHITE);//murks
+
+		paint.setTextSize(getResources().getDimension(R.dimen.font_height));
+		paint.setColor(getResources().getColor(R.color.normTextColor));
 		paint.setFakeBoldText(true);
 		paint.setTextAlign(Align.CENTER);
-		this.pressedKey = 0;// key that was pressed before switch to lower layer
+		// this.pressedKey = 0;// key that was pressed before switch to lower
+		// layer
 	}
 
 	public boolean getLevelDownState() {
@@ -96,7 +97,6 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		 * Set pressed area before invalidating the view! (setPressedArea(int
 		 * primaryCode) )
 		 */
-		// I know this shouldn't be hard coded.. but it's 6 areas for now ;)
 		drawBackgrounds(canvas);
 		Key key = this.getKeyboard().getKeys().get(11);// shoot me for this..
 		for (int i = (pressedKey / 6) * 6; i < (pressedKey / 6) * 6 + 6; ++i) {
@@ -108,7 +108,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 							* key.width + 3 * key.width, 2 * ((i % 6) / 3)
 							* key.height + 2 * key.height), paint);
 
-			canvas.drawText(label, center.x, center.y+key.height, paint);
+			canvas.drawText(label, center.x, center.y + key.height, paint);
 
 		}
 
@@ -125,27 +125,20 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 				if ((key.codes[0] / 6) % 2 == 0) {
 					bgPaint.setColor(this.getResources().getColor(
-							R.color.backgroundDark)); // Gets the color
-														// specified
-														// in res/values/colors
-														// ..
-														// could me more modular
-														// though :)
+							R.color.backgroundDark));
 					canvas.drawRect(key.x, key.y, key.x + key.width, key.y
 							+ key.height, bgPaint);
 
 				} else {
 					bgPaint.setColor(this.getResources().getColor(
 							R.color.backgroundLight));
-					;// Gets the color specified ind res/values/colors .. could
-						// me
-						// more modular though :)
+					;
 					canvas.drawRect(key.x, key.y, key.x + key.width, key.y
 							+ key.height, bgPaint);
 
 				}
 			}
-			
+
 		}
 
 	}
@@ -175,7 +168,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public void setCharset(String cs) {
 		this.charset = cs;
 	}
-	public String getCharset(){
+
+	public String getCharset() {
 		return this.charset;
 	}
 }

@@ -2,6 +2,6 @@
 <resources>
     <color name="backgroundLight">#000000</color>
     <color name="backgroundDark">#333333</color>
-    <color name="textColor">#ffe35900</color>
-
+    <color name="emphTextColor">#ffe35900</color>
+    <color name="normTextColor">#ffffff</color>
 </resources>

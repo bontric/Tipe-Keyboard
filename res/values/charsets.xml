@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="defaultCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
+	<string name="defaultCharsetShift">"QWEASDRTUFGHIOPJKLYXCÄÖÜVBN@!?MZß,.-"</string>
+	<string name="SymbolSet">    "123^#€456^$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/-`"</string>
+</resources>
