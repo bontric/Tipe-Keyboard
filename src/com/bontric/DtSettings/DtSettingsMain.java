@@ -10,7 +10,7 @@ import android.preference.PreferenceActivity;
 @SuppressWarnings("deprecation")
 public class DtSettingsMain extends PreferenceActivity {
 
-	public final static String bWS = "startWithShift";
+	public final static String bWS = "swypeActive";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

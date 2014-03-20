@@ -4,9 +4,9 @@
     android:title="Dt Settings">
 
     <CheckBoxPreference
-       android:key="startWithShift"
+       android:key="swypeActive"
        android:defaultValue="true"
-       android:title="Start with Shift (ingnore)"
+       android:title="Wischen Aktivieren"
        />
 
 </PreferenceScreen>

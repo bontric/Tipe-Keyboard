@@ -34,6 +34,8 @@ public class SoftKeyboard extends InputMethodService implements
 	private final int KEYCODE_SHIFT = -10;
 	private final int KEYCODE_SYM = -6;
 
+	private boolean swypeActive = true;
+
 	public SoftKeyboard() {
 	}
 
@@ -95,11 +97,6 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	@Override
-	public void onKey(int primaryCode, int[] keyCodes) {
-
-	}
-
-	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
 		this.mCurKeyboard = this.mQwertyKeyboard;
@@ -108,6 +105,11 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		swypeActive = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+
 		super.onStartInputView(attribute, restarting);
 		this.mInputView.setKeyboard(this.mCurKeyboard);
 		this.mInputView.closing();
@@ -138,60 +140,93 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	@Override
-	public void onPress(int primaryCode) {
+	public void onKey(int primaryCode, int[] keyCodes) {
+		if (!swypeActive) {
+			if (0 <= primaryCode && charset.length() > primaryCode) {
+				if (!mInputView.getLevelDownState()) {
+					mInputView.setPressedKey(primaryCode);
+				} else {
+					sendKey((int) charset.charAt(mInputView
+							.getCharCode(primaryCode)));
+					if (mShiftState) {
+						mShiftState = false;
+					}
+					handleShift();
+					mInputView.setLevelDownState(false);
+					// kind of dirty quickfix.. want to change this
+				}
 
-		if (0 <= primaryCode && charset.length() > primaryCode) {
-			mInputView.setPressedKey(primaryCode);
-			mInputView.setLevelDownState(true);
-			mInputView.invalidate();
+				mInputView.invalidate();
+			} else {
+				handleNonInputKeys(primaryCode);
+			}
+		}
+	}
+
+	@Override
+	public void onPress(int primaryCode) {
+		if (swypeActive) {
+			if (0 <= primaryCode && charset.length() > primaryCode) {
+				mInputView.setPressedKey(primaryCode);
+				mInputView.invalidate();
+			}
 		}
 	}
 
 	@Override
 	public void onRelease(int primaryCode) {
-
-		if (0 <= primaryCode && charset.length() > primaryCode) {
-			sendKey((int) charset.charAt(mInputView.getCharCode(primaryCode)));
-			if (mShiftState) {
-				mShiftState = false;
-			}
-			handleShift();
-		} else {
-			switch (primaryCode) {
-			case KEYCODE_DELETE:
-				handleBackspace();
-
-				break;
-
-			case KEYCODE_SHIFT:
-				mShiftState = !mShiftState;
-				handleShift();
-				break;
-			case KEYCODE_SPACE:
-				sendKey(32);
-				break;
-			case KEYCODE_ENTER:
-				keyDownUp(KeyEvent.KEYCODE_ENTER);
-				break;
-			case KEYCODE_SYM:
-				Key k = getKey(primaryCode);
-				if (k.label.equals(new String("SYM"))) {
-					charset = (String) this.getResources().getText(
-							R.string.SymbolSet);
-					mInputView.setCharset(charset);
-					k.label = "QWERZ";
-				} else {
-					charset = (String) this.getResources().getText(
-							R.string.defaultCharset);
-					mInputView.setCharset(charset);
-					k.label = "SYM";
+		if (swypeActive) {
+			if (0 <= primaryCode && charset.length() > primaryCode) {
+				sendKey((int) charset.charAt(mInputView
+						.getCharCode(primaryCode)));
+				if (mShiftState) {
+					mShiftState = false;
 				}
-				break;
-
+				handleShift();
+				mInputView.setLevelDownState(false);
+				// kind of dirty quickfix.. want to change this
+			} else {
+				handleNonInputKeys(primaryCode);
 			}
-		}
-		mInputView.setLevelDownState(false);
 
+		}
+	}
+
+	private void handleNonInputKeys(int primaryCode) {
+		switch (primaryCode) {
+		case KEYCODE_DELETE:
+			handleBackspace();
+			break;
+		case KEYCODE_SHIFT:
+			mShiftState = !mShiftState;
+			handleShift();
+			break;
+		case KEYCODE_SPACE:
+			sendKey(32);
+			break;
+		case KEYCODE_ENTER:
+			keyDownUp(KeyEvent.KEYCODE_ENTER);
+			break;
+		case KEYCODE_SYM:
+			handleSYM();
+			break;
+
+		}
+
+	}
+
+	private void handleSYM() {
+		Key k = getKey(KEYCODE_SYM);
+		if (k.label.equals(new String("SYM"))) {
+			charset = (String) this.getResources().getText(R.string.SymbolSet);
+			mInputView.setCharset(charset);
+			k.label = "QWERZ";
+		} else {
+			charset = (String) this.getResources().getText(
+					R.string.defaultCharset);
+			mInputView.setCharset(charset);
+			k.label = "SYM";
+		}
 		mInputView.invalidate();
 
 	}
@@ -204,32 +239,34 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	/**
-	 * This feels bad.. does not allow multiple charsets for now. Will be
-	 * changed one day
+	 * 
+	 * 
 	 */
 	private void handleShift() {
-		
+
 		if (mInputView.getCharset() != (String) this.getResources().getText(
 				R.string.SymbolSet)) {
 			if (mShiftState) {
 				charset = (String) this.getResources().getText(
 						R.string.defaultCharsetShift);
 				mInputView.setCharset(charset);
-				mInputView.invalidate();
 			} else {
 				charset = (String) this.getResources().getText(
 						R.string.defaultCharset);
 				mInputView.setCharset(charset);
-				mInputView.invalidate();
 			}
+		} else {
+			mShiftState = false;// there's no shift in symbol view
+
 		}
+		mInputView.invalidate();
 	}
 
 	/**
 	 * return Keyboard.Key of mCurKeyboard by looking up the primary code
 	 */
 	private Key getKey(int primaryCode) {
-		
+
 		for (Key k : mCurKeyboard.getKeys()) {
 			if (k.codes[0] == primaryCode) {
 				return k;
@@ -237,15 +274,6 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 		return null;
 	}
-	
-	/*
-	 * If you want to use settings use something like this
-	 * 
-	 * SharedPreferences sharedPref =
-	 * PreferenceManager.getDefaultSharedPreferences(this); boolean
-	 * syncConnPref = sharedPref.getBoolean(DtSettingsMain.bWS, false);
-	 * Log.d("Main",""+syncConnPref);
-	 */
 
 	@Override
 	public void swipeDown() {
@@ -253,7 +281,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void swipeLeft() {
-
 	}
 
 	@Override
