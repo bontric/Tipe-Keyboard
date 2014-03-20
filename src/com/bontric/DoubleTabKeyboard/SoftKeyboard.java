@@ -59,7 +59,8 @@ public class SoftKeyboard extends InputMethodService implements
 				.inflate(R.layout.input, null);
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
-		this.charset = (String) this.getResources().getText(R.string.defaultCharset);
+		this.charset = (String) this.getResources().getText(
+				R.string.defaultCharset);
 		this.mInputView.init(charset);
 		mInputView.setPreviewEnabled(false);
 
@@ -148,15 +149,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onRelease(int primaryCode) {
-		/*
-		 * This assumes that  that  keycodes from 0... charset.length represent the
-		 * "tap n swype" area. 
-		 */
-		
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean syncConnPref = sharedPref.getBoolean(DtSettingsMain.bWS, false);
-		Log.d("Main",""+syncConnPref);
-		
+
 		if (0 <= primaryCode && charset.length() > primaryCode) {
 			sendKey((int) charset.charAt(mInputView.getCharCode(primaryCode)));
 			if (mShiftState) {
@@ -164,7 +157,6 @@ public class SoftKeyboard extends InputMethodService implements
 			}
 			handleShift();
 		} else {
-			// note to myself: bad programming style!
 			switch (primaryCode) {
 			case KEYCODE_DELETE:
 				handleBackspace();
@@ -184,8 +176,8 @@ public class SoftKeyboard extends InputMethodService implements
 			case KEYCODE_SYM:
 				Key k = getKey(primaryCode);
 				if (k.label.equals(new String("SYM"))) {
-					charset = (String) this.getResources()
-							.getText(R.string.SymbolSet);
+					charset = (String) this.getResources().getText(
+							R.string.SymbolSet);
 					mInputView.setCharset(charset);
 					k.label = "QWERZ";
 				} else {
@@ -211,28 +203,33 @@ public class SoftKeyboard extends InputMethodService implements
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
 
+	/**
+	 * This feels bad.. does not allow multiple charsets for now. Will be
+	 * changed one day
+	 */
 	private void handleShift() {
-		/*
-		 * This feels bad.. does not allow multiple charsets for now. Will be
-		 * changed soon
-		 */
+		
 		if (mInputView.getCharset() != (String) this.getResources().getText(
 				R.string.SymbolSet)) {
 			if (mShiftState) {
-				charset = (String) this.getResources()
-						.getText(R.string.defaultCharsetShift);
+				charset = (String) this.getResources().getText(
+						R.string.defaultCharsetShift);
 				mInputView.setCharset(charset);
 				mInputView.invalidate();
 			} else {
-				charset = (String) this.getResources()
-						.getText(R.string.defaultCharset);
+				charset = (String) this.getResources().getText(
+						R.string.defaultCharset);
 				mInputView.setCharset(charset);
 				mInputView.invalidate();
 			}
 		}
 	}
 
+	/**
+	 * return Keyboard.Key of mCurKeyboard by looking up the primary code
+	 */
 	private Key getKey(int primaryCode) {
+		
 		for (Key k : mCurKeyboard.getKeys()) {
 			if (k.codes[0] == primaryCode) {
 				return k;
@@ -240,6 +237,15 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 		return null;
 	}
+	
+	/*
+	 * If you want to use settings use something like this
+	 * 
+	 * SharedPreferences sharedPref =
+	 * PreferenceManager.getDefaultSharedPreferences(this); boolean
+	 * syncConnPref = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+	 * Log.d("Main",""+syncConnPref);
+	 */
 
 	@Override
 	public void swipeDown() {

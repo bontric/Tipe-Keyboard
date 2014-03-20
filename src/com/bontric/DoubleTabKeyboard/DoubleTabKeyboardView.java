@@ -30,7 +30,10 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		super(context, attrs, defStyle);
 
 	}
-
+	
+	/**
+	 * Initialise the paint process
+	 */
 	public void init(String charset) {
 		this.charset = charset;
 		this.levelDownState = false;
@@ -40,41 +43,41 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		paint.setColor(getResources().getColor(R.color.normTextColor));
 		paint.setFakeBoldText(true);
 		paint.setTextAlign(Align.CENTER);
-		// this.pressedKey = 0;// key that was pressed before switch to lower
-		// layer
 	}
-
+	
+	/**
+	 * returns weather we're on first (false) or second(true) layer
+	 */
 	public boolean getLevelDownState() {
-		/*
-		 * returns weather we're on first (false) or second(true) layer
-		 */
-
 		return this.levelDownState;
 	}
-
+	
+	/**
+	 * sets weather we're on first (false) or second(true) layer
+	 */
 	public void setLevelDownState(boolean b) {
-		/*
-		 * sets weather we're on first (false) or second(true) layer
-		 */
+		
 		this.levelDownState = b;
 	}
 
 	public void setPressedKey(int primaryCode) {
 		this.pressedKey = primaryCode;
 	}
-
+	
+	/**
+	 * this returns which button was pressed relative to "pressedKey" Call
+	 * this in "layerDown" state ONLY!
+	 */
 	public int getCharCode(int primaryCode) {
-		/*
-		 * this returns which button was pressed relative to "pressedKey" Call
-		 * this in "layerDown" state ONLY!
-		 */
+	
 		return (pressedKey / 6) * 6 + (primaryCode / 6);
 	}
 
+	/**
+	 * draw upper level of keyboard (contains all characters of charset)
+	 */
 	public void levelUp(Canvas canvas) {
-		/*
-		 * draw upper level of keyboard (contains all characters of charset)
-		 */
+		
 		drawBackgrounds(canvas);
 		int i = 0;
 		for (Key key : this.getKeyboard().getKeys()) {
@@ -92,13 +95,18 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		}
 	}
 
+	/**
+	 * Go to second level. This will put the 6 characters in the area pressed
+	 * before on all 6 buttons. Therefore it is important to Set the pressed key
+	 * before invalidating the view!
+	 */
 	public void levelDown(Canvas canvas) {
 		/*
-		 * Set pressed area before invalidating the view! (setPressedArea(int
-		 * primaryCode) )
+		 * this function is not well programmed and is very specific. 
+		 * I'll fix this up one day
 		 */
 		drawBackgrounds(canvas);
-		Key key = this.getKeyboard().getKeys().get(11);// shoot me for this..
+		Key key = this.getKeyboard().getKeys().get(11);
 		for (int i = (pressedKey / 6) * 6; i < (pressedKey / 6) * 6 + 6; ++i) {
 
 			String label = "" + charset.charAt(i);
@@ -114,10 +122,11 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 	}
 
+	/**
+	 * draw background of charset
+	 */
 	private void drawBackgrounds(Canvas canvas) {
-		/*
-		 * draw background of charset
-		 */
+
 		Paint bgPaint = new Paint();
 
 		for (Key key : this.getKeyboard().getKeys()) {
@@ -152,12 +161,13 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		}
 	}
 
+	/**
+	 * returns a point which holds the coorinates to center given text
+	 * within a rectangle -> center.draw()
+	 */
 	public static PointF getTextCenterToDraw(String text, RectF region,
 			Paint paint) {
-		/*
-		 * returns a point which holds the coorinates to center given text
-		 * within a region -> center.draw()
-		 */
+		
 		Rect textBounds = new Rect();
 		paint.getTextBounds(text, 0, text.length(), textBounds);
 		float x = region.centerX() - textBounds.width() * 0.4f;

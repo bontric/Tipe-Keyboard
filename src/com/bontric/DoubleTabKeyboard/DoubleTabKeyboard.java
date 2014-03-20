@@ -27,9 +27,6 @@ public class DoubleTabKeyboard extends Keyboard {
         if (key.codes[0] == -13) {
             mEnterKey = key;
         }
-        if(key.codes[0] == -10){//dirty stuff might be obsolete in future builds..
-        	key.icon = res.getDrawable(R.drawable.sym_keyboard_shift);
-        }
         return key;
 	}
 	
