@@ -3,3 +3,10 @@ Creative Commons License 3.0 (BY-NC-SA)
 BY: Attribution
 NC: NonCommercial
 SA: ShareAlike
+
+Some Links you should check out:
+http://stackoverflow.com/questions/7752580/creating-a-softkeyboard-with-multiple-alternate-characters-per-key
+http://developer.android.com/reference/android/inputmethodservice/InputMethodService.html
+http://developer.samsung.com/android/technical-docs/Implementing-a-custom-input-method
+http://developer.android.com/guide/topics/ui/settings.html
+http://viralpatel.net/blogs/android-preferences-activity-example/
