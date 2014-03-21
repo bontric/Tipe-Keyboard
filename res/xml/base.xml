@@ -8,6 +8,7 @@
       <Row>
         <Key android:codes="-6" android:keyWidth="33.3%p" android:keyEdgeFlags="left" android:keyLabel="SYM" />
         <Key android:codes="-1" android:keyWidth="33.3%p" android:keyLabel="" />
+             
         <Key android:codes="-13"    android:keyIcon="@drawable/sym_keyboard_return" android:keyWidth="33.3%p" />
    </Row>
    <Row>
@@ -61,3 +62,4 @@
         <Key android:codes="-12"   android:keyIcon="@drawable/sym_keyboard_delete"  android:keyWidth="25%p" android:longClickable="true"/>
             </Row> 
 </Keyboard>
+

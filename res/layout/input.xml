@@ -6,8 +6,9 @@
 	android:layout_height="wrap_content" 
 	android:layout_alignParentBottom="true"
 	android:keyTextColor="@color/emphTextColor"
-	android:keyBackground="@drawable/default_bg"
+android:keyBackground="@drawable/default_bg" 
 	>
 	
 </com.bontric.DoubleTabKeyboard.DoubleTabKeyboardView>
 
+	

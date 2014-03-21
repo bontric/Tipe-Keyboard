@@ -1,3 +1,9 @@
+/*
+ * @author Benedikt Wieder
+ * (Special thanks to the Emojikeyboard developer. Took his keyboard
+ * apart to get a basic one)
+ */
+
 package com.bontric.DoubleTabKeyboard;
 
 
@@ -72,7 +78,7 @@ public class DoubleTabKeyboard extends Keyboard {
 		@Override
 		public boolean isInside(int x, int y) {
 			return super.isInside(x, y+20);
-			//this is bad but important.. ensure to find a nice fix one day!
+			//this is bad but important.. TODO ensure to find a nice fix one day!
 		}
 	}
 	

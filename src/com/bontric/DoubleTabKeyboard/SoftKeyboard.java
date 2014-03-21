@@ -1,3 +1,9 @@
+/*
+ * @author Benedikt Wieder
+ */
+
+
+
 package com.bontric.DoubleTabKeyboard;
 
 import android.annotation.SuppressLint;
@@ -59,6 +65,9 @@ public class SoftKeyboard extends InputMethodService implements
 	public View onCreateInputView() {
 		this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
 				.inflate(R.layout.input, null);
+		/*
+		 * remember this place @ben 
+		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
 		this.charset = (String) this.getResources().getText(
@@ -227,7 +236,7 @@ public class SoftKeyboard extends InputMethodService implements
 			mInputView.setCharset(charset);
 			k.label = "SYM";
 		}
-		mInputView.invalidate();
+		//mInputView.invalidate();
 
 	}
 

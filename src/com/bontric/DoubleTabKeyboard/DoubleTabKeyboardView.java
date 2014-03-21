@@ -1,3 +1,7 @@
+/*
+ * @author Benedikt Wieder
+ */
+
 package com.bontric.DoubleTabKeyboard;
 
 import com.bontric.DoubleTab.R;
@@ -28,8 +32,9 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-
 	}
+	
+	
 
 	/**
 	 * Initialize the paint process

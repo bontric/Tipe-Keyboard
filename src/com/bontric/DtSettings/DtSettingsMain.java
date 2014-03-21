@@ -1,3 +1,8 @@
+/*
+ * @author Benedikt Wieder
+ */
+
+
 package com.bontric.DtSettings;
 
 import com.bontric.DoubleTab.R;
