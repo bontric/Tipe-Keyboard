@@ -217,9 +217,7 @@ public class SoftKeyboard extends InputMethodService implements
 			sendKey(32);
 			break;
 		case KEYCODE_ENTER:
-
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
-
 			break;
 		case KEYCODE_SYM:
 			handleSYM();
