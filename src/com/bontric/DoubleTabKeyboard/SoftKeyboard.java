@@ -2,8 +2,6 @@
  * @author Benedikt Wieder
  */
 
-
-
 package com.bontric.DoubleTabKeyboard;
 
 import android.annotation.SuppressLint;
@@ -66,7 +64,7 @@ public class SoftKeyboard extends InputMethodService implements
 		this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
 				.inflate(R.layout.input, null);
 		/*
-		 * remember this place @ben 
+		 * remember this place @ben
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
@@ -204,7 +202,12 @@ public class SoftKeyboard extends InputMethodService implements
 	private void handleNonInputKeys(int primaryCode) {
 		switch (primaryCode) {
 		case KEYCODE_DELETE:
-			handleBackspace();
+			if (mInputView.getLevelDownState()) {
+				mInputView.setLevelDownState(false);
+				mInputView.invalidate();
+			} else {
+				handleBackspace();
+			}
 			break;
 		case KEYCODE_SHIFT:
 			mShiftState = !mShiftState;
@@ -214,7 +217,9 @@ public class SoftKeyboard extends InputMethodService implements
 			sendKey(32);
 			break;
 		case KEYCODE_ENTER:
+
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
+
 			break;
 		case KEYCODE_SYM:
 			handleSYM();
@@ -236,7 +241,7 @@ public class SoftKeyboard extends InputMethodService implements
 			mInputView.setCharset(charset);
 			k.label = "SYM";
 		}
-		//mInputView.invalidate();
+		mInputView.invalidate();
 
 	}
 
@@ -247,10 +252,6 @@ public class SoftKeyboard extends InputMethodService implements
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
 
-	/**
-	 * 
-	 * 
-	 */
 	private void handleShift() {
 
 		if (mInputView.getCharset() != (String) this.getResources().getText(
