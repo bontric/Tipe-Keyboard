@@ -4,6 +4,8 @@
 
 package com.bontric.DoubleTabKeyboard;
 
+import java.util.Locale;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
@@ -30,7 +32,7 @@ public class SoftKeyboard extends InputMethodService implements
 	private DoubleTabKeyboard mQwertyKeyboard;
 	private DoubleTabKeyboard mCurKeyboard;
 	private int mLastDisplayWidth;
-	private String charset;
+	private String mCurCharset;
 
 	private final int KEYCODE_ENTER = -13;
 	private final int KEYCODE_SPACE = -11;
@@ -68,9 +70,9 @@ public class SoftKeyboard extends InputMethodService implements
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
-		this.charset = (String) this.getResources().getText(
+		this.mCurCharset = (String) this.getResources().getText(
 				R.string.defaultCharset);
-		this.mInputView.init(charset);
+		this.mInputView.init(mCurCharset);
 		mInputView.setPreviewEnabled(false);
 
 		return this.mInputView;
@@ -92,9 +94,9 @@ public class SoftKeyboard extends InputMethodService implements
 
 	public void onFinishInputView(boolean finishingInput) {
 		super.onFinishInputView(finishingInput);
-		this.charset = (String) this.getResources().getText(
+		this.mCurCharset = (String) this.getResources().getText(
 				R.string.defaultCharset);
-		this.mInputView.init(charset);
+		this.mInputView.init(mCurCharset);
 	}
 
 	public void onInitializeInterface() {
@@ -133,8 +135,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	}
 
-
-
 	@Override
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd, int candidatesStart,
@@ -142,7 +142,7 @@ public class SoftKeyboard extends InputMethodService implements
 		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
 				candidatesStart, candidatesEnd);
 	}
-	
+
 	@Override
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
@@ -160,11 +160,11 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
 		if (!swypeActive) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				if (!mInputView.getLevelDownState()) {
 					mInputView.setPressedKey(primaryCode);
 				} else {
-					sendKey((int) charset.charAt(mInputView
+					sendKey((int) mCurCharset.charAt(mInputView
 							.getCharCode(primaryCode)));
 					if (mShiftState) {
 						mShiftState = false;
@@ -184,7 +184,7 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onPress(int primaryCode) {
 		if (swypeActive) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				mInputView.setPressedKey(primaryCode);
 				mInputView.invalidate();
 			}
@@ -194,8 +194,8 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onRelease(int primaryCode) {
 		if (swypeActive) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
-				sendKey((int) charset.charAt(mInputView
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
+				sendKey((int) mCurCharset.charAt(mInputView
 						.getCharCode(primaryCode)));
 				if (mShiftState) {
 					mShiftState = false;
@@ -241,13 +241,14 @@ public class SoftKeyboard extends InputMethodService implements
 	private void handleSYM() {
 		Key k = getKey(KEYCODE_SYM);
 		if (k.label.equals(new String("SYM"))) {
-			charset = (String) this.getResources().getText(R.string.SymbolSet);
-			mInputView.setCharset(charset);
+			mCurCharset = (String) this.getResources().getText(
+					R.string.SymbolSet);
+			mInputView.setCharset(mCurCharset);
 			k.label = "QWERZ";
 		} else {
-			charset = (String) this.getResources().getText(
+			mCurCharset = (String) this.getResources().getText(
 					R.string.defaultCharset);
-			mInputView.setCharset(charset);
+			mInputView.setCharset(mCurCharset);
 			k.label = "SYM";
 		}
 		mInputView.invalidate();
@@ -261,18 +262,24 @@ public class SoftKeyboard extends InputMethodService implements
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
 
+	@SuppressLint("DefaultLocale")
 	private void handleShift() {
 
 		if (mInputView.getCharset() != (String) this.getResources().getText(
 				R.string.SymbolSet)) {
 			if (mShiftState) {
-				charset = (String) this.getResources().getText(
-						R.string.defaultCharsetShift);
-				mInputView.setCharset(charset);
+				mCurCharset = mInputView.getCharset().toUpperCase(
+						Locale.GERMANY);
+				mInputView.setCharset(mCurCharset);
+				/*
+				 * note this keyboard is for german use right now.. work on
+				 * locale one day @ben
+				 */
 			} else {
-				charset = (String) this.getResources().getText(
-						R.string.defaultCharset);
-				mInputView.setCharset(charset);
+
+				mCurCharset = mInputView.getCharset().toLowerCase(
+						Locale.GERMANY);
+				mInputView.setCharset(mCurCharset);
 			}
 		} else {
 			mShiftState = false;// there's no shift in symbol view
