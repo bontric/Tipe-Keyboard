@@ -291,17 +291,16 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void handleShift() {
 
-		if (mInputView.getCharset() != (String) this.getResources().getText(
-				R.string.SymbolSet)) {
+		if (mInputView.getCharset().equals(mCurSymset)) {
 			/*
-			 * String.toUpperCase() is handling the German "ß" wrong (replaces it with "SS")... 
-			 * so this is a rather bad 'n' dirty fix..but i have no other idea than 
-			 * rewriting the toUpperCase() function
+			 * String.toUpperCase() is handling the German "ß" wrong (replaces
+			 * it with "SS")... so this is a rather bad 'n' dirty fix..but i
+			 * have no other idea than rewriting the toUpperCase() function
 			 */
 			if (mShiftState) {
 				String cs = mCurCharset.replace('ß', '\uffff');
-				mCurCharset = cs.toUpperCase(Locale.GERMAN).replace(
-						'\uffff', 'ß');
+				mCurCharset = cs.toUpperCase(Locale.GERMAN).replace('\uffff',
+						'ß');
 				mInputView.setCharset(mCurCharset);
 				/*
 				 * note this keyboard is for german use right now.. work on
