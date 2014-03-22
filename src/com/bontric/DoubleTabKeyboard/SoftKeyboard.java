@@ -85,16 +85,7 @@ public class SoftKeyboard extends InputMethodService implements
 		this.mCurKeyboard = mQwertyKeyboard;
 		if (this.mInputView != null) {
 			this.mInputView.closing();
-
 		}
-
-	}
-
-	public void onFinishInputView(boolean finishingInput) {
-		super.onFinishInputView(finishingInput);
-		this.charset = (String) this.getResources().getText(
-				R.string.defaultCharset);
-		this.mInputView.init(charset);
 	}
 
 	public void onInitializeInterface() {
@@ -133,16 +124,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	}
 
-
-
-	@Override
-	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
-			int newSelStart, int newSelEnd, int candidatesStart,
-			int candidatesEnd) {
-		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
-				candidatesStart, candidatesEnd);
-	}
-	
 	@Override
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
@@ -155,6 +136,14 @@ public class SoftKeyboard extends InputMethodService implements
 		ic.commitText(text, 0);
 		ic.endBatchEdit();
 
+	}
+
+	@Override
+	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
+			int newSelStart, int newSelEnd, int candidatesStart,
+			int candidatesEnd) {
+		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
+				candidatesStart, candidatesEnd);
 	}
 
 	@Override
@@ -228,7 +217,9 @@ public class SoftKeyboard extends InputMethodService implements
 			sendKey(32);
 			break;
 		case KEYCODE_ENTER:
+
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
+
 			break;
 		case KEYCODE_SYM:
 			handleSYM();

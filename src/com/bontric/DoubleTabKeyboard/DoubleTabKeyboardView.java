@@ -4,23 +4,25 @@
 
 package com.bontric.DoubleTabKeyboard;
 
-import com.bontric.DoubleTab.R;
-
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Paint.Align;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+
+import com.bontric.DoubleTab.R;
 
 public class DoubleTabKeyboardView extends KeyboardView {
 	private String charset;
-	private boolean levelDownState;
+	protected boolean levelDownState;
 	private Paint paint;
 	private int pressedKey;
 
@@ -40,6 +42,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	 * Initialize the paint process
 	 */
 	public void init(String charset) {
+		
+		
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
@@ -115,6 +119,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		 * this up one day
 		 */
 		drawBackgrounds(canvas);
+		//TODO a litte bit hackly
 		Key key = this.getKeyboard().getKeys().get(11);
 		for (int i = (pressedKey / 6) * 6; i < (pressedKey / 6) * 6 + 6; ++i) {
 
@@ -192,4 +197,32 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public String getCharset() {
 		return this.charset;
 	}
+	
+	//Calculates the median of all points of an motion event
+	public Point getEventMedianPos(MotionEvent event){
+		int pointerCount = event.getPointerCount();
+		Point medianPoint = new Point();
+		medianPoint.x = (int) event.getX(0);
+		medianPoint.y = (int) event.getY(0);
+			
+		for(int c = 1; c < pointerCount; c++){
+			medianPoint.x = (int) (medianPoint.x + (int) event.getX(c)) / 2;
+			medianPoint.y = (int) (medianPoint.y + (int) event.getY(c)) / 2;
+		}
+		return medianPoint;
+	}
+	
+	// Just returns the first key to a given point on the screen
+	public Key getKeyToPoint(Point point){
+		Key firstKey = null;
+		for (Key k : this.getKeyboard().getKeys()) {
+			if(k.isInside(point.x, point.y)){
+				firstKey = k;
+				break;
+			}
+				
+		}
+		return firstKey;
+	}
+	
 }
