@@ -26,7 +26,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	static final boolean DEBUG = false;
 
-	// private StringBuilder mComposing;
+	private boolean delayDeleteCheck = false;
 	private boolean mShiftState;
 	private DoubleTabKeyboardView mInputView;
 	private DoubleTabKeyboard mQwertyKeyboard;
@@ -42,18 +42,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private boolean swypeActive = true;
 
-	public SoftKeyboard() {
-	}
-
-	public void handleBackspace() {
-		this.keyDownUp(KeyEvent.KEYCODE_DEL);
-	}
-
-	private void sendKey(int keyCode) {
-		char curCharacter = (char) keyCode;
-		getCurrentInputConnection().commitText("" + curCharacter, 1);
-
-	}
+	private boolean useCustomCharset;
 
 	public void onCreate() {
 		super.onCreate();
@@ -70,9 +59,14 @@ public class SoftKeyboard extends InputMethodService implements
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		useCustomCharset = sharedPref.getBoolean(
+				DtSettingsMain.useCustomCharset, false);
+
 		this.mCurCharset = (String) this.getResources().getText(
 				R.string.defaultCharset);
-		this.mInputView.init(mCurCharset);
+
 		mInputView.setPreviewEnabled(false);
 
 		return this.mInputView;
@@ -126,10 +120,16 @@ public class SoftKeyboard extends InputMethodService implements
 
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		swypeActive = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+		swypeActive = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
+		useCustomCharset = sharedPref.getBoolean(
+				DtSettingsMain.useCustomCharset, false);
 
+		this.mCurCharset = (String) this.getResources().getText(
+				R.string.defaultCharset);
+
+		this.mInputView.init(mCurCharset);
 		super.onStartInputView(attribute, restarting);
-		this.mInputView.setKeyboard(this.mCurKeyboard);
+		this.mInputView.setKeyboard(this.mCurKeyboard); // needs check@ben
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -171,7 +171,6 @@ public class SoftKeyboard extends InputMethodService implements
 					}
 					handleShift();
 					mInputView.setLevelDownState(false);
-					// kind of dirty quickfix.. want to change this
 				}
 
 				mInputView.invalidate();
@@ -202,7 +201,6 @@ public class SoftKeyboard extends InputMethodService implements
 				}
 				handleShift();
 				mInputView.setLevelDownState(false);
-				// kind of dirty quickfix.. want to change this
 			} else {
 				handleNonInputKeys(primaryCode);
 			}
@@ -210,6 +208,30 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 	}
 
+	public void handleBackspace() {
+		/*
+		 * meh this is dirty... i feel so dirty... but it works.. for now..
+		 */
+		if (getCurrentInputConnection().getTextBeforeCursor(1, 0).equals(" ")
+				&& !delayDeleteCheck) {
+			delayDeleteCheck = true;
+		} else {
+
+			this.keyDownUp(KeyEvent.KEYCODE_DEL);
+			delayDeleteCheck = false;
+		}
+
+	}
+
+	private void sendKey(int keyCode) {
+		char curCharacter = (char) keyCode;
+		getCurrentInputConnection().commitText("" + curCharacter, 1);
+
+	}
+
+	/*
+	 * handle action for non-input key like SPACE /DELETE etc.
+	 */
 	private void handleNonInputKeys(int primaryCode) {
 		switch (primaryCode) {
 		case KEYCODE_DELETE:
@@ -262,7 +284,6 @@ public class SoftKeyboard extends InputMethodService implements
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
 
-	@SuppressLint("DefaultLocale")
 	private void handleShift() {
 
 		if (mInputView.getCharset() != (String) this.getResources().getText(

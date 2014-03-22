@@ -8,5 +8,11 @@
        android:defaultValue="true"
        android:title="Wischen Aktivieren"
        />
-
+    <CheckBoxPreference
+       android:key="useCustomCharset"
+       android:defaultValue="false"
+       android:title="Benutzerdefinierte Zeichenanordnung"
+       />
+    
+	
 </PreferenceScreen>
