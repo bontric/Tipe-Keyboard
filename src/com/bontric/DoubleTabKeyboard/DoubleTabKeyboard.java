@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.Keyboard;
+import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import com.bontric.DoubleTab.R;
 
