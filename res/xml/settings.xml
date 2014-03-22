@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="Dt Settings">
+    android:title="Dt Settings" >
 
     <CheckBoxPreference
-       android:key="swypeActive"
-       android:defaultValue="true"
-       android:title="Wischen Aktivieren"
-       />
-    <CheckBoxPreference
-       android:key="useCustomCharset"
-       android:defaultValue="false"
-       android:title="Benutzerdefinierte Zeichenanordnung"
-       />
-    
-	
+        android:defaultValue="true"
+        android:key="swypeActive"
+        android:title="Wischen Aktivieren" />
+
+    <PreferenceScreen android:title="Feinschliff" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useCustomCharset"
+            android:title="Benutzerdefinierte Zeichenanordnung" />
+
+        <EditTextPreference
+            android:defaultValue="@string/defaultCharset"
+            android:dependency="useCustomCharset"
+            android:dialogMessage="Hier können sie ihre eigene Zeichenanordnung setzten."
+            android:dialogTitle="Benutzerdefinierte Zeichenanordnung"
+            android:key="cusCharset"
+            android:summary="Eigene Zeichenanordnung für die Tastatur festlegen"
+            android:title="Zeichenanordnung eingeben" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useCustomSymset"
+            android:title="Benutzerdefinierte Symbolanordnung" />
+
+        <EditTextPreference
+            android:defaultValue="@string/SymbolSet"
+            android:dependency="useCustomSymset"
+            android:dialogMessage="Hier können sie ihre eigene Symbolanordnung setzten."
+            android:dialogTitle="Benutzerdefinierte Symbolanordnung"
+            android:key="cusSymset"
+            android:summary="Eigene Symbolanordnung für die Tastatur festlegen"
+            android:title="Symbolanordnung eingeben" />
+    >
+    </PreferenceScreen>
+preferenceScreen>
+
 </PreferenceScreen>

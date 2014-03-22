@@ -33,6 +33,7 @@ public class SoftKeyboard extends InputMethodService implements
 	private DoubleTabKeyboard mCurKeyboard;
 	private int mLastDisplayWidth;
 	private String mCurCharset;
+	private String mCurSymset;
 
 	private final int KEYCODE_ENTER = -13;
 	private final int KEYCODE_SPACE = -11;
@@ -42,8 +43,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private boolean swypeActive = true;
 
-	private boolean useCustomCharset;
-
 	public void onCreate() {
 		super.onCreate();
 		getResources();
@@ -52,6 +51,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
+
 		this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
 				.inflate(R.layout.input, null);
 		/*
@@ -59,13 +59,6 @@ public class SoftKeyboard extends InputMethodService implements
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		useCustomCharset = sharedPref.getBoolean(
-				DtSettingsMain.useCustomCharset, false);
-
-		this.mCurCharset = (String) this.getResources().getText(
-				R.string.defaultCharset);
 
 		mInputView.setPreviewEnabled(false);
 
@@ -120,11 +113,24 @@ public class SoftKeyboard extends InputMethodService implements
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		swypeActive = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
-		useCustomCharset = sharedPref.getBoolean(
+		boolean useCustomCharset = sharedPref.getBoolean(
 				DtSettingsMain.useCustomCharset, false);
-
-		this.mCurCharset = (String) this.getResources().getText(
-				R.string.defaultCharset);
+		boolean useCustomSymset = sharedPref.getBoolean(
+				DtSettingsMain.useCustomSymset, false);
+		if (useCustomCharset) {
+			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
+					"Err   or!");
+		} else {
+			this.mCurCharset = (String) this.getResources().getText(
+					R.string.defaultCharset);
+		}
+		if (useCustomSymset) {
+			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,
+					"Err   or!");
+		} else {
+			this.mCurSymset = (String) this.getResources().getText(
+					R.string.SymbolSet);
+		}
 
 		this.mInputView.init(mCurCharset);
 		super.onStartInputView(attribute, restarting);
@@ -133,7 +139,6 @@ public class SoftKeyboard extends InputMethodService implements
 		this.mShiftState = false;
 
 	}
-
 
 	@Override
 	public void onText(CharSequence text) {
@@ -182,6 +187,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onPress(int primaryCode) {
+
 		if (swypeActive) {
 			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				mInputView.setPressedKey(primaryCode);
@@ -265,13 +271,10 @@ public class SoftKeyboard extends InputMethodService implements
 	private void handleSYM() {
 		Key k = getKey(KEYCODE_SYM);
 		if (k.label.equals(new String("SYM"))) {
-			mCurCharset = (String) this.getResources().getText(
-					R.string.SymbolSet);
-			mInputView.setCharset(mCurCharset);
+
+			mInputView.setCharset(mCurSymset);
 			k.label = "QWERZ";
 		} else {
-			mCurCharset = (String) this.getResources().getText(
-					R.string.defaultCharset);
 			mInputView.setCharset(mCurCharset);
 			k.label = "SYM";
 		}

@@ -1,6 +1,4 @@
-/*
- * @author Benedikt Wieder
- */
+
 
 package com.bontric.DoubleTabKeyboard;
 
@@ -15,7 +13,6 @@ import android.graphics.RectF;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.bontric.DoubleTab.R;
