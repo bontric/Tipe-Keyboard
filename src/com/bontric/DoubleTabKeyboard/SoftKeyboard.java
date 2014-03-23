@@ -126,25 +126,32 @@ public class SoftKeyboard extends InputMethodService implements
 				DtSettingsMain.useCustomCharset, false);
 		boolean useCustomSymset = sharedPref.getBoolean(
 				DtSettingsMain.useCustomSymset, false);
-		if (useCustomCharset) {
-			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
-					"Err   or!");
+		boolean useAdvancedCharset = sharedPref.getBoolean(
+				DtSettingsMain.useAdvancedCharset, false);
+		if (useAdvancedCharset) {
+			this.mCurCharset = (String) this.getResources().getText(
+					R.string.advancedCharset);
 		} else {
-			String useDefaultLangCharset = sharedPref.getString(
-					DtSettingsMain.cusLanguage, "");
-			if (useDefaultLangCharset.equals("english")) {
-				this.mCurCharset = (String) this.getResources().getText(
-						R.string.engCharset);
+			if (useCustomCharset) {
+				this.mCurCharset = sharedPref.getString(
+						DtSettingsMain.cusCharset, "Err   or!");
 			} else {
-				if (useDefaultLangCharset.equals("german")) {
+				String useDefaultLangCharset = sharedPref.getString(
+						DtSettingsMain.cusLanguage, "");
+				if (useDefaultLangCharset.equals("english")) {
 					this.mCurCharset = (String) this.getResources().getText(
-							R.string.gerCharset);
-				} else
+							R.string.engCharset);
+				} else {
+					if (useDefaultLangCharset.equals("german")) {
+						this.mCurCharset = (String) this.getResources()
+								.getText(R.string.gerCharset);
+					} else
 
-					this.mCurCharset = (String) this.getResources().getText(
-							R.string.defaultCharset);
+						this.mCurCharset = (String) this.getResources()
+								.getText(R.string.defaultCharset);
+				}
+
 			}
-
 		}
 		if (useCustomSymset) {
 			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,

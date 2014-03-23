@@ -15,12 +15,18 @@
         android:title="@string/chose_lang_title" />
 
     <PreferenceScreen android:title="Feinschliff" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useAdvancedCharset"
+            android:title="Use advanced charset" />
+
         <com.bontric.DtSettings.SliderPreference
-            android:dependency="swypeActive"
             android:defaultValue="@string/swipe_sensitivity_default"
+            android:dependency="swypeActive"
             android:dialogMessage="Set Sensitivity"
             android:key="swipe_sensitivity"
             android:title="Swipe sensitivity" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useCustomCharset"
