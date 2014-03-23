@@ -26,7 +26,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	static final boolean DEBUG = false;
 
-	private boolean delayDeleteCheck = false;
 	private boolean mShiftState;
 	private DoubleTabKeyboardView mInputView;
 	private DoubleTabKeyboard mQwertyKeyboard;
@@ -55,16 +54,15 @@ public class SoftKeyboard extends InputMethodService implements
 				.getDefaultSharedPreferences(this);
 		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
 		this.mInputView = null;
-		
-		if(isSwipe){
-			this.mInputView = (DoubleTabSwipeKeyboardView) this.getLayoutInflater()
-				.inflate(R.layout.swipeinput, null);	
-		}
-		else{
+
+		if (isSwipe) {
+			this.mInputView = (DoubleTabSwipeKeyboardView) this
+					.getLayoutInflater().inflate(R.layout.swipeinput, null);
+		} else {
 			this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
-			.inflate(R.layout.input, null);
+					.inflate(R.layout.input, null);
 		}
-		
+
 		/*
 		 * remember this place @ben
 		 */
@@ -112,9 +110,9 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
-		
-		this.setInputView(this.onCreateInputView());		
-		
+
+		this.setInputView(this.onCreateInputView());
+
 		super.onStartInput(attribute, restarting);
 		this.mCurKeyboard = this.mQwertyKeyboard; // check this @ben
 		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
@@ -133,21 +131,21 @@ public class SoftKeyboard extends InputMethodService implements
 			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
 					"Err   or!");
 		} else {
-			String useDefaultLangCharset = 
-					sharedPref.getString(DtSettingsMain.cusLanguage, "");
-			if(useDefaultLangCharset.equals("english")){
+			String useDefaultLangCharset = sharedPref.getString(
+					DtSettingsMain.cusLanguage, "");
+			if (useDefaultLangCharset.equals("english")) {
 				this.mCurCharset = (String) this.getResources().getText(
 						R.string.engCharset);
-			}else{
-				if(useDefaultLangCharset.equals("german")){
+			} else {
+				if (useDefaultLangCharset.equals("german")) {
 					this.mCurCharset = (String) this.getResources().getText(
-						R.string.gerCharset);
-				}else
-					
-				this.mCurCharset = (String) this.getResources().getText(
-						R.string.defaultCharset);
+							R.string.gerCharset);
+				} else
+
+					this.mCurCharset = (String) this.getResources().getText(
+							R.string.defaultCharset);
 			}
-		
+
 		}
 		if (useCustomSymset) {
 			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,
@@ -158,16 +156,17 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 
 		this.mInputView.init(mCurCharset);
-		
+
 		super.onStartInputView(attribute, restarting);
 		this.mInputView.setKeyboard(this.mCurKeyboard); // needs check@ben
-		
-		//quickfix for now.. fixing this depends on future updates.. so keep this in mind @ben
+
+		// quickfix for now.. fixing this depends on future updates.. so keep
+		// this in mind @ben
 		Key k = getKey(KEYCODE_SYM);
 		mInputView.setCharset(mCurCharset);
 		k.label = "SYM";
-		//----
-		
+		// ----
+
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -251,14 +250,8 @@ public class SoftKeyboard extends InputMethodService implements
 		/*
 		 * meh this is dirty... i feel so dirty... but it works.. for now..
 		 */
-		if (getCurrentInputConnection().getTextBeforeCursor(1, 0).equals(" ")
-				&& !delayDeleteCheck) {
-			delayDeleteCheck = true;
-		} else {
 
-			this.keyDownUp(KeyEvent.KEYCODE_DEL);
-			delayDeleteCheck = false;
-		}
+		this.keyDownUp(KeyEvent.KEYCODE_DEL);
 
 	}
 
