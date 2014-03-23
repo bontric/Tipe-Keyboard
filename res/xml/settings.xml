@@ -6,35 +6,43 @@
         android:defaultValue="true"
         android:key="swypeActive"
         android:title="Wischen Aktivieren" />
-
+	
+    <ListPreference 
+        android:key="cusLanguage"
+        android:defaultValue="default"
+        android:title="@string/chose_lang_title"
+        android:entries="@array/lang_list_names"
+        android:entryValues="@array/lang_list_values"
+                />   
+         
     <PreferenceScreen android:title="Feinschliff" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useCustomCharset"
-            android:title="Benutzerdefinierte Zeichenanordnung" />
+            android:title="@string/cus_charset_title" />
 
         <EditTextPreference
             android:defaultValue="@string/defaultCharset"
             android:dependency="useCustomCharset"
-            android:dialogMessage="Hier können sie ihre eigene Zeichenanordnung setzten."
-            android:dialogTitle="Benutzerdefinierte Zeichenanordnung"
+            android:dialogMessage="@string/cus_charset_dialogMess"
+            android:dialogTitle="@string/cus_charset_dialogTitle"
             android:key="cusCharset"
-            android:summary="Eigene Zeichenanordnung für die Tastatur festlegen"
-            android:title="Zeichenanordnung eingeben" />
+            android:summary="@string/cus_charset_summary"
+            android:title="@string/cus_charset_title" />
         
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useCustomSymset"
-            android:title="Benutzerdefinierte Symbolanordnung" />
+            android:title="@string/cus_symset_checkbox" />
 
         <EditTextPreference
             android:defaultValue="@string/SymbolSet"
             android:dependency="useCustomSymset"
-            android:dialogMessage="Hier können sie ihre eigene Symbolanordnung setzten."
-            android:dialogTitle="Benutzerdefinierte Symbolanordnung"
+            android:dialogMessage="@string/cus_symset_dialogMess"
+            android:dialogTitle="@string/cus_symset_dialogTitle"
             android:key="cusSymset"
-            android:summary="Eigene Symbolanordnung für die Tastatur festlegen"
-            android:title="Symbolanordnung eingeben" />
+            android:summary="@string/cus_symset_summary"
+            android:title="@string/cus_symset_title" />
     >
     </PreferenceScreen>
 preferenceScreen>

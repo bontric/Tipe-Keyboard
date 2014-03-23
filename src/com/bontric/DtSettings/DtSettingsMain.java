@@ -20,6 +20,7 @@ public class DtSettingsMain extends PreferenceActivity {
 	public final static String useCustomSymset= "useCustomSymset";
 	public final static String cusCharset = "cusCharset";
 	public final static String cusSymset = "cusSymset";
+	public final static String cusLanguage = "default";
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
