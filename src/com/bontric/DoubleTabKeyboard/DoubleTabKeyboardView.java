@@ -225,4 +225,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		return firstKey;
 	}
 	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return super.onTouchEvent(event);
+	}
 }

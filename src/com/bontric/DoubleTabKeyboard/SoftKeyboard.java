@@ -38,7 +38,7 @@ public class SoftKeyboard extends InputMethodService implements
 	private final int KEYCODE_SHIFT = -10;
 	private final int KEYCODE_SYM = -6;
 
-	private boolean swypeActive = true;
+	private boolean isSwipe = true;
 
 	public SoftKeyboard() {
 	}
@@ -61,8 +61,21 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
-		this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
-				.inflate(R.layout.input, null);
+		
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		isSwipe = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+		this.mInputView = null;
+		
+		if(isSwipe){
+			this.mInputView = (DoubleTabSwipeKeyboardView) this.getLayoutInflater()
+				.inflate(R.layout.swipeinput, null);	
+		}
+		else{
+			this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
+			.inflate(R.layout.input, null);
+		}
+		
 		/*
 		 * remember this place @ben
 		 */
@@ -74,7 +87,6 @@ public class SoftKeyboard extends InputMethodService implements
 		mInputView.setPreviewEnabled(false);
 
 		return this.mInputView;
-
 	}
 
 	public void onFinishInput() {
@@ -105,18 +117,16 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
+		
+		this.setInputView(this.onCreateInputView());		
+		
 		super.onStartInput(attribute, restarting);
 		this.mCurKeyboard = this.mQwertyKeyboard;
 		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
 	@Override
-	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		swypeActive = sharedPref.getBoolean(DtSettingsMain.bWS, false);
-
+	public void onStartInputView(EditorInfo attribute, boolean restarting) {		
 		super.onStartInputView(attribute, restarting);
 		this.mInputView.setKeyboard(this.mCurKeyboard);
 		this.mInputView.closing();
@@ -148,7 +158,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
-		if (!swypeActive) {
+		if (!isSwipe) {
 			if (0 <= primaryCode && charset.length() > primaryCode) {
 				if (!mInputView.getLevelDownState()) {
 					mInputView.setPressedKey(primaryCode);
@@ -172,7 +182,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onPress(int primaryCode) {
-		if (swypeActive) {
+		if (isSwipe) {
 			if (0 <= primaryCode && charset.length() > primaryCode) {
 				mInputView.setPressedKey(primaryCode);
 				mInputView.invalidate();
@@ -182,7 +192,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onRelease(int primaryCode) {
-		if (swypeActive) {
+		if (isSwipe) {
 			if (0 <= primaryCode && charset.length() > primaryCode) {
 				sendKey((int) charset.charAt(mInputView
 						.getCharCode(primaryCode)));

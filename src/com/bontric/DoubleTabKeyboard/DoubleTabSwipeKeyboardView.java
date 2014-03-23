@@ -1,3 +1,6 @@
+/*
+ * @author Jakob Frick
+ */
 package com.bontric.DoubleTabKeyboard;
 
 import android.content.Context;
@@ -13,7 +16,7 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	private Point endPos = null;
 	
 	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+		super(context, attrs);	
 	}
 	
 	@Override
@@ -22,15 +25,10 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	    boolean gotKey;
 	    gotKey = false;
 	    
-	    
-	    
 	    switch (eventaction) {
 	        case MotionEvent.ACTION_DOWN: 
 	            // finger touches the screen
-	        //	if(this.levelDownState){
-	        	
-	        		startPos = getEventMedianPos(event);
-	        //	}
+	        	startPos = getEventMedianPos(event);
 	        	break;
 
 	        case MotionEvent.ACTION_MOVE:
@@ -46,7 +44,6 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	        		//TODO make controllable with a slider :)
 	        		swipeVec.x = startPos.x + (int) ((endPos.x - startPos.x)*1.25);
 	        		swipeVec.y = startPos.y + (int) ((endPos.y - startPos.y)*1.25);
-	        		Log.d("UP", "SwipeX " + swipeVec.x +"\tSwipeY " +swipeVec.y );
 	        		Key first = getKeyToPoint(swipeVec);
 	        		if(first != null && first.codes[0] >= 0 && first.codes[0] <=35){
 	        		
@@ -73,15 +70,6 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	            break;
 	    }
 	    
-	 /*   if(this.levelDownState && !(moving || started) ){
-    		this.levelDownState = false;
-    		this.invalidate();
-    		Point lastPos = getEventMedianPos(event);
-    		if(getKeyToPoint(lastPos) == null)
-    			return true;
-    		
-    		this.getOnKeyboardActionListener().onPress(getKeyToPoint(lastPos).codes[0]);
-    	}*/ 
 	    if(!gotKey)
 	    	super.onTouchEvent(event);
 	    // tell the system that we handled the event and no further processing is required
