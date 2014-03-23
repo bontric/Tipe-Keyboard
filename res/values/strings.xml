@@ -7,5 +7,7 @@
     <string name="label_keyboard_key_next">Next</string>
     <string name="label_keyboard_key_done">Done</string>
     
+    <item name="swipe_sensitivity_default" format="float" type="string">0.5</item>
+    
 	<string name="word_separators">" .,;:!?()[]*&amp;@{}/&lt;>_+=|"</string>
 </resources>

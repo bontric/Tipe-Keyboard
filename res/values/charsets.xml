@@ -2,5 +2,5 @@
 <resources>
 
     <string name="defaultCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
-	<string name="SymbolSet">    "123^#€456^$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/-`"</string>
+	<string name="SymbolSet">    "123^#€456§$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/-`"</string>
 </resources>

@@ -81,7 +81,7 @@ public class DoubleTabKeyboard extends Keyboard {
 
 		@Override
 		public boolean isInside(int x, int y) {
-			return super.isInside(x, y+20);
+			return super.isInside(x, y);
 			// this is bad but important.. TODO ensure to find a nice fix one
 			// day!
 		}
