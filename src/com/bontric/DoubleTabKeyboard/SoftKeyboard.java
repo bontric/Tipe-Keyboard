@@ -103,13 +103,12 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
-		this.mCurKeyboard = this.mQwertyKeyboard;
+		this.mCurKeyboard = this.mQwertyKeyboard; // check this @ben
 		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		swypeActive = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
@@ -135,6 +134,13 @@ public class SoftKeyboard extends InputMethodService implements
 		this.mInputView.init(mCurCharset);
 		super.onStartInputView(attribute, restarting);
 		this.mInputView.setKeyboard(this.mCurKeyboard); // needs check@ben
+		
+		//quickfix for now.. fixing this depends on future updates.. so keep this in mind @ben
+		Key k = getKey(KEYCODE_SYM);
+		mInputView.setCharset(mCurCharset);
+		k.label = "SYM";
+		//----
+		
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -200,8 +206,8 @@ public class SoftKeyboard extends InputMethodService implements
 	public void onRelease(int primaryCode) {
 		if (swypeActive) {
 			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
-				sendKey((int) mCurCharset.charAt(mInputView
-						.getCharCode(primaryCode)));
+				sendKey((int) mInputView.getCharset().charAt(
+						mInputView.getCharCode(primaryCode)));
 				if (mShiftState) {
 					mShiftState = false;
 				}
@@ -270,13 +276,13 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void handleSYM() {
 		Key k = getKey(KEYCODE_SYM);
-		if (k.label.equals(new String("SYM"))) {
-
-			mInputView.setCharset(mCurSymset);
-			k.label = "QWERZ";
-		} else {
+		if (mInputView.getCharset().equals(mCurSymset)) {
 			mInputView.setCharset(mCurCharset);
 			k.label = "SYM";
+
+		} else {
+			mInputView.setCharset(mCurSymset);
+			k.label = "QWERZ";
 		}
 		mInputView.invalidate();
 
@@ -291,7 +297,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void handleShift() {
 
-		if (mInputView.getCharset().equals(mCurSymset)) {
+		if (!mInputView.getCharset().equals(mCurSymset)) {
 			/*
 			 * String.toUpperCase() is handling the German "ß" wrong (replaces
 			 * it with "SS")... so this is a rather bad 'n' dirty fix..but i
@@ -308,7 +314,9 @@ public class SoftKeyboard extends InputMethodService implements
 				 */
 			} else {
 
-				mCurCharset = mInputView.getCharset().toLowerCase();
+				String cs = mCurCharset.replace('ß', '\uffff');
+				mCurCharset = cs.toLowerCase(Locale.GERMAN).replace('\uffff',
+						'ß');
 				mInputView.setCharset(mCurCharset);
 			}
 		} else {
