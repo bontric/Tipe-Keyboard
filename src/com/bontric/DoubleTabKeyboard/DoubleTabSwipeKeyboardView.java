@@ -11,7 +11,6 @@ import android.graphics.Point;
 import android.inputmethodservice.Keyboard.Key;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
@@ -19,7 +18,7 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	private Point startPos = null;
 	private Point endPos = null;
 	SharedPreferences sharedPref;
-
+	
 	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -30,8 +29,8 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		int eventaction = event.getAction();
 		boolean gotKey;
 		gotKey = false;
-		double sensitivity = 1 + 0.25 * sharedPref.getFloat(DtSettingsMain.swipeSensitivity,
-				(float) 1);
+		double sensitivity = 1 + 0.25 * sharedPref.getFloat(
+				DtSettingsMain.swipeSensitivity, (float) 1);
 
 		switch (eventaction) {
 		case MotionEvent.ACTION_DOWN:
@@ -82,11 +81,12 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 			break;
 		}
 
-		if (!gotKey)
+		if (!gotKey) {
 			super.onTouchEvent(event);
+		}
 		// tell the system that we handled the event and no further processing
 		// is required
 		return true;
 	}
-
 }
+	
