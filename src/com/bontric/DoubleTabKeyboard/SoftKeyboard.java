@@ -4,6 +4,8 @@
 
 package com.bontric.DoubleTabKeyboard;
 
+import java.util.Locale;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
@@ -24,13 +26,14 @@ public class SoftKeyboard extends InputMethodService implements
 
 	static final boolean DEBUG = false;
 
-	// private StringBuilder mComposing;
+	private boolean delayDeleteCheck = false;
 	private boolean mShiftState;
 	private DoubleTabKeyboardView mInputView;
 	private DoubleTabKeyboard mQwertyKeyboard;
 	private DoubleTabKeyboard mCurKeyboard;
 	private int mLastDisplayWidth;
-	private String charset;
+	private String mCurCharset;
+	private String mCurSymset;
 
 	private final int KEYCODE_ENTER = -13;
 	private final int KEYCODE_SPACE = -11;
@@ -40,19 +43,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private boolean isSwipe = true;
 
-	public SoftKeyboard() {
-	}
-
-	public void handleBackspace() {
-		this.keyDownUp(KeyEvent.KEYCODE_DEL);
-	}
-
-	private void sendKey(int keyCode) {
-		char curCharacter = (char) keyCode;
-		getCurrentInputConnection().commitText("" + curCharacter, 1);
-
-	}
-
 	public void onCreate() {
 		super.onCreate();
 		getResources();
@@ -61,10 +51,9 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
-		
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		isSwipe = sharedPref.getBoolean(DtSettingsMain.bWS, false);
+		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
 		this.mInputView = null;
 		
 		if(isSwipe){
@@ -81,9 +70,7 @@ public class SoftKeyboard extends InputMethodService implements
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mQwertyKeyboard);
-		this.charset = (String) this.getResources().getText(
-				R.string.defaultCharset);
-		this.mInputView.init(charset);
+
 		mInputView.setPreviewEnabled(false);
 
 		return this.mInputView;
@@ -98,6 +85,14 @@ public class SoftKeyboard extends InputMethodService implements
 		if (this.mInputView != null) {
 			this.mInputView.closing();
 		}
+
+	}
+
+	public void onFinishInputView(boolean finishingInput) {
+		super.onFinishInputView(finishingInput);
+		this.mCurCharset = (String) this.getResources().getText(
+				R.string.defaultCharset);
+		this.mInputView.init(mCurCharset);
 	}
 
 	public void onInitializeInterface() {
@@ -121,14 +116,45 @@ public class SoftKeyboard extends InputMethodService implements
 		this.setInputView(this.onCreateInputView());		
 		
 		super.onStartInput(attribute, restarting);
-		this.mCurKeyboard = this.mQwertyKeyboard;
+		this.mCurKeyboard = this.mQwertyKeyboard; // check this @ben
 		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
 	@Override
-	public void onStartInputView(EditorInfo attribute, boolean restarting) {		
+	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
+		boolean useCustomCharset = sharedPref.getBoolean(
+				DtSettingsMain.useCustomCharset, false);
+		boolean useCustomSymset = sharedPref.getBoolean(
+				DtSettingsMain.useCustomSymset, false);
+		if (useCustomCharset) {
+			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
+					"Err   or!");
+		} else {
+			this.mCurCharset = (String) this.getResources().getText(
+					R.string.defaultCharset);
+		}
+		if (useCustomSymset) {
+			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,
+					"Err   or!");
+		} else {
+			this.mCurSymset = (String) this.getResources().getText(
+					R.string.SymbolSet);
+		}
+
+		this.mInputView.init(mCurCharset);
+		
 		super.onStartInputView(attribute, restarting);
-		this.mInputView.setKeyboard(this.mCurKeyboard);
+		this.mInputView.setKeyboard(this.mCurKeyboard); // needs check@ben
+		
+		//quickfix for now.. fixing this depends on future updates.. so keep this in mind @ben
+		Key k = getKey(KEYCODE_SYM);
+		mInputView.setCharset(mCurCharset);
+		k.label = "SYM";
+		//----
+		
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -159,18 +185,17 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
 		if (!isSwipe) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				if (!mInputView.getLevelDownState()) {
 					mInputView.setPressedKey(primaryCode);
 				} else {
-					sendKey((int) charset.charAt(mInputView
+					sendKey((int) mCurCharset.charAt(mInputView
 							.getCharCode(primaryCode)));
 					if (mShiftState) {
 						mShiftState = false;
 					}
 					handleShift();
 					mInputView.setLevelDownState(false);
-					// kind of dirty quickfix.. want to change this
 				}
 
 				mInputView.invalidate();
@@ -183,7 +208,7 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onPress(int primaryCode) {
 		if (isSwipe) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				mInputView.setPressedKey(primaryCode);
 				mInputView.invalidate();
 			}
@@ -193,15 +218,15 @@ public class SoftKeyboard extends InputMethodService implements
 	@Override
 	public void onRelease(int primaryCode) {
 		if (isSwipe) {
-			if (0 <= primaryCode && charset.length() > primaryCode) {
-				sendKey((int) charset.charAt(mInputView
-						.getCharCode(primaryCode)));
+			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
+				sendKey((int) mInputView.getCharset().charAt(
+						mInputView.getCharCode(primaryCode)));
+
 				if (mShiftState) {
 					mShiftState = false;
 				}
 				handleShift();
 				mInputView.setLevelDownState(false);
-				// kind of dirty quickfix.. want to change this
 			} else {
 				handleNonInputKeys(primaryCode);
 			}
@@ -209,6 +234,30 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 	}
 
+	public void handleBackspace() {
+		/*
+		 * meh this is dirty... i feel so dirty... but it works.. for now..
+		 */
+		if (getCurrentInputConnection().getTextBeforeCursor(1, 0).equals(" ")
+				&& !delayDeleteCheck) {
+			delayDeleteCheck = true;
+		} else {
+
+			this.keyDownUp(KeyEvent.KEYCODE_DEL);
+			delayDeleteCheck = false;
+		}
+
+	}
+
+	private void sendKey(int keyCode) {
+		char curCharacter = (char) keyCode;
+		getCurrentInputConnection().commitText("" + curCharacter, 1);
+
+	}
+
+	/*
+	 * handle action for non-input key like SPACE /DELETE etc.
+	 */
 	private void handleNonInputKeys(int primaryCode) {
 		switch (primaryCode) {
 		case KEYCODE_DELETE:
@@ -241,15 +290,13 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void handleSYM() {
 		Key k = getKey(KEYCODE_SYM);
-		if (k.label.equals(new String("SYM"))) {
-			charset = (String) this.getResources().getText(R.string.SymbolSet);
-			mInputView.setCharset(charset);
-			k.label = "QWERZ";
-		} else {
-			charset = (String) this.getResources().getText(
-					R.string.defaultCharset);
-			mInputView.setCharset(charset);
+		if (mInputView.getCharset().equals(mCurSymset)) {
+			mInputView.setCharset(mCurCharset);
 			k.label = "SYM";
+
+		} else {
+			mInputView.setCharset(mCurSymset);
+			k.label = "QWERZ";
 		}
 		mInputView.invalidate();
 
@@ -264,16 +311,27 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void handleShift() {
 
-		if (mInputView.getCharset() != (String) this.getResources().getText(
-				R.string.SymbolSet)) {
+		if (!mInputView.getCharset().equals(mCurSymset)) {
+			/*
+			 * String.toUpperCase() is handling the German "ß" wrong (replaces
+			 * it with "SS")... so this is a rather bad 'n' dirty fix..but i
+			 * have no other idea than rewriting the toUpperCase() function
+			 */
 			if (mShiftState) {
-				charset = (String) this.getResources().getText(
-						R.string.defaultCharsetShift);
-				mInputView.setCharset(charset);
+				String cs = mCurCharset.replace('ß', '\uffff');
+				mCurCharset = cs.toUpperCase(Locale.GERMAN).replace('\uffff',
+						'ß');
+				mInputView.setCharset(mCurCharset);
+				/*
+				 * note this keyboard is for german use right now.. work on
+				 * locale one day @ben
+				 */
 			} else {
-				charset = (String) this.getResources().getText(
-						R.string.defaultCharset);
-				mInputView.setCharset(charset);
+
+				String cs = mCurCharset.replace('ß', '\uffff');
+				mCurCharset = cs.toLowerCase(Locale.GERMAN).replace('\uffff',
+						'ß');
+				mInputView.setCharset(mCurCharset);
 			}
 		} else {
 			mShiftState = false;// there's no shift in symbol view

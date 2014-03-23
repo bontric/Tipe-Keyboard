@@ -59,7 +59,7 @@
     <Row>
         <Key android:codes="-10"   android:keyIcon="@drawable/sym_keyboard_shift"  android:keyWidth="25%p" android:paddingTop="10dp"/>
         <Key android:codes="-11"    android:keyIcon="@drawable/sym_keyboard_space"  android:keyWidth="50%p"/>
-        <Key android:codes="-12"   android:keyIcon="@drawable/sym_keyboard_delete"  android:keyWidth="25%p" android:longClickable="true"/>
+        <Key android:codes="-12"   android:keyIcon="@drawable/sym_keyboard_delete"  android:keyWidth="25%p" android:isRepeatable="true"/>
             </Row> 
 </Keyboard>
 

@@ -1,6 +1,4 @@
-/*
- * @author Benedikt Wieder
- */
+
 
 package com.bontric.DoubleTabKeyboard;
 
@@ -15,7 +13,6 @@ import android.graphics.RectF;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.bontric.DoubleTab.R;
@@ -28,6 +25,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
 
 	}
 
@@ -42,7 +40,6 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	 * Initialize the paint process
 	 */
 	public void init(String charset) {
-		
 		
 		this.charset = charset;
 		this.levelDownState = false;
@@ -108,6 +105,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.setLevelDownState(false);
 	}
 
+
+	
 	/**
 	 * Go to second level. This will put the 6 characters in the area pressed
 	 * before on all 6 buttons. Therefore it is important to Set the pressed key
@@ -166,7 +165,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		}
 
 	}
-
+	
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		if (levelDownState) {

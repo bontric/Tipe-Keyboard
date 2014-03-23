@@ -15,8 +15,12 @@ import android.preference.PreferenceActivity;
 @SuppressWarnings("deprecation")
 public class DtSettingsMain extends PreferenceActivity {
 
-	public final static String bWS = "swypeActive";
-
+	public final static String swypeActive = "swypeActive";
+	public final static String useCustomCharset= "useCustomCharset";
+	public final static String useCustomSymset= "useCustomSymset";
+	public final static String cusCharset = "cusCharset";
+	public final static String cusSymset = "cusSymset";
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
