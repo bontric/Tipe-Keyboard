@@ -7,25 +7,20 @@
         android:key="swypeActive"
         android:title="Wischen Aktivieren" />
 
-
-    <com.bontric.DtSettings.SliderPreference
-        android:defaultValue="@string/swipe_sensitivity_default"
-        android:dialogMessage="Set Sensitivity"
-        android:key="swipe_sensitivity"
-        android:title="Swipe sensitivity" />
-
-
-	
-    <ListPreference 
-        android:key="cusLanguage"
+    <ListPreference
         android:defaultValue="default"
-        android:title="@string/chose_lang_title"
         android:entries="@array/lang_list_names"
         android:entryValues="@array/lang_list_values"
-                />   
-         
+        android:key="cusLanguage"
+        android:title="@string/chose_lang_title" />
 
     <PreferenceScreen android:title="Feinschliff" >
+        <com.bontric.DtSettings.SliderPreference
+            android:dependency="swypeActive"
+            android:defaultValue="@string/swipe_sensitivity_default"
+            android:dialogMessage="Set Sensitivity"
+            android:key="swipe_sensitivity"
+            android:title="Swipe sensitivity" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useCustomCharset"
@@ -39,7 +34,7 @@
             android:key="cusCharset"
             android:summary="@string/cus_charset_summary"
             android:title="@string/cus_charset_title" />
-        
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useCustomSymset"
