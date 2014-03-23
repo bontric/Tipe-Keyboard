@@ -133,8 +133,21 @@ public class SoftKeyboard extends InputMethodService implements
 			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
 					"Err   or!");
 		} else {
-			this.mCurCharset = (String) this.getResources().getText(
-					R.string.defaultCharset);
+			String useDefaultLangCharset = 
+					sharedPref.getString(DtSettingsMain.cusLanguage, "");
+			if(useDefaultLangCharset.equals("english")){
+				this.mCurCharset = (String) this.getResources().getText(
+						R.string.engCharset);
+			}else{
+				if(useDefaultLangCharset.equals("german")){
+					this.mCurCharset = (String) this.getResources().getText(
+						R.string.gerCharset);
+				}else
+					
+				this.mCurCharset = (String) this.getResources().getText(
+						R.string.defaultCharset);
+			}
+		
 		}
 		if (useCustomSymset) {
 			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,
