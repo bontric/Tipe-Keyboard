@@ -207,7 +207,7 @@ public class SoftKeyboard extends InputMethodService implements
 				if (!mInputView.getLevelDownState()) {
 					mInputView.setPressedKey(primaryCode);
 				} else {
-					sendKey((int) mCurCharset.charAt(mInputView
+					sendKey((int) mInputView.getCharset().charAt(mInputView
 							.getCharCode(primaryCode)));
 					if (mShiftState) {
 						mShiftState = false;
