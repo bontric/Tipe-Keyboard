@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="lang_list_names">
-	    <item>@string/label_default_lang</item>
-	    <item>English</item>
-	    <item>Deutsch</item>
-	</string-array>
-
-    <string-array name="lang_list_values">
-	    <item>default</item>
-	    <item>english</item>
-	    <item>german</item>
-	</string-array>    
+    
 </resources>

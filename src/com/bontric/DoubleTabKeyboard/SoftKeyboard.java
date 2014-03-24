@@ -86,8 +86,8 @@ public class SoftKeyboard extends InputMethodService implements
 
 	public void onFinishInputView(boolean finishingInput) {
 		super.onFinishInputView(finishingInput);
-		this.mCurCharset = (String) this.getResources().getText(
-				R.string.defaultCharset);
+//		this.mCurCharset = (String) this.getResources().getText(
+//				R.string.defaultCharset);
 		this.mInputView.init(mCurCharset);
 	}
 
@@ -135,23 +135,25 @@ public class SoftKeyboard extends InputMethodService implements
 				this.mCurCharset = sharedPref.getString(
 						DtSettingsMain.cusCharset, "Err   or!");
 			} else {
-				String useDefaultLangCharset = sharedPref.getString(
+				String getLangCharset = sharedPref.getString(
 						DtSettingsMain.cusLanguage, "");
-				Log.d("Main", useDefaultLangCharset);
-				if (useDefaultLangCharset.equals("english")) {
 				
-					this.mCurCharset = (String) this.getResources().getText(
-							R.string.engCharset);
-				} else {
-					if (useDefaultLangCharset.equals("german")) {
-						this.mCurCharset = (String) this.getResources()
-								.getText(R.string.gerCharset);
-					} else
-
-						this.mCurCharset = (String) this.getResources()
-								.getText(R.string.defaultCharset);
-				}
-
+				this.mCurCharset = getLangCharset;
+//				Log.d("Main", useDefaultLangCharset);
+//				if (useDefaultLangCharset.equals("english")) {
+//				
+//					this.mCurCharset = (String) this.getResources().getText(
+//							R.string.engCharset);
+//				} else {
+//					if (useDefaultLangCharset.equals("german")) {
+//						this.mCurCharset = (String) this.getResources()
+//								.getText(R.string.gerCharset);
+//					} else
+//
+//						this.mCurCharset = (String) this.getResources()
+//								.getText(R.string.defaultCharset);
+//				}
+//
 			}
 		}
 		if (useCustomSymset) {
