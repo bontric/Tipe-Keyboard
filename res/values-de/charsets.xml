@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="defaultCharset">"qweasdrtufghiopjklzxc';[vbn@!?my],.-"</string>
+<string name="engCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
+	<string name="gerCharset">"qweasdrtufghiopjklzxc';[vbn@!?my],.-"</string>
+    <string name="defaultCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
 	<string name="SymbolSet">    "123^#€456^$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/-`"</string>
 </resources>
