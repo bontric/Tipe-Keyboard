@@ -86,8 +86,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	public void onFinishInputView(boolean finishingInput) {
 		super.onFinishInputView(finishingInput);
-//		this.mCurCharset = (String) this.getResources().getText(
-//				R.string.defaultCharset);
 		this.mInputView.init(mCurCharset);
 	}
 
@@ -139,21 +137,6 @@ public class SoftKeyboard extends InputMethodService implements
 						DtSettingsMain.cusLanguage, "");
 				
 				this.mCurCharset = getLangCharset;
-//				Log.d("Main", useDefaultLangCharset);
-//				if (useDefaultLangCharset.equals("english")) {
-//				
-//					this.mCurCharset = (String) this.getResources().getText(
-//							R.string.engCharset);
-//				} else {
-//					if (useDefaultLangCharset.equals("german")) {
-//						this.mCurCharset = (String) this.getResources()
-//								.getText(R.string.gerCharset);
-//					} else
-//
-//						this.mCurCharset = (String) this.getResources()
-//								.getText(R.string.defaultCharset);
-//				}
-//
 			}
 		}
 		if (useCustomSymset) {
