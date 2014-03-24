@@ -5,6 +5,6 @@
 	<string name="SymbolSet">"123^#€456^$%789;:0*+~&lt;&gt;[]{}=_|'()&quot;&amp;/-`"</string>
 	
 	<string name="advancedCharset">"edxja.zstyßh?fa@gäbp,iw-öcvonküul!mr"</string>
-	<string name="engCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
-	<string name="gerCharset">"qweasdrtufghiopjklzxc';[vbn@!?my],.-"</string>
+	<string name="gerCharset">"qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-"</string>
+	<string name="engCharset">"qweasdrtufghiopjklzxc';[vbn@!?my],.-"</string>
 </resources>

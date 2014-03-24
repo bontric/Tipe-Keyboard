@@ -12,6 +12,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,7 +28,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private boolean mShiftState;
 	private DoubleTabKeyboardView mInputView;
-	private DoubleTabKeyboard mQwertyKeyboard;
 	private DoubleTabKeyboard mCurKeyboard;
 	private int mLastDisplayWidth;
 	private String mCurCharset;
@@ -66,7 +66,7 @@ public class SoftKeyboard extends InputMethodService implements
 		 * remember this place @ben
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
-		this.mInputView.setKeyboard(this.mQwertyKeyboard);
+		this.mInputView.setKeyboard(this.mCurKeyboard);
 
 		mInputView.setPreviewEnabled(false);
 
@@ -78,7 +78,6 @@ public class SoftKeyboard extends InputMethodService implements
 
 		this.setCandidatesViewShown(false);
 
-		this.mCurKeyboard = mQwertyKeyboard;
 		if (this.mInputView != null) {
 			this.mInputView.closing();
 		}
@@ -93,7 +92,7 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	public void onInitializeInterface() {
-		if (this.mQwertyKeyboard != null) {
+		if (this.mCurKeyboard != null) {
 			int displayWidth = getMaxWidth();
 
 			if (displayWidth == mLastDisplayWidth) {
@@ -103,7 +102,7 @@ public class SoftKeyboard extends InputMethodService implements
 			mLastDisplayWidth = displayWidth;
 		}
 
-		this.mQwertyKeyboard = new DoubleTabKeyboard(this, R.xml.base);
+		this.mCurKeyboard = new DoubleTabKeyboard(this, R.xml.base);
 
 	}
 
@@ -113,7 +112,6 @@ public class SoftKeyboard extends InputMethodService implements
 		this.setInputView(this.onCreateInputView());
 
 		super.onStartInput(attribute, restarting);
-		this.mCurKeyboard = this.mQwertyKeyboard; // check this @ben
 		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
@@ -128,6 +126,7 @@ public class SoftKeyboard extends InputMethodService implements
 				DtSettingsMain.useCustomSymset, false);
 		boolean useAdvancedCharset = sharedPref.getBoolean(
 				DtSettingsMain.useAdvancedCharset, false);
+		
 		if (useAdvancedCharset) {
 			this.mCurCharset = (String) this.getResources().getText(
 					R.string.advancedCharset);
@@ -138,7 +137,9 @@ public class SoftKeyboard extends InputMethodService implements
 			} else {
 				String useDefaultLangCharset = sharedPref.getString(
 						DtSettingsMain.cusLanguage, "");
+				Log.d("Main", useDefaultLangCharset);
 				if (useDefaultLangCharset.equals("english")) {
+				
 					this.mCurCharset = (String) this.getResources().getText(
 							R.string.engCharset);
 				} else {

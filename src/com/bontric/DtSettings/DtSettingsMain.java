@@ -20,7 +20,7 @@ public class DtSettingsMain extends PreferenceActivity {
 	public final static String useCustomSymset= "useCustomSymset";
 	public final static String cusCharset = "cusCharset";
 	public final static String cusSymset = "cusSymset";
-	public final static String cusLanguage = "default";
+	public final static String cusLanguage = "cusLanguage";
 	public final static String swipeSensitivity = "swipe_sensitivity";
 	public final static String useAdvancedCharset = "useAdvancedCharset";
 	
