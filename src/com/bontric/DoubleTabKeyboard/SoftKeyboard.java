@@ -39,19 +39,22 @@ public class SoftKeyboard extends InputMethodService implements
 	private final int KEYCODE_DELETE = -12;
 	private final int KEYCODE_SHIFT = -10;
 	private final int KEYCODE_SYM = -6;
-
+	SharedPreferences sharedPref;
 	private boolean isSwipe = true;
 
 	public void onCreate() {
 		super.onCreate();
 		getResources();
+		/*
+		 * loads default settings on first start! ducking important..
+		 */
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 	}
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
 		this.mInputView = null;
 
@@ -116,9 +119,8 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-	
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
 		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
 		boolean useCustomCharset = sharedPref.getBoolean(
 				DtSettingsMain.useCustomCharset, false);
@@ -126,7 +128,7 @@ public class SoftKeyboard extends InputMethodService implements
 				DtSettingsMain.useCustomSymset, false);
 		boolean useAdvancedCharset = sharedPref.getBoolean(
 				DtSettingsMain.useAdvancedCharset, false);
-		
+
 		if (useAdvancedCharset) {
 			this.mCurCharset = (String) this.getResources().getText(
 					R.string.advancedCharset);
@@ -135,9 +137,9 @@ public class SoftKeyboard extends InputMethodService implements
 				this.mCurCharset = sharedPref.getString(
 						DtSettingsMain.cusCharset, "Err   or!");
 			} else {
-				String getLangCharset = sharedPref.getString(
-						DtSettingsMain.cusLanguage, "");
-				
+				String getLangCharset = (String) this.getResources().getText(
+						R.string.defaultCharset);
+
 				this.mCurCharset = getLangCharset;
 			}
 		}
@@ -160,7 +162,9 @@ public class SoftKeyboard extends InputMethodService implements
 		mInputView.setCharset(mCurCharset);
 		k.label = "SYM";
 		// ----
-
+		
+		Log.d("MainDt",this.mCurSymset);
+		
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -195,8 +199,8 @@ public class SoftKeyboard extends InputMethodService implements
 				if (!mInputView.getLevelDownState()) {
 					mInputView.setPressedKey(primaryCode);
 				} else {
-					sendKey((int) mInputView.getCharset().charAt(mInputView
-							.getCharCode(primaryCode)));
+					sendKey((int) mInputView.getCharset().charAt(
+							mInputView.getCharCode(primaryCode)));
 					if (mShiftState) {
 						mShiftState = false;
 					}

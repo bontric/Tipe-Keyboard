@@ -39,6 +39,7 @@ public class DtSettingsMain extends PreferenceActivity {
 	public final static String backgroundColor = "backgroundColor";
 	public final static String lightBgColor = "background_light";
 	public final static String darkBgColor = "background_dark";
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
