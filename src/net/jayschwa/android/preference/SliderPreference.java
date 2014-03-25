@@ -4,7 +4,7 @@
  * Licensed under the MIT License (see LICENSE.txt)
  */
 
-package com.bontric.DtSettings;
+package net.jayschwa.android.preference;
 
 import com.bontric.DoubleTab.R;
 

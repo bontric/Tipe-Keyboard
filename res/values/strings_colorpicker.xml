@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- App -->
+    <string name="hello">Hello World, Main!</string>
+   
+    
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on Color to apply</string>    
+    
+    <!-- Preferences -->
+    <string name="pref_category">Category</string>
+    <string name="fontColor_title">Text Color</string>
+    <string name="fontColor_summary">White by default</string>
+
+</resources>

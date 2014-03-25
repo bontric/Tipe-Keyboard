@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -117,6 +118,7 @@ public class SoftKeyboard extends InputMethodService implements
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
+	
 		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
 		boolean useCustomCharset = sharedPref.getBoolean(
 				DtSettingsMain.useCustomCharset, false);
