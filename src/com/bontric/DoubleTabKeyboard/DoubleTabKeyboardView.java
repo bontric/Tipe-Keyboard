@@ -48,6 +48,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
+		this.setBackgroundColor(sharedPref.getInt(DtSettingsMain.backgroundColor, Color.WHITE));
 		paint.setTextSize(getResources().getDimension(R.dimen.font_height));
 		paint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
 				Color.WHITE));

@@ -36,7 +36,7 @@ public class DtSettingsMain extends PreferenceActivity {
 	 * colors
 	 */
 	public final static String normFontColor = "normFontColor";
-	public final static String emphFontColor = "emphFontColor";
+	public final static String backgroundColor = "backgroundColor";
 	public final static String lightBgColor = "background_light";
 	public final static String darkBgColor = "background_dark";
 	public void onCreate(Bundle savedInstanceState) {

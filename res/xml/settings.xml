@@ -15,39 +15,32 @@
         android:title="@string/chose_lang_title" />
 
     <PreferenceScreen android:title="Custom Colors" >
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="customColors"
-            android:title="Use custom Colors" />
+      
 
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             alphaSlider="false"
             android:defaultValue="@color/normTextColor"
-            android:dependency="customColors"
             android:key="normFontColor"
             android:summary="@string/fontColor_summary"
             android:title="@string/fontColor_title" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="false"
-            android:defaultValue="@color/emphTextColor"
-            android:dependency="customColors"
-            android:key="emphFontColor"
-            android:summary="Orange by default"
-            android:title="Emphesized Font Color " />
+            alphaSlider="true"
+            android:defaultValue="@color/backgroundDark"
+            android:key="backgroundColor"
+            android:summary="Overall Background Color"
+            android:title="Background Color " />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="false"
+            alphaSlider="true"
             android:defaultValue="@color/backgroundLight"
-            android:dependency="customColors"
             android:key="background_light"
             android:summary="Lighter Background color of the tiles"
-            android:title="Lighter Background" />
+            android:title="Background 2 for 6x6 grid" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="false"
+            alphaSlider="true"
             android:defaultValue="@color/backgroundDark"
-            android:dependency="customColors"
             android:key="background_dark"
             android:summary="Darker Background color of the tiles"
-            android:title="Darker Background" />
+            android:title="Background 2 for 6x6 grid" />
     </PreferenceScreen>
     <PreferenceScreen android:title="Feinschliff" >
         <CheckBoxPreference
