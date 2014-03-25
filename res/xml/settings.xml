@@ -61,7 +61,7 @@
             android:title="@string/cus_charset_title" />
 
         <EditTextPreference
-            android:defaultValue="@string/advancedCharset"
+            android:defaultValue="@string/defaultCharset"
             android:dependency="useCustomCharset"
             android:dialogMessage="@string/cus_charset_dialogMess"
             android:dialogTitle="@string/cus_charset_dialogTitle"

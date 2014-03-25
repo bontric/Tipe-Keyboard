@@ -6,10 +6,7 @@ package com.bontric.DtSettings;
 
 import com.bontric.DoubleTab.R;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 @SuppressWarnings("deprecation")
@@ -27,7 +24,6 @@ public class DtSettingsMain extends PreferenceActivity {
 	 */
 
 	public final static String cusLanguage = "cusLanguage";
-	public final static String useAdvancedCharset = "useAdvancedCharset";
 	public final static String useCustomCharset = "useCustomCharset";
 	public final static String useCustomSymset = "useCustomSymset";
 	public final static String cusCharset = "cusCharset";

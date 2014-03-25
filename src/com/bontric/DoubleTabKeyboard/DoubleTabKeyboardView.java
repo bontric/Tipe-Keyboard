@@ -25,11 +25,13 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	private Paint paint;
 	private int pressedKey;
 	SharedPreferences sharedPref;
+	
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 
 		super(context, attrs);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+	 
 
 	}
 
