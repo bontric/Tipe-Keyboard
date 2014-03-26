@@ -119,7 +119,7 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		
+
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
@@ -132,10 +132,9 @@ public class SoftKeyboard extends InputMethodService implements
 			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
 					"Err   or!");
 		} else {
-			String getLangCharset = (String) this.getResources().getText(
+			this.mCurCharset = (String) this.getResources().getText(
 					R.string.defaultCharset);
 
-			this.mCurCharset = getLangCharset;
 		}
 
 		if (useCustomSymset) {
@@ -158,7 +157,6 @@ public class SoftKeyboard extends InputMethodService implements
 		k.label = "SYM";
 		// ----
 
-		Log.d("MainDt", this.mCurSymset);
 
 		this.mInputView.closing();
 		this.mShiftState = false;

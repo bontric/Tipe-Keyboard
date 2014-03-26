@@ -1,5 +1,8 @@
 package com.bontric.DoubleTabKeyboard;
 
+
+import java.lang.reflect.Field;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -124,7 +127,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		 */
 		drawBackgrounds(canvas);
 		// TODO a litte bit hackly
-		Key key = this.getKeyboard().getKeys().get(11);
+		Key key = this.getKeyboard().getKeys().get(4);
 		for (int i = (pressedKey / 6) * 6; i < (pressedKey / 6) * 6 + 6; ++i) {
 
 			String label = "" + charset.charAt(i);
@@ -172,6 +175,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	}
 
 	public void onDraw(Canvas canvas) {
+
 		super.onDraw(canvas);
 		if (levelDownState) {
 			levelDown(canvas);
