@@ -4,9 +4,10 @@ BY: Attribution
 NC: NonCommercial
 SA: ShareAlike
 
-Some Links you should check out:
-http://stackoverflow.com/questions/7752580/creating-a-softkeyboard-with-multiple-alternate-characters-per-key
-http://developer.android.com/reference/android/inputmethodservice/InputMethodService.html
-http://developer.samsung.com/android/technical-docs/Implementing-a-custom-input-method
-http://developer.android.com/guide/topics/ui/settings.html
-http://viralpatel.net/blogs/android-preferences-activity-example/
+Definitions for swiping behavior (implemented in onTouch() in SwipeView):
+
+swiping off a non-character key to a character key or an empty area => do nothing
+		 (Delete Key IS an exception since it is repeatable!)
+swiping off a non-character key to a non-character key => interpret end position
+swiping off a character key to a non-character key => do nothing
+Any touch related behavior using swipe not defined is considered bug. In which case it should be reported (or fixed)

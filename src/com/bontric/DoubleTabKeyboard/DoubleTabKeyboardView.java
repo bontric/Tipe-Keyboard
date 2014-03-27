@@ -1,8 +1,6 @@
 package com.bontric.DoubleTabKeyboard;
 
 
-import java.lang.reflect.Field;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -28,13 +26,12 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	private Paint paint;
 	private int pressedKey;
 	SharedPreferences sharedPref;
-	
+	SoftKeyboard mSoftKeyboard;
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 
 		super(context, attrs);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-	 
 
 	}
 
@@ -49,11 +46,12 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	 * Initialize the paint process
 	 */
 	public void init(String charset) {
-		
+
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
-		this.setBackgroundColor(sharedPref.getInt(DtSettingsMain.backgroundColor, Color.BLACK));
+		this.setBackgroundColor(sharedPref.getInt(
+				DtSettingsMain.backgroundColor, Color.BLACK));
 		paint.setTextSize(getResources().getDimension(R.dimen.font_height));
 		paint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
 				Color.WHITE));
@@ -236,5 +234,9 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return super.onTouchEvent(event);
+	}
+
+	public void setSoftKeyboard(SoftKeyboard sk) {
+		this.mSoftKeyboard = sk;
 	}
 }

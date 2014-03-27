@@ -34,11 +34,11 @@ public class SoftKeyboard extends InputMethodService implements
 	private String mCurCharset;
 	private String mCurSymset;
 
-	private final int KEYCODE_ENTER = -13;
-	private final int KEYCODE_SPACE = -11;
-	private final int KEYCODE_DELETE = -12;
-	private final int KEYCODE_SHIFT = -10;
-	private final int KEYCODE_SYM = -6;
+	final int KEYCODE_ENTER = -13;
+	final int KEYCODE_SPACE = -11;
+	final int KEYCODE_DELETE = -12;
+	final int KEYCODE_SHIFT = -10;
+	final int KEYCODE_SYM = -6;
 	SharedPreferences sharedPref;
 	private boolean isSwipe = true;
 
@@ -61,6 +61,7 @@ public class SoftKeyboard extends InputMethodService implements
 		if (isSwipe) {
 			this.mInputView = (DoubleTabSwipeKeyboardView) this
 					.getLayoutInflater().inflate(R.layout.swipeinput, null);
+			
 		} else {
 			this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
 					.inflate(R.layout.input, null);
@@ -71,7 +72,7 @@ public class SoftKeyboard extends InputMethodService implements
 		 */
 		this.mInputView.setOnKeyboardActionListener(this);
 		this.mInputView.setKeyboard(this.mCurKeyboard);
-
+		this.mInputView.setSoftKeyboard(this);
 		mInputView.setPreviewEnabled(false);
 
 		return this.mInputView;
@@ -157,7 +158,6 @@ public class SoftKeyboard extends InputMethodService implements
 		k.label = "SYM";
 		// ----
 
-
 		this.mInputView.closing();
 		this.mShiftState = false;
 
@@ -237,15 +237,6 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 	}
 
-	public void handleBackspace() {
-		/*
-		 * meh this is dirty... i feel so dirty... but it works.. for now..
-		 */
-
-		this.keyDownUp(KeyEvent.KEYCODE_DEL);
-
-	}
-
 	private void sendKey(int keyCode) {
 		char curCharacter = (char) keyCode;
 		getCurrentInputConnection().commitText("" + curCharacter, 1);
@@ -262,7 +253,7 @@ public class SoftKeyboard extends InputMethodService implements
 				mInputView.setLevelDownState(false);
 				mInputView.invalidate();
 			} else {
-				handleBackspace();
+				keyDownUp(KeyEvent.KEYCODE_DEL);
 			}
 			break;
 		case KEYCODE_SHIFT:
