@@ -124,4 +124,6 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		// is required
 		return true;
 	}
+	
+	
 }

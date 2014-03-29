@@ -16,6 +16,7 @@
            <!-- Optional: an activity for controlling the IME settings -->
     <activity android:name="com.bontric.DtSettings.DtSettingsMain" 
         android:label="DT Settings">
+            
         <intent-filter>
             <action android:name="android.intent.action.MAIN"/>
         </intent-filter>

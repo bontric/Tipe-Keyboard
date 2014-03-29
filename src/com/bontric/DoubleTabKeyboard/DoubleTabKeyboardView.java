@@ -203,6 +203,9 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public String getCharset() {
 		return this.charset;
 	}
+	
+	
+	
 
 	// Calculates the median of all points of an motion event
 	public Point getEventMedianPos(MotionEvent event) {
