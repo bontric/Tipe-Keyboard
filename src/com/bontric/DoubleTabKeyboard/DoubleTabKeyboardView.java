@@ -46,7 +46,6 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	 * Initialize the paint process
 	 */
 	public void init(String charset) {
-
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
