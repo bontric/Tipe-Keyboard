@@ -22,6 +22,7 @@ import android.view.inputmethod.InputConnection;
 import com.bontric.DoubleTab.R;
 import com.bontric.DtSettings.DtSettingsMain;
 
+
 public class SoftKeyboard extends InputMethodService implements
 		KeyboardView.OnKeyboardActionListener {
 
@@ -30,6 +31,10 @@ public class SoftKeyboard extends InputMethodService implements
 	private boolean mShiftState;
 	private DoubleTabKeyboardView mInputView;
 	private DoubleTabKeyboard mCurKeyboard;
+	
+	private CanidateView mCandidateView;
+	private String tmpWord;
+	
 	private int mLastDisplayWidth;
 	private String mCurCharset;
 	private String mCurSymset;
@@ -76,10 +81,25 @@ public class SoftKeyboard extends InputMethodService implements
 
 		return this.mInputView;
 	}
+	
 
+    /**
+     * Called by the framework when your view for showing candidates needs to
+     * be generated, like {@link #onCreateInputView}.
+     */
+    @Override public View onCreateCandidatesView() {
+    	Log.d("CreateCandiateView", "Here is onCreateCandiateView");
+        mCandidateView = new CanidateView(this);
+        mCandidateView.setService(this);
+        tmpWord = "";
+    //  return null;
+        return mCandidateView;
+    }
+        
 	public void onFinishInput() {
 		super.onFinishInput();
-
+		
+		tmpWord = "";
 		this.setCandidatesViewShown(false);
 
 		if (this.mInputView != null) {
@@ -103,7 +123,8 @@ public class SoftKeyboard extends InputMethodService implements
 
 			mLastDisplayWidth = displayWidth;
 		}
-
+		//TODO init suggestions list
+		
 		this.mCurKeyboard = new DoubleTabKeyboard(this, R.xml.base);
 
 	}
@@ -224,7 +245,7 @@ public class SoftKeyboard extends InputMethodService implements
 			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
 				sendKey((int) mInputView.getCharset().charAt(
 						mInputView.getCharCode(primaryCode)));
-
+				
 				if (mShiftState) {
 					mShiftState = false;
 				}
@@ -241,13 +262,24 @@ public class SoftKeyboard extends InputMethodService implements
 		/*
 		 * meh this is dirty... i feel so dirty... but it works.. for now..
 		 */
-
+		if(tmpWord.length() < 2)
+			tmpWord = "";
+		else
+			tmpWord = tmpWord.substring(0, tmpWord.length()-2);
+		mCandidateView.getSuggestionsForWord(tmpWord);
+		
 		this.keyDownUp(KeyEvent.KEYCODE_DEL);
 
 	}
 
 	private void sendKey(int keyCode) {
+		//Add to word 
+		tmpWord += (char) keyCode;
+		mCandidateView.getSuggestionsForWord(tmpWord);
+		
+		
 		char curCharacter = (char) keyCode;
+		
 		getCurrentInputConnection().commitText("" + curCharacter, 1);
 
 	}
@@ -271,11 +303,12 @@ public class SoftKeyboard extends InputMethodService implements
 			break;
 		case KEYCODE_SPACE:
 			sendKey(32);
+			tmpWord = "";
 			break;
 		case KEYCODE_ENTER:
 
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
-
+			tmpWord = "";
 			break;
 		case KEYCODE_SYM:
 			handleSYM();
@@ -296,7 +329,7 @@ public class SoftKeyboard extends InputMethodService implements
 			k.label = "QWERZ";
 		}
 		mInputView.invalidate();
-
+		
 	}
 
 	private void keyDownUp(int keyEventCode) {
@@ -367,5 +400,6 @@ public class SoftKeyboard extends InputMethodService implements
 	public void swipeUp() {
 
 	}
+
 
 }
