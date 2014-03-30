@@ -54,7 +54,7 @@ public class SoftKeyboard extends InputMethodService implements
 		 * loads default settings on first start! ducking important..
 		 */
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-
+		
 	}
 
 	@SuppressLint("NewApi")
@@ -90,10 +90,10 @@ public class SoftKeyboard extends InputMethodService implements
      */
     @Override public View onCreateCandidatesView() {
     	Log.d("CreateCandiateView", "Here is onCreateCandiateView");
+    	
         mCandidateView = new CanidateView(this);
         mCandidateView.setService(this);
         tmpWord = "";
-    //  return null;
         return mCandidateView;
     }
         
