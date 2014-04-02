@@ -10,12 +10,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.inputmethodservice.Keyboard.Key;
+import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	private boolean isNonCharacterKey = false;
@@ -25,6 +27,14 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 
 	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+	
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+	}
+	
+	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs,
+			int defStyle) {
+
+		super(context, attrs, defStyle);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 	}
@@ -124,6 +134,13 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		// is required
 		return true;
 	}
+	
+	public boolean onLongPress(Keyboard.Key popupKey){
+		return super.onLongPress(popupKey);
+	}
+	
+
+	
 	
 	
 }
