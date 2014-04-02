@@ -5,24 +5,27 @@ package com.bontric.DoubleTabKeyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bontric.DoubleTab.R;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.textservice.SentenceSuggestionsInfo;
 import android.view.textservice.SpellCheckerSession;
-import android.view.textservice.TextInfo;
 import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import android.view.textservice.SuggestionsInfo;
+import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+
+import com.bontric.DoubleTab.R;
 
 public class CanidateView extends View implements SpellCheckerSessionListener {
 	private Context ctx;
@@ -32,6 +35,9 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	private SoftKeyboard mService;
 	private Paint mPaint;
 	
+	private int screenWidth;
+	private int screenHeight;
+	
 	private List<String> mSuggestions;
 	
 	
@@ -40,6 +46,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 		ctx = context;
 		// TODO Auto-generated constructor stub
 		initView();
+		setScreenDimen();
 		initSpellCheckerSession();
 		initPaint();
 	}
@@ -48,6 +55,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 		ctx = context;
 		// TODO Auto-generated constructor stub
 		initView();
+		setScreenDimen();
 		initSpellCheckerSession();
 		initPaint();
 	}
@@ -56,9 +64,23 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 		ctx = context;
 		// TODO Auto-generated constructor stub
 		initView();
+		setScreenDimen();
 		initSpellCheckerSession();
 		initPaint();
 	}
+	
+	@SuppressLint("NewApi")
+	public void setScreenDimen() {
+		WindowManager wm = (WindowManager) ctx
+				.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		screenWidth = size.x;
+		screenHeight = size.y;
+	}
+	
+	
 	
 	//-----------------------------------------------
 	// Things for the right handeling of the view
@@ -109,19 +131,36 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
         invalidate();
     }
     
-    public String getSuggenstionsText(){
-    	if(mSuggestions.size()>= 3)
-    		return mSuggestions.get(mSuggestions.size()-2) + "\t|\t" +
+    
+    public void drawSuggenstionsText(Canvas canvas, Paint paint, int y){
+    	
+    	
+    	if(mSuggestions.size()>= 3){
+    /*		return mSuggestions.get(mSuggestions.size()-2) + "\t|\t" +
     		   	mSuggestions.get(mSuggestions.size()-1) + "\t|\t" +
-    		   	mSuggestions.get(mSuggestions.size()-3);
-    	if(mSuggestions.size()== 2)
-    		return mSuggestions.get(1) + "\t|\t" +
-    		   	mSuggestions.get(0) ;
-    	if(mSuggestions.size()== 1)
-    		return mSuggestions.get(0);
-    	else
-    		return "";
-    			
+    		   	mSuggestions.get(mSuggestions.size()-3);*/
+    		canvas.drawText(mSuggestions.get(mSuggestions.size()-2), (float) (screenWidth/6 - 
+    				paint.measureText(mSuggestions.get(mSuggestions.size()-2))*0.5)
+    				, y, paint);
+    		canvas.drawText(mSuggestions.get(mSuggestions.size()-1), (float) (screenWidth/2 - 
+					paint.measureText(mSuggestions.get(mSuggestions.size()-1))*0.5)
+					, y, paint);
+    		canvas.drawText(mSuggestions.get(mSuggestions.size()-3), (float) (5*screenWidth/6 - 
+					paint.measureText(mSuggestions.get(mSuggestions.size()-3))*0.5)
+					, y, paint);
+    	}
+    	if(mSuggestions.size()== 2){
+    	/*	return mSuggestions.get(1) + "\t|\t" +
+    		   	mSuggestions.get(0) ;*/
+    		canvas.drawText(mSuggestions.get(0), (float) (screenWidth/3 - paint.measureText(mSuggestions.get(0))*0.5)
+    				, y, paint);
+    		canvas.drawText(mSuggestions.get(1), (float) (2*screenWidth/3 - paint.measureText(mSuggestions.get(1))*0.5)
+    				, y, paint);
+    	}
+    	if(mSuggestions.size()== 1){
+    		canvas.drawText(mSuggestions.get(0), (float) (screenWidth/2 - paint.measureText(mSuggestions.get(0))*0.5)
+    				, y, paint);
+    	}		
     }
     
     public void initPaint(){
@@ -145,16 +184,19 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     	//super.onDraw(canvas);
     
     	if (mSuggestions == null) return;
-    	String strToDraw = getSuggenstionsText();
+    //	String strToDraw = getSuggenstionsText();
     	
     	final int height = getHeight();
-    	final int y = (int) (((height - mPaint.getTextSize()) / 2) - mPaint.ascent());
-    	float textWidth = mPaint.measureText(strToDraw);
+    	final int rectOffset = 40;
+    	final int y = (int) (((height - mPaint.getTextSize())) - mPaint.ascent());
+    //	float textWidth = mPaint.measureText(strToDraw);
     	
-    	mPaint.setColor(Color.RED);
-    	canvas.drawRect(0, height+20, textWidth+20, y, mPaint);
+    	mPaint.setColor(Color.BLACK);
+    	canvas.drawRect(0, (float) (height-mPaint.getTextSize()*1.5), screenWidth, height, mPaint);
     	mPaint.setColor(Color.WHITE);
-    	canvas.drawText(strToDraw, 10, 10, mPaint);
+    	
+    	drawSuggenstionsText(canvas, mPaint, y);
+    	//	canvas.drawText(strToDraw, textWidth/2, y-10, mPaint);
     }
     
     @Override
@@ -208,7 +250,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
             	}
             }
         }
-        postInvalidate();
+        invalidate();
         requestLayout();
 	}
 	
@@ -229,17 +271,23 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
         		Log.d("TAG sentence suggests", mSuggestions.get(mSuggestions.size()-1));
         	}
         }
-        postInvalidate();
+        invalidate();
         requestLayout();
 	}
 	
 	public void getSuggestionsForWord(String word){
 		
-		if (mScs != null && !word.isEmpty()) {
-			mScs.getSentenceSuggestions(new TextInfo[] {new TextInfo(
+		if (mScs != null) {
+			mSuggestions.clear();
+			
+			if(!word.isEmpty())
+				mScs.getSentenceSuggestions(new TextInfo[] {new TextInfo(
                     word)}, 3);
 		}
 	} 
-
+	
+	public boolean hasSuggestions(){
+		return !mSuggestions.isEmpty();
+	}
 	
 }
