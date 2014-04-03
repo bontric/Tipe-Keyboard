@@ -1,6 +1,5 @@
 package com.bontric.DoubleTabKeyboard;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -27,6 +26,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	private int pressedKey;
 	SharedPreferences sharedPref;
 	SoftKeyboard mSoftKeyboard;
+	private boolean mDrawAlternativeChars;
 
 	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
 
@@ -42,6 +42,8 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
+	
+	
 	/**
 	 * Initialize the paint process
 	 */
@@ -141,6 +143,38 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.setLevelDownState(true);
 	}
 
+	public void DrawKeyAlternatives(Canvas canvas) {
+		/*
+		 * this function is not well programmed and is very specific. I'll fix
+		 * this up one day
+		 */
+
+		String test = "HALLO";
+		drawBackgrounds(canvas);
+		// TODO a litte bit hackly
+		Key key = this.getKeyboard().getKeys().get(4);
+		for (int i = 0; i < test.length(); ++i) {
+
+			String label = "" + test.charAt(i);
+			PointF center = getTextCenterToDraw(label, new RectF(3 * (i % 3)
+					* key.width, 2 * (i / 3) * key.height, 3 * (i % 3)
+					* key.width + 3 * key.width, 2 * (i / 3) * key.height + 2
+					* key.height), paint);
+
+			canvas.drawText(label, center.x, center.y + key.height, paint);
+
+		}
+
+		this.setLevelDownState(true);
+	}
+
+	public void setDrawAlternativeChars(boolean isActive){
+		mDrawAlternativeChars = isActive;
+	}
+	
+	public boolean getDrawAlternativeChars(){
+		return mDrawAlternativeChars;
+	}
 	/**
 	 * draw background of charset
 	 */
@@ -174,6 +208,10 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public void onDraw(Canvas canvas) {
 
 		super.onDraw(canvas);
+		if (mDrawAlternativeChars) {
+			DrawKeyAlternatives(canvas);
+			return;
+		}
 		if (levelDownState) {
 			levelDown(canvas);
 		} else {
@@ -202,9 +240,6 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public String getCharset() {
 		return this.charset;
 	}
-	
-	
-	
 
 	// Calculates the median of all points of an motion event
 	public Point getEventMedianPos(MotionEvent event) {

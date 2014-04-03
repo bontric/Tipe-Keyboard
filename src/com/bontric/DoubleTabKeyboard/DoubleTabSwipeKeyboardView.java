@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -24,13 +25,16 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	private Point startPos = null;
 	private Point endPos = null;
 	SharedPreferences sharedPref;
+	protected boolean mLongpressDetectionActive = false;
+	private Handler longPressHandler = new Handler();
+	private final int longpressTimeout = 500; // final for now
 
 	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-	
+
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
-	
+
 	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs,
 			int defStyle) {
 
@@ -39,9 +43,25 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 
 	}
 
+	/**
+	 * This is *of course* for long press detection. not guaranteed to work for
+	 * now.. reference:
+	 * http://stackoverflow.com/questions/1877417/how-to-set-a-timer-in-android
+	 */
+	private Runnable longPressActionRunnable = new Runnable() {
+		public void run() {
+			// if (mLongpressDetectionActive) {
+			// Log.d("Main", "Ben's Longpress detection works!");
+			// setDrawAlternativeChars(true);
+			// invalidate();
+			// }
+		}
+	};
+
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+
 		/**
 		 * Definitions for sliding behavior: swiping off a non-character key to
 		 * a character key or an empty area => do nothing
@@ -64,19 +84,39 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 
 		switch (eventaction) {
 		case MotionEvent.ACTION_DOWN:
+
 			startPos = getEventMedianPos(event);
 
 			Key k = getKeyToPoint(startPos);
 			if (k != null && k.codes[0] < 0) {
 				isNonCharacterKey = true;
+			} else {
+				if (!mLongpressDetectionActive) {
+					mLongpressDetectionActive = true;
+					setDrawAlternativeChars(false);
+					longPressHandler.postDelayed(longPressActionRunnable,
+							longpressTimeout);
+				}
 			}
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-
+			if (mLongpressDetectionActive) {
+				/*
+				 * reset timer when finger moves
+				 */
+				longPressHandler.removeCallbacks(longPressActionRunnable);
+				longPressHandler.postDelayed(longPressActionRunnable,
+						longpressTimeout);
+			}
 			break;
 
 		case MotionEvent.ACTION_UP:
+			if (mLongpressDetectionActive) {
+				longPressHandler.removeCallbacks(longPressActionRunnable);
+				mLongpressDetectionActive = false;
+				setDrawAlternativeChars(false);
+			}
 			if (startPos != null) {
 				endPos = getEventMedianPos(event);
 				if (getKeyToPoint(endPos) == null
@@ -134,13 +174,15 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		// is required
 		return true;
 	}
-	
-	public boolean onLongPress(Keyboard.Key popupKey){
+
+	public static int getLongPressTimeout() {
+		return 0;
+
+	}
+
+	public boolean onLongPress(Keyboard.Key popupKey) {
+		Log.d("Main", "LongPress detected");
 		return super.onLongPress(popupKey);
 	}
-	
 
-	
-	
-	
 }
