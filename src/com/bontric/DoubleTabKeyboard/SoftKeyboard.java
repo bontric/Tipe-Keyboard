@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
@@ -184,6 +185,20 @@ public class SoftKeyboard extends InputMethodService implements
 
 	}
 
+	@Override public void onDisplayCompletions(CompletionInfo[] completions) {
+		mCandidateView.getSuggestionsForWord(tmpWord);
+	}
+	
+	public void chooseSuggestion(String composedWord){
+		mInputView.setLevelDownState(false);
+		InputConnection ic = getCurrentInputConnection();
+		//So messy but the best we got so far  .....
+		ic.deleteSurroundingText(tmpWord.length(), 0);
+		ic.commitText(composedWord+" ", composedWord.length()+1);
+		tmpWord = "";
+		setCandidatesViewShown(false);
+	}
+	
 	@Override
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
@@ -262,12 +277,6 @@ public class SoftKeyboard extends InputMethodService implements
 		/*
 		 * meh this is dirty... i feel so dirty... but it works.. for now..
 		 */
-		if(tmpWord.length() < 2)
-			tmpWord = "";
-		else
-			tmpWord = tmpWord.substring(0, tmpWord.length()-2);
-		mCandidateView.getSuggestionsForWord(tmpWord);
-		
 		this.keyDownUp(KeyEvent.KEYCODE_DEL);
 	}
 
@@ -275,7 +284,7 @@ public class SoftKeyboard extends InputMethodService implements
 		//Add to word 
 		tmpWord += (char) keyCode;
 		mCandidateView.getSuggestionsForWord(tmpWord);
-		
+		setCandidatesViewShown(true);
 		
 		char curCharacter = (char) keyCode;
 		
@@ -293,6 +302,18 @@ public class SoftKeyboard extends InputMethodService implements
 				mInputView.setLevelDownState(false);
 				mInputView.invalidate();
 			} else {
+				
+				if(tmpWord.length() < 2)
+					tmpWord = "";
+				else
+					tmpWord = tmpWord.substring(0, tmpWord.length()-2);
+				
+				mCandidateView.getSuggestionsForWord(tmpWord);
+				if(tmpWord.isEmpty() || !mCandidateView.hasSuggestions())
+					setCandidatesViewShown(false);
+				else
+					setCandidatesViewShown(true);
+				
 				keyDownUp(KeyEvent.KEYCODE_DEL);
 			}
 			break;
