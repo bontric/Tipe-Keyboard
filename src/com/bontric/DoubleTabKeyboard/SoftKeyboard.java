@@ -189,6 +189,16 @@ public class SoftKeyboard extends InputMethodService implements
 		mCandidateView.getSuggestionsForWord(tmpWord);
 	}
 	
+	public void chooseSuggestion(String composedWord){
+		mInputView.setLevelDownState(false);
+		InputConnection ic = getCurrentInputConnection();
+		//So messy but the best we got so far  .....
+		ic.deleteSurroundingText(tmpWord.length(), 0);
+		ic.commitText(composedWord+" ", composedWord.length()+1);
+		tmpWord = "";
+		setCandidatesViewShown(false);
+	}
+	
 	@Override
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
