@@ -34,7 +34,7 @@ public class SoftKeyboard extends InputMethodService implements
 	private DoubleTabKeyboard mCurKeyboard;
 	
 	private CanidateView mCandidateView;
-	private String tmpWord;
+	private String curSugestPrototype;
 	
 	private int mLastDisplayWidth;
 	private String mCurCharset;
@@ -94,14 +94,14 @@ public class SoftKeyboard extends InputMethodService implements
     	
         mCandidateView = new CanidateView(this);
         mCandidateView.setService(this);
-        tmpWord = "";
+        curSugestPrototype = "";
         return mCandidateView;
     }
         
 	public void onFinishInput() {
 		super.onFinishInput();
 		
-		tmpWord = "";
+		curSugestPrototype = "";
 		this.setCandidatesViewShown(false);
 
 		if (this.mInputView != null) {
@@ -186,16 +186,16 @@ public class SoftKeyboard extends InputMethodService implements
 	}
 
 	@Override public void onDisplayCompletions(CompletionInfo[] completions) {
-		mCandidateView.getSuggestionsForWord(tmpWord);
+		mCandidateView.getSuggestionsForWord(curSugestPrototype);
 	}
 	
 	public void chooseSuggestion(String composedWord){
 		mInputView.setLevelDownState(false);
 		InputConnection ic = getCurrentInputConnection();
 		//So messy but the best we got so far  .....
-		ic.deleteSurroundingText(tmpWord.length(), 0);
+		ic.deleteSurroundingText(curSugestPrototype.length(), 0);
 		ic.commitText(composedWord+" ", composedWord.length()+1);
-		tmpWord = "";
+		curSugestPrototype = "";
 		setCandidatesViewShown(false);
 	}
 	
@@ -282,8 +282,8 @@ public class SoftKeyboard extends InputMethodService implements
 
 	private void sendKey(int keyCode) {
 		//Add to word 
-		tmpWord += (char) keyCode;
-		mCandidateView.getSuggestionsForWord(tmpWord);
+		curSugestPrototype += (char) keyCode;
+		mCandidateView.getSuggestionsForWord(curSugestPrototype);
 		setCandidatesViewShown(true);
 		
 		char curCharacter = (char) keyCode;
@@ -303,13 +303,13 @@ public class SoftKeyboard extends InputMethodService implements
 				mInputView.invalidate();
 			} else {
 				
-				if(tmpWord.length() < 2)
-					tmpWord = "";
+				if(curSugestPrototype.length() <= 1)
+					curSugestPrototype = "";
 				else
-					tmpWord = tmpWord.substring(0, tmpWord.length()-2);
+					curSugestPrototype = curSugestPrototype.substring(0, curSugestPrototype.length()-1);
 				
-				mCandidateView.getSuggestionsForWord(tmpWord);
-				if(tmpWord.isEmpty() || !mCandidateView.hasSuggestions())
+				mCandidateView.getSuggestionsForWord(curSugestPrototype);
+				if(curSugestPrototype.isEmpty() || !mCandidateView.hasSuggestions())
 					setCandidatesViewShown(false);
 				else
 					setCandidatesViewShown(true);
@@ -323,12 +323,12 @@ public class SoftKeyboard extends InputMethodService implements
 			break;
 		case KEYCODE_SPACE:
 			sendKey(32);
-			tmpWord = "";
+			curSugestPrototype = "";
 			break;
 		case KEYCODE_ENTER:
 
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
-			tmpWord = "";
+			curSugestPrototype = "";
 			break;
 		case KEYCODE_SYM:
 			handleSYM();

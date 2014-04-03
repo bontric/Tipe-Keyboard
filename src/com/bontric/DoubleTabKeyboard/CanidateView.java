@@ -7,12 +7,17 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Paint.Align;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -27,6 +32,7 @@ import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
 
 import com.bontric.DoubleTab.R;
+import com.bontric.DtSettings.DtSettingsMain;
 
 public class CanidateView extends View implements SpellCheckerSessionListener {
 	private Context ctx;
@@ -42,6 +48,8 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	private List<String> mSuggestions;
 	private List<String> curSuggestions;
 	private Rect suggestionsArea;
+	
+	private SharedPreferences sharedPref;
 	
 	
 	public CanidateView(Context context) {
@@ -86,18 +94,14 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	
 	
 	//-----------------------------------------------
-	// Things for the right handeling of the view
+	// Things for the right handleing of the view
 	//------------------------------------------------
 	
 	public void initView(){
-	/*	setBackgroundColor(getResources().getColor(R.color.candidate_background));
-		setHorizontalFadingEdgeEnabled(true);
-        setWillNotDraw(false);
-        setHorizontalScrollBarEnabled(false);
-        setVerticalScrollBarEnabled(false);
-	*/
+		curSuggestions = new ArrayList<String>();
 		setWillNotDraw(false);
-		}
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
+	}
 	
 	
 	@Override
@@ -134,97 +138,118 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
         invalidate();
     }
     
-    
-    public void drawSuggenstionsText(Canvas canvas, Paint paint, int y){
-    	curSuggestions = new ArrayList<String>();
-    	
-    	if(mSuggestions.size()>= 3){
-    /*		return mSuggestions.get(mSuggestions.size()-2) + "\t|\t" +
-    		   	mSuggestions.get(mSuggestions.size()-1) + "\t|\t" +
-    		   	mSuggestions.get(mSuggestions.size()-3);*/
-    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-1));
-    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-2));
-    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-3));
-    		
-    		canvas.drawText(curSuggestions.get(1), (float) (screenWidth/6 - 
-    				paint.measureText(curSuggestions.get(1))*0.5)
-    				, y, paint);
-    		
-    		canvas.drawText(curSuggestions.get(0), (float) (screenWidth/2 - 
-					paint.measureText(curSuggestions.get(0))*0.5)
-					, y, paint);
-    		
-    		canvas.drawText(curSuggestions.get(2), (float) (5*screenWidth/6 - 
-					paint.measureText(curSuggestions.get(2))*0.5)
-					, y, paint);
-    		return;
-    	}
-    	
-    	curSuggestions = new ArrayList<String>(mSuggestions);
-    	if(mSuggestions.size()== 2){
-    	/*	return mSuggestions.get(1) + "\t|\t" +
-    		   	mSuggestions.get(0) ;*/
-    		canvas.drawText(mSuggestions.get(0), (float) (screenWidth/4 - paint.measureText(mSuggestions.get(0))*0.5)
-    				, y, paint);
-    		canvas.drawText(mSuggestions.get(1), (float) (3*screenWidth/4 - paint.measureText(mSuggestions.get(1))*0.5)
-    				, y, paint);
-    	}
-    	if(mSuggestions.size()== 1){
-    		canvas.drawText(mSuggestions.get(0), (float) (screenWidth/2 - paint.measureText(mSuggestions.get(0))*0.5)
-    				, y, paint);
-    	}		
-    }
-    
     public void initPaint(){
     	mPaint = new Paint();
-        mPaint.setColor(Color.WHITE);
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.candidate_font_height));
+        mPaint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
+				Color.WHITE));
         mPaint.setFakeBoldText(true);
-        mPaint.setStrokeWidth(2);
+        mPaint.setTextAlign(Align.CENTER);
         
         suggestionsArea = new Rect();
     }
     
-    @Override
-    protected void onDraw(Canvas canvas) {
-    	// TODO Auto-generated method stub
-    	if(canvas == null){
-    		return;
+    // Prepare the first 3 Suggestions text before drawing it
+    public void prepareSuggestions(){
+    	curSuggestions.clear();
+    	if(mSuggestions.size() >= 3){
+    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-1));
+    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-2));
+    		curSuggestions.add(mSuggestions.get(mSuggestions.size()-3));
     	}
-    		//super.onDraw(canvas);
+    	else 
+    		curSuggestions = new ArrayList<String>(mSuggestions);
+    }
     
-    	if (mSuggestions == null) return;
-    //	String strToDraw = getSuggenstionsText();
+    
+    //Draw the suggestions into the view
+    public void drawSuggenstionsText(Canvas canvas){
+    	prepareSuggestions();
     	
-    	final int height = getHeight();
-    	final int rectOffset = 40;
-    	final int y = (int) (((height - mPaint.getTextSize())) - mPaint.ascent());
-    //	float textWidth = mPaint.measureText(strToDraw);
+    
+    	//Copy current Suggestions and check for oversize
+       	int maxStrLength = 8; 			//Size at which strings are shortend
+        
+    	List<String> tmpSuggstStrs = new ArrayList<String>();
+    	for (String singleStr : curSuggestions) {
+			if(singleStr.length() > maxStrLength){
+				tmpSuggstStrs.add(singleStr.substring(0, maxStrLength) + "...");
+			}
+			else 
+				tmpSuggstStrs.add(singleStr);
+		}
     	
-    	mPaint.setColor(Color.BLACK);	
-    	suggestionsArea.set(0, (int) (height-mPaint.getTextSize()*1.5), screenWidth, height);
-    	canvas.drawRect(0, (int) (height-mPaint.getTextSize()*1.5), screenWidth, height, mPaint);
-    	mPaint.setColor(Color.WHITE);
+    	//Draw texts
+    	int i = 0;
+    	RectF tmpArea = new RectF();
+    	int colors[] = { sharedPref.getInt(
+				DtSettingsMain.darkBgColor, Color.BLACK), 
+				sharedPref.getInt(
+						DtSettingsMain.lightBgColor, Color.GRAY) };
+    	int colorPick = 0;
     	
-    	drawSuggenstionsText(canvas, mPaint, y);
-    	//	canvas.drawText(strToDraw, textWidth/2, y-10, mPaint);
+    	for (String string : tmpSuggstStrs) {
+    		//Calc to box for the text
+    		tmpArea.set(suggestionsArea);
+    		tmpArea.left =   screenWidth/tmpSuggstStrs.size() * i;
+    		tmpArea.right =  screenWidth/tmpSuggstStrs.size() * (i+1);
+    		
+    		//Color switches with every box
+    		//TODO needs testing for a good ui
+    		//mPaint.setColor(colors[(colorPick++)%2]);
+    		mPaint.setColor(colors[1]);
+    		
+    		canvas.drawRect(tmpArea, mPaint);
+    		
+    		//TODO Might come in handy to export to a seperate utils file @jakob -> @ben
+    		mPaint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
+    				Color.WHITE));
+    		PointF textP = DoubleTabKeyboardView.getTextCenterToDraw(string, tmpArea, mPaint);
+    		    
+    		canvas.drawText(string, (float) (textP.x), textP.y, mPaint);
+    		i++;
+		}
+    		
     }
     
     @Override
-    public boolean onTouchEvent(MotionEvent me) {
+    protected void onDraw(Canvas canvas) {
+    	if(canvas == null){
+    		return;
+    	}
+    	
+    	//No suggestions nothing to do 
+    	if (mSuggestions == null || mSuggestions.size() == 0) return;
+    	
+    	//Get view height
+    	final int height = getHeight();
+    	
+    	//Draw background
+    	mPaint.setColor(sharedPref.getInt(DtSettingsMain.darkBgColor, Color.BLACK));	
+    	suggestionsArea.set(0, (int) (height-mPaint.getTextSize()*2), screenWidth, height);	
+    	canvas.drawRect(suggestionsArea, mPaint);
+    	
+    	drawSuggenstionsText(canvas);
+    }
     
+    //Picks a suggestion on touch
+    @Override
+    public boolean onTouchEvent(MotionEvent me) {
+    	
     	int action = me.getAction();
         int x = (int) me.getX();
         int y = (int) me.getY();
-    	
+        //Test if suggestion was hit
         if(y > suggestionsArea.bottom || y < suggestionsArea.top || curSuggestions.size() == 0)
         	return true;
         
         String chosenSuggest;
         switch (curSuggestions.size()) {
+        	// Calculate corresponding suggestions to x
+        	//
 			case 3:
-				//So dirty
+				
 				if(x < suggestionsArea.right / 3)
 					chosenSuggest = curSuggestions.get(1);
 				else 
@@ -248,8 +273,10 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 				Log.d("Tipe", "onTouchEvent: problem with size => " + curSuggestions.size() );
 				return true;
 		}
+        //Something was found, clear the old stuff
         curSuggestions.clear();
         mSuggestions.clear();
+        //Tell Service what was picked
     	mService.chooseSuggestion(chosenSuggest);
     	return true;
     }
@@ -263,9 +290,9 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     public void initSpellCheckerSession(){
 		final TextServicesManager tsm = (TextServicesManager) ctx.getSystemService(
                 Context.TEXT_SERVICES_MANAGER_SERVICE);
-		//TODO make choosable 
-		//spellCheck = tsm.newSpellCheckerSession(null, Local.ENGLISH, this, false); 
-        mScs = tsm.newSpellCheckerSession(null, null, this, true);
+		//TODO make chosable 
+		
+		mScs = tsm.newSpellCheckerSession(null, null, this, true);
         mSuggestions = new ArrayList<String>();
 	}
 
@@ -276,7 +303,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     
     @Override
 	public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] arg0) {
-		// TODO Auto-generated method stub
+		// Handle the suggestions gotten from the spell chekcer
 		
 		 
 		if (!isSentenceSpellCheckSupported()) {
@@ -286,10 +313,10 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
         }
 		mSuggestions.clear();
 		
-       // Log.d("TAG", "onGetSentenceSuggestions");
         //Get all the suggestions 
         //fewer might be sufficent 
         
+		//You have to parse all the information from all info to get single suggestions
         for (int i = 0; i < arg0.length; ++i) {
             final SentenceSuggestionsInfo ssi = arg0[i];
             for (int j = 0; j < ssi.getSuggestionsCount(); ++j) {            	
@@ -304,6 +331,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	}
 	
 	private boolean isSentenceSpellCheckSupported() {
+		//Check if spell checker is supported
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }
 
@@ -311,9 +339,11 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	@Override
 	public void onGetSuggestions(SuggestionsInfo[] arg0) {
 		mSuggestions.clear();
-		// TODO Auto-generated method stub
-		//Log.d("TAG", "onGetSuggestions");
-		// TODO get list string list 
+		
+		//Get all the suggestions 
+        //fewer might be sufficent 
+        
+		//You have to parse all the information from all info to get single suggestions
         for (int i = 0; i < arg0.length; ++i) {
         	for(int c = 0; c < arg0[0].getSuggestionsCount(); c++){
         		mSuggestions.add(arg0[0].getSuggestionAt(c));
@@ -325,6 +355,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
 	}
 	
 	public void getSuggestionsForWord(String word){
+		//Request new suggestions for the current input
 		
 		if (mScs != null) {
 			mSuggestions.clear();
