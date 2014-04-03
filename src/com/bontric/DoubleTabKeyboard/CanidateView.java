@@ -192,7 +192,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     	for (String string : tmpSuggstStrs) {
     		//Calc to box for the text
     		tmpArea.set(suggestionsArea);
-    		tmpArea.left =   screenWidth/tmpSuggstStrs.size() * i;
+    		tmpArea.left  =  screenWidth/tmpSuggstStrs.size() * i;
     		tmpArea.right =  screenWidth/tmpSuggstStrs.size() * (i+1);
     		
     		//Color switches with every box
@@ -207,7 +207,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     				Color.WHITE));
     		PointF textP = DoubleTabKeyboardView.getTextCenterToDraw(string, tmpArea, mPaint);
     		    
-    		canvas.drawText(string, (float) (textP.x), textP.y, mPaint);
+    		canvas.drawText(string, (float) (textP.x+mPaint.measureText(string)*0.5), textP.y, mPaint);
     		i++;
 		}
     		
