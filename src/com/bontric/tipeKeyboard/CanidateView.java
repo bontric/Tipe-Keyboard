@@ -1,4 +1,12 @@
-package com.bontric.DoubleTabKeyboard;
+/**
+ *@name TipeSwipeKeyboardView
+ *@author Jakob Frick
+ *
+ *---Under construction-----
+ */
+
+
+package com.bontric.tipeKeyboard;
 
 
 
@@ -30,9 +38,7 @@ import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
-
-import com.bontric.DoubleTab.R;
-import com.bontric.DtSettings.DtSettingsMain;
+import com.bontric.tipeSettings.TipeSettings;
 
 public class CanidateView extends View implements SpellCheckerSessionListener {
 	private Context ctx;
@@ -142,7 +148,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     	mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.candidate_font_height));
-        mPaint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
+        mPaint.setColor(sharedPref.getInt(TipeSettings.normFontColor,
 				Color.WHITE));
         mPaint.setFakeBoldText(true);
         mPaint.setTextAlign(Align.CENTER);
@@ -184,9 +190,9 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     	int i = 0;
     	RectF tmpArea = new RectF();
     	int colors[] = { sharedPref.getInt(
-				DtSettingsMain.darkBgColor, Color.BLACK), 
+				TipeSettings.darkBgColor, Color.BLACK), 
 				sharedPref.getInt(
-						DtSettingsMain.lightBgColor, Color.GRAY) };
+						TipeSettings.lightBgColor, Color.GRAY) };
     	int colorPick = 0;
     	
     	for (String string : tmpSuggstStrs) {
@@ -203,9 +209,9 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     		canvas.drawRect(tmpArea, mPaint);
     		
     		//TODO Might come in handy to export to a seperate utils file @jakob -> @ben
-    		mPaint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
+    		mPaint.setColor(sharedPref.getInt(TipeSettings.normFontColor,
     				Color.WHITE));
-    		PointF textP = DoubleTabKeyboardView.getTextCenterToDraw(string, tmpArea, mPaint);
+    		PointF textP = TipeKeyboardView.getTextCenterToDraw(string, tmpArea, mPaint);
     		    
     		canvas.drawText(string, (float) (textP.x+mPaint.measureText(string)*0.5), textP.y, mPaint);
     		i++;
@@ -226,7 +232,7 @@ public class CanidateView extends View implements SpellCheckerSessionListener {
     	final int height = getHeight();
     	
     	//Draw background
-    	mPaint.setColor(sharedPref.getInt(DtSettingsMain.darkBgColor, Color.BLACK));	
+    	mPaint.setColor(sharedPref.getInt(TipeSettings.darkBgColor, Color.BLACK));	
     	suggestionsArea.set(0, (int) (height-mPaint.getTextSize()*2), screenWidth, height);	
     	canvas.drawRect(suggestionsArea, mPaint);
     	

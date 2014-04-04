@@ -1,26 +1,26 @@
-/*
- * @author Jakob Frick
+/**
+ *@name TipeSwipeKeyboardView
+ *@author Benedikt John Wieder, Jakob Frick
+ *
+ * Extends TipeKeyboardView to override the onTouch() function
+ * of View. This implements the Tap and swipe function for the keyboard.
+ * Also implements a long press listener
  */
-package com.bontric.DoubleTabKeyboard;
+package com.bontric.tipeKeyboard;
 
-import com.bontric.DtSettings.DtSettingsMain;
+import com.bontric.tipeSettings.TipeSettings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.inputmethodservice.Keyboard.Key;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 
-public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
+public class TipeSwipeKeyboardView extends TipeKeyboardView {
 	private boolean isNonCharacterKey = false;
 	private Point startPos = null;
 	private Point endPos = null;
@@ -29,13 +29,13 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	private Handler longPressHandler = new Handler();
 	private final int longpressTimeout = 500; // final for now
 
-	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs) {
+	public TipeSwipeKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public DoubleTabSwipeKeyboardView(Context context, AttributeSet attrs,
+	public TipeSwipeKeyboardView(Context context, AttributeSet attrs,
 			int defStyle) {
 
 		super(context, attrs, defStyle);
@@ -44,14 +44,12 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 	}
 
 	/**
-	 * This is *of course* for long press detection. not guaranteed to work for
-	 * now.. reference:
-	 * http://stackoverflow.com/questions/1877417/how-to-set-a-timer-in-android
+	 * This is *of course* for long press detection. -Untested Implementation!-
 	 */
 	private Runnable longPressActionRunnable = new Runnable() {
 		public void run() {
+			// Needs xml Resource for alternate chars.
 			// if (mLongpressDetectionActive) {
-			// Log.d("Main", "Ben's Longpress detection works!");
 			// setDrawAlternativeChars(true);
 			// invalidate();
 			// }
@@ -80,18 +78,22 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		boolean gotKey;
 		gotKey = false;
 		double sensitivity = 1 + 0.25 * sharedPref.getFloat(
-				DtSettingsMain.swipeSensitivity, (float) 1);
+				TipeSettings.swipeSensitivity, (float) 1);
 
 		switch (eventaction) {
 		case MotionEvent.ACTION_DOWN:
 
 			startPos = getEventMedianPos(event);
 
-			Key k = getKeyToPoint(startPos);
+			Key k = getPointToKey(startPos);
 			if (k != null && k.codes[0] < 0) {
 				isNonCharacterKey = true;
 			} else {
 				if (!mLongpressDetectionActive) {
+					/*
+					 * Start long press runnable -> is exectuted (default 500ms)
+					 * delayed
+					 */
 					mLongpressDetectionActive = true;
 					setDrawAlternativeChars(false);
 					longPressHandler.postDelayed(longPressActionRunnable,
@@ -103,7 +105,7 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		case MotionEvent.ACTION_MOVE:
 			if (mLongpressDetectionActive) {
 				/*
-				 * reset timer when finger moves
+				 * reset timer for long press when finger moves
 				 */
 				longPressHandler.removeCallbacks(longPressActionRunnable);
 				longPressHandler.postDelayed(longPressActionRunnable,
@@ -113,15 +115,19 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 
 		case MotionEvent.ACTION_UP:
 			if (mLongpressDetectionActive) {
+				/*
+				 * As soon as finger releases off screen long press detection is
+				 * removed
+				 */
 				longPressHandler.removeCallbacks(longPressActionRunnable);
 				mLongpressDetectionActive = false;
 				setDrawAlternativeChars(false);
 			}
 			if (startPos != null) {
 				endPos = getEventMedianPos(event);
-				if (getKeyToPoint(endPos) == null
-						|| !(getKeyToPoint(endPos).codes[0] >= 0 ^ isNonCharacterKey)) {
-					Key startKey = getKeyToPoint(startPos);
+				if (getPointToKey(endPos) == null
+						|| !(getPointToKey(endPos).codes[0] >= 0 ^ isNonCharacterKey)) {
+					Key startKey = getPointToKey(startPos);
 					if (startKey != null && startKey.repeatable) {
 
 						super.onTouchEvent(event);
@@ -134,11 +140,14 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 					return true;
 				}
 				Point swipeVec = new Point();
+				/*
+				 * extend swipe vector by customizable factor (sensitivity)
+				 */
 				swipeVec.x = startPos.x
 						+ (int) ((endPos.x - startPos.x) * sensitivity);
 				swipeVec.y = startPos.y
 						+ (int) ((endPos.y - startPos.y) * sensitivity);
-				Key first = getKeyToPoint(swipeVec);
+				Key first = getPointToKey(swipeVec);
 				if (first != null && first.codes[0] >= 0
 						&& first.codes[0] <= 35) {
 
@@ -149,7 +158,7 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 				}
 			} else {
 				Point lastPos = getEventMedianPos(event);
-				Key first = getKeyToPoint(lastPos);
+				Key first = getPointToKey(lastPos);
 				if (first == null)
 					return true;
 
@@ -175,14 +184,31 @@ public class DoubleTabSwipeKeyboardView extends DoubleTabKeyboardView {
 		return true;
 	}
 
-	public static int getLongPressTimeout() {
-		return 0;
+	// Calculates the median of all points of an motion event
+	public Point getEventMedianPos(MotionEvent event) {
+		int pointerCount = event.getPointerCount();
+		Point medianPoint = new Point();
+		medianPoint.x = (int) event.getX(0);
+		medianPoint.y = (int) event.getY(0);
 
+		for (int c = 1; c < pointerCount; c++) {
+			medianPoint.x = (int) (medianPoint.x + (int) event.getX(c)) / 2;
+			medianPoint.y = (int) (medianPoint.y + (int) event.getY(c)) / 2;
+		}
+		return medianPoint;
 	}
 
-	public boolean onLongPress(Keyboard.Key popupKey) {
-		Log.d("Main", "LongPress detected");
-		return super.onLongPress(popupKey);
+	// Just returns the first key to a given point on the screen
+	public Key getPointToKey(Point point) {
+		Key firstKey = null;
+		for (Key k : this.getKeyboard().getKeys()) {
+			if (k.isInside(point.x, point.y)) {
+				firstKey = k;
+				break;
+			}
+
+		}
+		return firstKey;
 	}
 
 }

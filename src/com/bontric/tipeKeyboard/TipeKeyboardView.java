@@ -1,12 +1,17 @@
-package com.bontric.DoubleTabKeyboard;
-
+/**
+ *@name TipeKeyboardView
+ *@author Benedikt John Wieder, Jakob Frick
+ *
+ * Extends KeyboardView. This implements the layer based Keyboard visuals.
+ *  
+ */
+package com.bontric.tipeKeyboard;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -15,11 +20,8 @@ import android.inputmethodservice.KeyboardView;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
-import com.bontric.DoubleTab.R;
-import com.bontric.DtSettings.DtSettingsMain;
-
-public class DoubleTabKeyboardView extends KeyboardView {
+import com.bontric.tipeSettings.TipeSettings;;
+public class TipeKeyboardView extends KeyboardView {
 	private String charset;
 	protected boolean levelDownState;
 	private Paint paint;
@@ -28,22 +30,20 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	SoftKeyboard mSoftKeyboard;
 	private boolean mDrawAlternativeChars;
 
-	public DoubleTabKeyboardView(Context context, AttributeSet attrs) {
+	public TipeKeyboardView(Context context, AttributeSet attrs) {
 
 		super(context, attrs);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 	}
 
-	public DoubleTabKeyboardView(Context context, AttributeSet attrs,
+	public TipeKeyboardView(Context context, AttributeSet attrs,
 			int defStyle) {
 
 		super(context, attrs, defStyle);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	
-	
 	/**
 	 * Initialize the paint process
 	 */
@@ -52,9 +52,9 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.levelDownState = false;
 		this.paint = new Paint();
 		this.setBackgroundColor(sharedPref.getInt(
-				DtSettingsMain.backgroundColor, Color.BLACK));
+				TipeSettings.backgroundColor, Color.BLACK));
 		paint.setTextSize(getResources().getDimension(R.dimen.font_height));
-		paint.setColor(sharedPref.getInt(DtSettingsMain.normFontColor,
+		paint.setColor(sharedPref.getInt(TipeSettings.normFontColor,
 				Color.WHITE));
 		paint.setFakeBoldText(true);
 		paint.setTextAlign(Align.CENTER);
@@ -143,40 +143,22 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		this.setLevelDownState(true);
 	}
 
-	public void DrawKeyAlternatives(Canvas canvas) {
-		/*
-		 * this function is not well programmed and is very specific. I'll fix
-		 * this up one day
-		 */
-
-		String test = "HALLO";
-		drawBackgrounds(canvas);
-		// TODO a litte bit hackly
-		Key key = this.getKeyboard().getKeys().get(4);
-		for (int i = 0; i < test.length(); ++i) {
-
-			String label = "" + test.charAt(i);
-			PointF center = getTextCenterToDraw(label, new RectF(3 * (i % 3)
-					* key.width, 2 * (i / 3) * key.height, 3 * (i % 3)
-					* key.width + 3 * key.width, 2 * (i / 3) * key.height + 2
-					* key.height), paint);
-
-			canvas.drawText(label, center.x, center.y + key.height, paint);
-
-		}
-
-		this.setLevelDownState(true);
-	}
-
-	public void setDrawAlternativeChars(boolean isActive){
+	/**
+	 * 
+	 * @param isActive
+	 * weather we need to draw Alternatives for char ( used for long press handling
+	 * 
+	 */
+	public void setDrawAlternativeChars(boolean isActive) {
 		mDrawAlternativeChars = isActive;
 	}
-	
-	public boolean getDrawAlternativeChars(){
+
+	public boolean getDrawAlternativeChars() {
 		return mDrawAlternativeChars;
 	}
+
 	/**
-	 * draw background of charset
+	 * draw backgrounds of char area
 	 */
 	private void drawBackgrounds(Canvas canvas) {
 
@@ -187,13 +169,13 @@ public class DoubleTabKeyboardView extends KeyboardView {
 
 				if ((key.codes[0] / 6) % 2 == 0) {
 					bgPaint.setColor(sharedPref.getInt(
-							DtSettingsMain.darkBgColor, Color.BLACK));
+							TipeSettings.darkBgColor, Color.BLACK));
 					canvas.drawRect(key.x, key.y, key.x + key.width, key.y
 							+ key.height, bgPaint);
 
 				} else {
 					bgPaint.setColor(sharedPref.getInt(
-							DtSettingsMain.lightBgColor, Color.GRAY));
+							TipeSettings.lightBgColor, Color.GRAY));
 
 					canvas.drawRect(key.x, key.y, key.x + key.width, key.y
 							+ key.height, bgPaint);
@@ -208,10 +190,7 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public void onDraw(Canvas canvas) {
 
 		super.onDraw(canvas);
-		if (mDrawAlternativeChars) {
-			DrawKeyAlternatives(canvas);
-			return;
-		}
+
 		if (levelDownState) {
 			levelDown(canvas);
 		} else {
@@ -241,33 +220,6 @@ public class DoubleTabKeyboardView extends KeyboardView {
 		return this.charset;
 	}
 
-	// Calculates the median of all points of an motion event
-	public Point getEventMedianPos(MotionEvent event) {
-		int pointerCount = event.getPointerCount();
-		Point medianPoint = new Point();
-		medianPoint.x = (int) event.getX(0);
-		medianPoint.y = (int) event.getY(0);
-
-		for (int c = 1; c < pointerCount; c++) {
-			medianPoint.x = (int) (medianPoint.x + (int) event.getX(c)) / 2;
-			medianPoint.y = (int) (medianPoint.y + (int) event.getY(c)) / 2;
-		}
-		return medianPoint;
-	}
-
-	// Just returns the first key to a given point on the screen
-	public Key getKeyToPoint(Point point) {
-		Key firstKey = null;
-		for (Key k : this.getKeyboard().getKeys()) {
-			if (k.isInside(point.x, point.y)) {
-				firstKey = k;
-				break;
-			}
-
-		}
-		return firstKey;
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return super.onTouchEvent(event);
@@ -276,4 +228,5 @@ public class DoubleTabKeyboardView extends KeyboardView {
 	public void setSoftKeyboard(SoftKeyboard sk) {
 		this.mSoftKeyboard = sk;
 	}
+
 }

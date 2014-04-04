@@ -17,9 +17,7 @@
 package net.margaritov.preference.colorpicker;
 
 import java.util.Locale;
-
-import com.bontric.DoubleTab.R;
-
+import com.bontric.tipeKeyboard.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;

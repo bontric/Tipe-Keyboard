@@ -1,14 +1,18 @@
-/*
- * @author Benedikt Wieder
+/**
+ *@name SoftKeyboard
+ *@author Benedikt John Wieder, Jakob Frick
+ *
+ * Implementation of the Input Method Service.
+ * Handles the IME life cycle and text input.
+ * 
+ *  
  */
-
-package com.bontric.DoubleTabKeyboard;
+package com.bontric.tipeKeyboard;
 
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -20,8 +24,7 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
-import com.bontric.DoubleTab.R;
-import com.bontric.DtSettings.DtSettingsMain;
+import com.bontric.tipeSettings.TipeSettings;
 
 
 public class SoftKeyboard extends InputMethodService implements
@@ -30,8 +33,8 @@ public class SoftKeyboard extends InputMethodService implements
 	static final boolean DEBUG = false;
 
 	private boolean mShiftState;
-	private DoubleTabKeyboardView mInputView;
-	private DoubleTabKeyboard mCurKeyboard;
+	private TipeKeyboardView mInputView;
+	private TipeKeyboard mCurKeyboard;
 	
 	private CanidateView mCandidateView;
 	private String curSugestPrototype;
@@ -61,15 +64,15 @@ public class SoftKeyboard extends InputMethodService implements
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
+		isSwipe = sharedPref.getBoolean(TipeSettings.swypeActive, false);
 		this.mInputView = null;
 
 		if (isSwipe) {
-			this.mInputView = (DoubleTabSwipeKeyboardView) this
+			this.mInputView = (TipeSwipeKeyboardView) this
 					.getLayoutInflater().inflate(R.layout.swipeinput, null);
 			
 		} else {
-			this.mInputView = (DoubleTabKeyboardView) this.getLayoutInflater()
+			this.mInputView = (TipeKeyboardView) this.getLayoutInflater()
 					.inflate(R.layout.input, null);
 		}
 
@@ -127,7 +130,7 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 		//TODO init suggestions list
 		
-		this.mCurKeyboard = new DoubleTabKeyboard(this, R.xml.base);
+		this.mCurKeyboard = new TipeKeyboard(this, R.xml.base);
 
 	}
 
@@ -145,14 +148,14 @@ public class SoftKeyboard extends InputMethodService implements
 
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		isSwipe = sharedPref.getBoolean(DtSettingsMain.swypeActive, false);
+		isSwipe = sharedPref.getBoolean(TipeSettings.swypeActive, false);
 		boolean useCustomCharset = sharedPref.getBoolean(
-				DtSettingsMain.useCustomCharset, false);
+				TipeSettings.useCustomCharset, false);
 		boolean useCustomSymset = sharedPref.getBoolean(
-				DtSettingsMain.useCustomSymset, false);
+				TipeSettings.useCustomSymset, false);
 
 		if (useCustomCharset) {
-			this.mCurCharset = sharedPref.getString(DtSettingsMain.cusCharset,
+			this.mCurCharset = sharedPref.getString(TipeSettings.cusCharset,
 					"Err   or!");
 		} else {
 			this.mCurCharset = (String) this.getResources().getText(
@@ -161,7 +164,7 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 
 		if (useCustomSymset) {
-			this.mCurSymset = sharedPref.getString(DtSettingsMain.cusSymset,
+			this.mCurSymset = sharedPref.getString(TipeSettings.cusSymset,
 					"Err   or!");
 		} else {
 			this.mCurSymset = (String) this.getResources().getText(

@@ -1,16 +1,21 @@
-/*
- * @author Benedikt Wieder
+/**
+ *@name TipeSettings
+ *@author Benedikt John Wieder, Jakob Frick
+ *
+ * Implementation of the settings menu. 
+ * static values are needed for reference
  */
 
-package com.bontric.DtSettings;
+package com.bontric.tipeSettings;
 
-import com.bontric.DoubleTab.R;
+
+import com.bontric.tipeKeyboard.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 @SuppressWarnings("deprecation")
-public class DtSettingsMain extends PreferenceActivity {
+public class TipeSettings extends PreferenceActivity {
 
 	
 	/*

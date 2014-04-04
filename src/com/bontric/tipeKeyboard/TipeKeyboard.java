@@ -4,25 +4,24 @@
  * apart to get a basic one)
  */
 
-package com.bontric.DoubleTabKeyboard;
+package com.bontric.tipeKeyboard;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.Keyboard;
 import android.view.inputmethod.EditorInfo;
-import com.bontric.DoubleTab.R;
 
-public class DoubleTabKeyboard extends Keyboard {
+public class TipeKeyboard extends Keyboard {
 
 	private Key mEnterKey;
 
-	public DoubleTabKeyboard(Context context, int xmlLayoutResId) {
+	public TipeKeyboard(Context context, int xmlLayoutResId) {
 		super(context, xmlLayoutResId);
 
 	}
 
-	public DoubleTabKeyboard(Context context, int layoutTemplateResId,
+	public TipeKeyboard(Context context, int layoutTemplateResId,
 			CharSequence characters, int columns, int horizontalPadding) {
 		super(context, layoutTemplateResId, characters, columns,
 				horizontalPadding);

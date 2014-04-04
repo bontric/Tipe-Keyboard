@@ -6,7 +6,9 @@
 
 package net.jayschwa.android.preference;
 
-import com.bontric.DoubleTab.R;
+
+
+import com.bontric.tipeKeyboard.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
