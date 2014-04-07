@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -45,6 +46,7 @@ public class CharacterView extends View {
 	 */
 	public void init() {
 		this.getLayoutParams().height = KeyboardHandler.CHARACTER_VIEW_HEIGHT;
+		// this.getLayoutParams().width = KeyboardHandler.CHARACTER_VIEW_WIDTH;
 		initCharAreas();
 	}
 
@@ -72,7 +74,7 @@ public class CharacterView extends View {
 		characterAreas.add(new CharacterArea(x + 2 * width, y + height, width,
 				height, KeyboardHandler.CharViewLightColor));
 
-		setLevelUpChars(KeyboardHandler.CharacterSet);
+		setLevelUpChars();
 	}
 
 	@Override
@@ -113,18 +115,20 @@ public class CharacterView extends View {
 			}
 			if (released != null) {
 				/*
-				 * make sure this only sends one character a time.. 
+				 * make sure this only sends one character a time..
 				 */
-				KeyboardHandler.inputConnection.sendKey(released.getChars().charAt(0));
+				KeyboardHandler.inputConnection.sendKey(released.getChars()
+						.charAt(0));
 				Log.d("Main", "Pressed: " + released.getChars());
-			}else{
+			} else {
 				/*
-				 * this is just for testing! when you release your finger outside the Character View
-				 * you'll send a space to the inputConnection
+				 * this is just for testing! when you release your finger
+				 * outside the Character View you'll send a space to the
+				 * inputConnection
 				 */
 				KeyboardHandler.inputConnection.handleSpace();
 			}
-			initCharAreas();
+			setLevelUpChars();
 			this.invalidate();
 			break;
 		}
@@ -182,7 +186,12 @@ public class CharacterView extends View {
 	 *            this expects the charset to have 36 characters everything else
 	 *            will! lead to bugs
 	 */
-	private void setLevelUpChars(String charset) {
+	private void setLevelUpChars() {
+		/*
+		 * check this if you need more symbol set's
+		 */
+		String charset = (KeyboardHandler.isSymbolSet ? KeyboardHandler.SymbolSet
+				: KeyboardHandler.CharacterSet);
 		for (int i = 0; i < 6; ++i) {
 			characterAreas.get(i).setChars(
 					charset.substring(i * 6, (i + 1) * 6));
@@ -190,6 +199,7 @@ public class CharacterView extends View {
 	}
 
 	private void setLevelDownChars(String charset) {
+
 		for (int i = 0; i < charset.length() && i < characterAreas.size(); ++i) {
 			characterAreas.get(i).setChars("" + charset.charAt(i));
 		}
@@ -219,8 +229,8 @@ public class CharacterView extends View {
 		public CharacterArea(float x, float y, float width, float height,
 				int bg_color) {
 			this.mSpace = new RectF(x, y, x + width, y + height);
-			this.mCharacters = mCharacters;
 			mBgColor = bg_color;
+			mPaint.setTextSize(KeyboardHandler.CharViewFontSize);
 
 		}
 
@@ -233,8 +243,8 @@ public class CharacterView extends View {
 			float height = Math.abs(mSpace.top - mSpace.bottom) / 2;
 			float x = mSpace.left;
 			float y = mSpace.top;
-			PointF center = getTextCenterToDraw(mCharacters, new RectF(x, y, x
-					+ width, y + height), mPaint);
+			PointF center = getTextCenterToDraw("" + mCharacters.charAt(0),
+					new RectF(x, y, x + width, y + height), mPaint);
 			textCenters = new LinkedList<PointF>();
 			textCenters.add(center);
 			textCenters.add(new PointF(center.x + width, center.y));
@@ -251,8 +261,7 @@ public class CharacterView extends View {
 			mPaint.setColor(mBgColor);
 			canvas.drawRect(mSpace, mPaint);
 			mPaint.setColor(KeyboardHandler.CharViewFontColor);
-			// mPaint.setTextAlign(Align.CENTER);
-			mPaint.setTextSize(KeyboardHandler.CharViewFontSize);
+			mPaint.setTextAlign(Align.CENTER);
 			int i = 0;
 			if (mCharacters.length() == 6) {
 				for (PointF center : textCenters) {

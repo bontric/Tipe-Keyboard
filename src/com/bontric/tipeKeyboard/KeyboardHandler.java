@@ -10,6 +10,8 @@
 
 package com.bontric.tipeKeyboard;
 
+import java.util.Locale;
+
 import com.bontric.tipeSettings.TipeSettings;
 
 import android.content.Context;
@@ -20,6 +22,7 @@ import android.preference.PreferenceManager;
 public class KeyboardHandler {
 	// constant for now -> is going to be a setting
 	public static final int CHARACTER_VIEW_HEIGHT = 300;
+	public static int LOWER_BAR_VIEW_HEIGHT = 100;
 
 	public static boolean isShift;
 	public static boolean isSymbolSet = false;
@@ -29,18 +32,49 @@ public class KeyboardHandler {
 	public static int CharViewLightColor = Color.DKGRAY;
 	public static int CharViewFontColor = Color.WHITE;
 	private static SharedPreferences sharedPrefs;
-	
-	public static InputHandler inputConnection = new InputHandler();
-	public static float CharViewFontSize = 40; // Make this variable 
 
+	public static InputHandler inputConnection = new InputHandler();
+	public static float CharViewFontSize = 40; // Make this variable
+
+	public static void setLayoutView(){
+		
+	}
+	
 	public static void init(Context context) {
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,"CHARSET ERROR! REPORT THIS");
+		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,
+				"CHARSET ERROR! REPORT THIS");
 		CharacterSet = sharedPrefs.getString(TipeSettings.CHARSET,
 				"CHARSET ERROR! REPORT THIS");
-		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
-		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
-		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR, Color.WHITE);
+		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_DARK,
+				Color.BLACK);
+		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_LIGHT,
+				Color.DKGRAY);
+		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
+				Color.WHITE);
 		
+		
+
+	}
+
+	public static void handleShift() {
+
+		/*
+		 * String.toUpperCase() is handling the German "ß" wrong (replaces it
+		 * with "SS")... so this is a rather bad 'n' dirty fix..but i have no
+		 * other idea than rewriting the toUpperCase() function
+		 */
+		if (isShift && !isSymbolSet) {
+			String cs = CharacterSet.replace('ß', '\uffff');
+			CharacterSet = cs.toUpperCase(Locale.GERMAN).replace('\uffff', 'ß');
+			/*
+			 * note this keyboard is for german use right now.. work on locale
+			 * one day @ben
+			 */
+		} else {
+
+			String cs = CharacterSet.replace('ß', '\uffff');
+			CharacterSet = cs.toLowerCase(Locale.GERMAN).replace('\uffff', 'ß');
+		}
 	}
 }

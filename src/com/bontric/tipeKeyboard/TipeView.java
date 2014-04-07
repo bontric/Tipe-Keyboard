@@ -26,6 +26,7 @@ public class TipeView extends LinearLayout {
 
 	public void init() {
 		((CharacterView) findViewById(R.id.character_view)).init();
+		((LowerBarView) findViewById(R.id.lower_bar_view)).init();
 	}
 
 	private void initKeyboardHandler(Context context) {
