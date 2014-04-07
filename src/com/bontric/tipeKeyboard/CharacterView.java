@@ -77,12 +77,12 @@ public class CharacterView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		Log.d("Main", "PING!");
+		double sensitivity = 1.2;
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			touchStartPoint = getEventMedianPos(event);
-			CharacterArea pressed = getAreaFromTouch(touchStartPoint.x, touchStartPoint.y);
-			if(pressed!= null){
+			CharacterArea pressed = getAreaFromTouch(touchStartPoint);
+			if (pressed != null) {
 				setLevelDownChars(pressed.getChars());
 				this.invalidate();
 			}
@@ -90,21 +90,71 @@ public class CharacterView extends View {
 		case MotionEvent.ACTION_MOVE:
 			break;
 		case MotionEvent.ACTION_UP:
+			PointF touchEndPoint = getEventMedianPos(event);
+			PointF swipeVec = new PointF();
+			/*
+			 * extend swipe vector by customizable factor (sensitivity)
+			 */
+			swipeVec.x = touchStartPoint.x
+					+ (int) ((touchEndPoint.x - touchStartPoint.x) * sensitivity);
+			swipeVec.y = touchStartPoint.y
+					+ (int) ((touchEndPoint.y - touchStartPoint.y) * sensitivity);
+			/*
+			 * if the vector extension brings the touch out of CharacterrView
+			 * We'll just interprete the release point!
+			 */
+			CharacterArea released = null;
+			if (isInBounds(swipeVec.x, swipeVec.y)) {
+				released = getAreaFromTouch(swipeVec);
+			} else {
+				released = getAreaFromTouch(touchEndPoint);
+				Log.d("Main", "X: " + touchEndPoint.x + " Y:" + touchEndPoint.y);
+
+			}
+			if (released != null) {
+				/*
+				 * make sure this only sends one character a time.. 
+				 */
+				KeyboardHandler.inputConnection.sendKey(released.getChars().charAt(0));
+				Log.d("Main", "Pressed: " + released.getChars());
+			}else{
+				/*
+				 * this is just for testing! when you release your finger outside the Character View
+				 * you'll send a space to the inputConnection
+				 */
+				KeyboardHandler.inputConnection.handleSpace();
+			}
 			initCharAreas();
 			this.invalidate();
 			break;
 		}
-	
+
 		return true;
+	}
+
+	private boolean isInBounds(float x, float y) {
+
+		return new RectF(this.getX(), this.getY(), this.getX()
+				+ this.getWidth(), this.getY() + this.getHeight()).contains(x,
+				y);
 	}
 
 	/**
 	 * 
 	 * @return null if touch is out of the Characterview Area!
 	 */
-	private CharacterArea getAreaFromTouch(float x, float y) {
+	private CharacterArea getAreaFromTouch(PointF pt) {
+		/**
+		 * check if the touch is out of borders ( we'll get the min/max values
+		 * for x/y)
+		 */
+		if (pt.x == this.getX() || pt.x == this.getX() + this.getWidth()
+				|| pt.y == this.getY()
+				|| pt.y == this.getY() + this.getHeight()) {
+			return null;
+		}
 		for (CharacterArea cA : characterAreas) {
-			if (cA.contains(x, y)) {
+			if (cA.contains(pt)) {
 				return cA;
 			}
 		}
@@ -174,8 +224,8 @@ public class CharacterView extends View {
 
 		}
 
-		public boolean contains(float x, float y) {
-			return mSpace.contains(x, y);
+		public boolean contains(PointF pt) {
+			return mSpace.contains(pt.x, pt.y);
 		}
 
 		private void initCenters() {

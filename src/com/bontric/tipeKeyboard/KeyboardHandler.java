@@ -29,7 +29,8 @@ public class KeyboardHandler {
 	public static int CharViewLightColor = Color.DKGRAY;
 	public static int CharViewFontColor = Color.WHITE;
 	private static SharedPreferences sharedPrefs;
-
+	
+	public static InputHandler inputConnection = new InputHandler();
 	public static float CharViewFontSize = 40; // Make this variable 
 
 	public static void init(Context context) {

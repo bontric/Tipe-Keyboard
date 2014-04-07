@@ -25,7 +25,7 @@ public class TipeService extends InputMethodService {
 		super.onCreate();
 		getResources();
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-
+		KeyboardHandler.inputConnection.setIMS(this);
 	}
 
 	@SuppressLint("NewApi")
