@@ -27,30 +27,10 @@ import android.view.inputmethod.InputConnection;
 import com.bontric.tipeSettings.TipeSettings;
 
 
-public class SoftKeyboard extends InputMethodService implements
-		KeyboardView.OnKeyboardActionListener {
+public class SoftKeyboard extends InputMethodService {
 
 	static final boolean DEBUG = false;
-
-	private boolean mShiftState;
-	private TipeKeyboardView mInputView;
-	private TipeKeyboard mCurKeyboard;
 	
-	private CanidateView mCandidateView;
-	private String curSugestPrototype;
-	
-	private int mLastDisplayWidth;
-	private String mCurCharset;
-	private String mCurSymset;
-
-	final int KEYCODE_ENTER = -13;
-	final int KEYCODE_SPACE = -11;
-	final int KEYCODE_DELETE = -12;
-	final int KEYCODE_SHIFT = -10;
-	final int KEYCODE_SYM = -6;
-	SharedPreferences sharedPref;
-	private boolean isSwipe = true;
-
 	public void onCreate() {
 		super.onCreate();
 		getResources();
@@ -63,28 +43,8 @@ public class SoftKeyboard extends InputMethodService implements
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		isSwipe = sharedPref.getBoolean(TipeSettings.swypeActive, false);
-		this.mInputView = null;
 
-		if (isSwipe) {
-			this.mInputView = (TipeSwipeKeyboardView) this
-					.getLayoutInflater().inflate(R.layout.swipeinput, null);
-			
-		} else {
-			this.mInputView = (TipeKeyboardView) this.getLayoutInflater()
-					.inflate(R.layout.input, null);
-		}
-
-		/*
-		 * remember this place @ben
-		 */
-		this.mInputView.setOnKeyboardActionListener(this);
-		this.mInputView.setKeyboard(this.mCurKeyboard);
-		this.mInputView.setSoftKeyboard(this);
-		mInputView.setPreviewEnabled(false);
-
-		return this.mInputView;
+		return this.getLayoutInflater().inflate(R.layout.tipe_view, null);
 	}
 	
 
@@ -93,98 +53,33 @@ public class SoftKeyboard extends InputMethodService implements
      * be generated, like {@link #onCreateInputView}.
      */
     @Override public View onCreateCandidatesView() {
-    	Log.d("CreateCandiateView", "Here is onCreateCandiateView");
-    	
-        mCandidateView = new CanidateView(this);
-        mCandidateView.setService(this);
-        curSugestPrototype = "";
-        return mCandidateView;
+    
     }
         
 	public void onFinishInput() {
 		super.onFinishInput();
 		
-		curSugestPrototype = "";
-		this.setCandidatesViewShown(false);
-
-		if (this.mInputView != null) {
-			this.mInputView.closing();
-		}
 
 	}
 
 	public void onFinishInputView(boolean finishingInput) {
 		super.onFinishInputView(finishingInput);
-		this.mInputView.init(mCurCharset);
 	}
 
 	public void onInitializeInterface() {
-		if (this.mCurKeyboard != null) {
-			int displayWidth = getMaxWidth();
-
-			if (displayWidth == mLastDisplayWidth) {
-				return;
-			}
-
-			mLastDisplayWidth = displayWidth;
-		}
-		//TODO init suggestions list
-		
-		this.mCurKeyboard = new TipeKeyboard(this, R.xml.base);
+	
 
 	}
 
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 
-		this.setInputView(this.onCreateInputView());
-
 		super.onStartInput(attribute, restarting);
-		this.mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 	}
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		isSwipe = sharedPref.getBoolean(TipeSettings.swypeActive, false);
-		boolean useCustomCharset = sharedPref.getBoolean(
-				TipeSettings.useCustomCharset, false);
-		boolean useCustomSymset = sharedPref.getBoolean(
-				TipeSettings.useCustomSymset, false);
-
-		if (useCustomCharset) {
-			this.mCurCharset = sharedPref.getString(TipeSettings.cusCharset,
-					"Err   or!");
-		} else {
-			this.mCurCharset = (String) this.getResources().getText(
-					R.string.defaultCharset);
-
-		}
-
-		if (useCustomSymset) {
-			this.mCurSymset = sharedPref.getString(TipeSettings.cusSymset,
-					"Err   or!");
-		} else {
-			this.mCurSymset = (String) this.getResources().getText(
-					R.string.SymbolSet);
-		}
-
-		this.mInputView.init(mCurCharset);
-
-		super.onStartInputView(attribute, restarting);
-		this.mInputView.setKeyboard(this.mCurKeyboard); // needs check@ben
-
-		// quickfix for now.. fixing this depends on future updates.. so keep
-		// this in mind @ben
-		Key k = getKey(KEYCODE_SYM);
-		mInputView.setCharset(mCurCharset);
-		k.label = "SYM";
-		// ----
-
-		this.mInputView.closing();
-		this.mShiftState = false;
 
 	}
 
