@@ -18,6 +18,7 @@ import android.inputmethodservice.Keyboard.Key;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class TipeSwipeKeyboardView extends TipeKeyboardView {
@@ -48,11 +49,11 @@ public class TipeSwipeKeyboardView extends TipeKeyboardView {
 	 */
 	private Runnable longPressActionRunnable = new Runnable() {
 		public void run() {
-			// Needs xml Resource for alternate chars.
-			// if (mLongpressDetectionActive) {
-			// setDrawAlternativeChars(true);
-			// invalidate();
-			// }
+			if (mLongpressDetectionActive) {
+//				Log.d("Main","longpress!");
+//				setDrawAlternativeChars(true);
+//				invalidate();
+			}
 		}
 	};
 
@@ -94,6 +95,7 @@ public class TipeSwipeKeyboardView extends TipeKeyboardView {
 					 * Start long press runnable -> is exectuted (default 500ms)
 					 * delayed
 					 */
+					setLongPressedKey(getPointToKey(new Point(startPos.x,startPos.y)).codes[0]);
 					mLongpressDetectionActive = true;
 					setDrawAlternativeChars(false);
 					longPressHandler.postDelayed(longPressActionRunnable,
@@ -107,6 +109,8 @@ public class TipeSwipeKeyboardView extends TipeKeyboardView {
 				/*
 				 * reset timer for long press when finger moves
 				 */
+				startPos = getEventMedianPos(event);
+				setLongPressedKey(getPointToKey(new Point(startPos.x,startPos.y)).codes[0]);
 				longPressHandler.removeCallbacks(longPressActionRunnable);
 				longPressHandler.postDelayed(longPressActionRunnable,
 						longpressTimeout);

@@ -261,8 +261,7 @@ public class SoftKeyboard extends InputMethodService implements
 	public void onRelease(int primaryCode) {
 		if (isSwipe) {
 			if (0 <= primaryCode && mCurCharset.length() > primaryCode) {
-				sendKey((int) mInputView.getCharset().charAt(
-						mInputView.getCharCode(primaryCode)));
+				sendKey(mInputView.getCharCode(primaryCode));
 				
 				if (mShiftState) {
 					mShiftState = false;

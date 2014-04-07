@@ -6,6 +6,7 @@
  *  
  */
 package com.bontric.tipeKeyboard;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -19,8 +20,12 @@ import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
-import com.bontric.tipeSettings.TipeSettings;;
+
+import com.bontric.tipeSettings.TipeSettings;
+
+;
 public class TipeKeyboardView extends KeyboardView {
 	private String charset;
 	protected boolean levelDownState;
@@ -29,6 +34,8 @@ public class TipeKeyboardView extends KeyboardView {
 	SharedPreferences sharedPref;
 	SoftKeyboard mSoftKeyboard;
 	private boolean mDrawAlternativeChars;
+	private String mAlternativeChars = null;
+	private int longPressedKey;
 
 	public TipeKeyboardView(Context context, AttributeSet attrs) {
 
@@ -37,8 +44,7 @@ public class TipeKeyboardView extends KeyboardView {
 
 	}
 
-	public TipeKeyboardView(Context context, AttributeSet attrs,
-			int defStyle) {
+	public TipeKeyboardView(Context context, AttributeSet attrs, int defStyle) {
 
 		super(context, attrs, defStyle);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -51,8 +57,8 @@ public class TipeKeyboardView extends KeyboardView {
 		this.charset = charset;
 		this.levelDownState = false;
 		this.paint = new Paint();
-		this.setBackgroundColor(sharedPref.getInt(
-				TipeSettings.backgroundColor, Color.BLACK));
+		this.setBackgroundColor(sharedPref.getInt(TipeSettings.backgroundColor,
+				Color.BLACK));
 		paint.setTextSize(getResources().getDimension(R.dimen.font_height));
 		paint.setColor(sharedPref.getInt(TipeSettings.normFontColor,
 				Color.WHITE));
@@ -86,8 +92,18 @@ public class TipeKeyboardView extends KeyboardView {
 	 * in "layerDown" state ONLY!
 	 */
 	public int getCharCode(int primaryCode) {
+		if(mDrawAlternativeChars&& mAlternativeChars != null){
+			return getAlternativeCharCode(primaryCode);
+		}
+		return charset.charAt((pressedKey / 6) * 6 + (primaryCode / 6));
+	}
+	
+	/**
+	 * this returns which button was pressed relative to "longPressedKey" 
+	 */
+	private int getAlternativeCharCode(int primaryCode) {
 
-		return (pressedKey / 6) * 6 + (primaryCode / 6);
+		return mAlternativeChars.charAt((primaryCode / 6));
 	}
 
 	/**
@@ -143,10 +159,44 @@ public class TipeKeyboardView extends KeyboardView {
 		this.setLevelDownState(true);
 	}
 
+	private void drawAlternatives(Canvas canvas) {
+		String[] alternativeChars = getResources().getStringArray(
+				R.array.key_alternatives);
+		mAlternativeChars= null;
+		for (int i = 0; i < alternativeChars.length; ++i) {
+			if ((getCharCode(longPressedKey)) == alternativeChars[i].charAt(0)) {
+				mAlternativeChars = alternativeChars[i];
+				continue;
+			}
+		}
+		if (mAlternativeChars != null) {
+			drawBackgrounds(canvas);
+			// TODO a litte bit hackly
+			Key key = this.getKeyboard().getKeys().get(4);
+			for (int i = 0; i < mAlternativeChars.length()-1; ++i) {
+
+				String label = "" + mAlternativeChars.charAt(i+1);
+				PointF center = getTextCenterToDraw(label, new RectF(3
+						* (i % 3) * key.width, 2 * (i / 3) * key.height, 3
+						* (i % 3) * key.width + 3 * key.width, 2 * (i / 3)
+						* key.height + 2 * key.height), paint);
+
+				canvas.drawText(label, center.x, center.y + key.height, paint);
+
+			}
+		} else {
+			Log.d("Main", "padPing "+(char) longPressedKey);
+			mDrawAlternativeChars = false; // this might cause a bug
+			levelDown(canvas);
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param isActive
-	 * weather we need to draw Alternatives for char ( used for long press handling
+	 *            weather we need to draw Alternatives for char ( used for long
+	 *            press handling
 	 * 
 	 */
 	public void setDrawAlternativeChars(boolean isActive) {
@@ -191,7 +241,9 @@ public class TipeKeyboardView extends KeyboardView {
 
 		super.onDraw(canvas);
 
-		if (levelDownState) {
+		if (mDrawAlternativeChars) {
+			drawAlternatives(canvas);
+		} else if (levelDownState) {
 			levelDown(canvas);
 		} else {
 			levelUp(canvas);
@@ -227,6 +279,14 @@ public class TipeKeyboardView extends KeyboardView {
 
 	public void setSoftKeyboard(SoftKeyboard sk) {
 		this.mSoftKeyboard = sk;
+	}
+
+	public int getLongPressedKey() {
+		return longPressedKey;
+	}
+
+	public void setLongPressedKey(int longPressedKey) {
+		this.longPressedKey = longPressedKey;
 	}
 
 }
