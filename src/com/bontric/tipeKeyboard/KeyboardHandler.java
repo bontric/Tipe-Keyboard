@@ -22,20 +22,24 @@ public class KeyboardHandler {
 	public static final int CHARACTER_VIEW_HEIGHT = 300;
 
 	public static boolean isShift;
-	public static boolean isSymbolSet;
+	public static boolean isSymbolSet = false;
 	public static String SymbolSet;
 	public static String CharacterSet;
 	public static int CharViewDarkColor = Color.BLACK;
 	public static int CharViewLightColor = Color.DKGRAY;
+	public static int CharViewFontColor = Color.WHITE;
 	private static SharedPreferences sharedPrefs;
+
+	public static float CharViewFontSize = 40; // Make this variable 
 
 	public static void init(Context context) {
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,
-				"CHARSET ERROR! REPORT THIS");
+		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,"CHARSET ERROR! REPORT THIS");
 		CharacterSet = sharedPrefs.getString(TipeSettings.CHARSET,
 				"CHARSET ERROR! REPORT THIS");
 		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
 		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
+		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR, Color.WHITE);
+		
 	}
 }
