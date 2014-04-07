@@ -18,28 +18,23 @@ import android.preference.PreferenceActivity;
 public class TipeSettings extends PreferenceActivity {
 
 	
-	/*
-	 * swype
-	 */
-	public final static String swypeActive = "swypeActive";
-	public final static String swipeSensitivity = "swipe_sensitivity";
+	
+	public final static String SWIPE_SENSITIVITY = "swipe_sensitivity";
 	
 	/*
 	 * charsets
 	 */
 
-	public final static String cusLanguage = "cusLanguage";
-	public final static String useCustomCharset = "useCustomCharset";
-	public final static String useCustomSymset = "useCustomSymset";
-	public final static String cusCharset = "cusCharset";
-	public final static String cusSymset = "cusSymset";
+	public final static String LANGUAGE = "cusLanguage";
+	public final static String CHARSET = "cusCharset";
+	public final static String SYMSET = "cusSymset";
 	/*
 	 * colors
 	 */
-	public final static String normFontColor = "normFontColor";
-	public final static String backgroundColor = "backgroundColor";
-	public final static String lightBgColor = "background_light";
-	public final static String darkBgColor = "background_dark";
+	public final static String FONT_COLOR = "normFontColor";
+	public final static String BACKGROUND_COLOR = "backgroundColor";
+	public final static String CHARACTER_BG_LIGHT = "background_light";
+	public final static String CHARACTER_BG_DARK = "background_dark";
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

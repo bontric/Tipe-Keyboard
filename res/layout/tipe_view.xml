@@ -1,14 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#1C1C1C"
-    tools:context="com.bontric.tipeKeyboard.TipeView" >
+<?xml version="1.0" encoding="utf-8"?>
+<com.bontric.tipeKeyboard.TipeView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true" >
 
-   <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-    </LinearLayout>
+    <com.bontric.tipeKeyboard.CharacterView
+        android:id="@+id/character_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:eventsInterceptionEnabled="false" >
+    </com.bontric.tipeKeyboard.CharacterView>
 
-</FrameLayout>
+</com.bontric.tipeKeyboard.TipeView>
