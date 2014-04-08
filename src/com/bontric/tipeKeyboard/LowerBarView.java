@@ -34,6 +34,7 @@ public class LowerBarView extends View {
 	}
 
 	public void init() {
+		this.setBackgroundColor(KeyboardHandler.BackgroundColor);
 		LayoutParams params = new LinearLayout.LayoutParams(
 				KeyboardHandler.KEYBOARD_WIDTH,
 				KeyboardHandler.LOWER_BAR_VIEW_HEIGHT);
