@@ -97,6 +97,8 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 	//------------------------------------------------
 
 	public void initView(){
+
+	  	this.setBackgroundColor(KeyboardHandler.BackgroundColor);
 		curSuggestions = new ArrayList<String>();
 		setWillNotDraw(false);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -182,11 +184,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     	//Draw texts
     	int i = 0;
     	RectF tmpArea = new RectF();
-    	int colors[] = { sharedPref.getInt(
-				TipeSettings.CHARACTER_BG_DARK, Color.BLACK), 
-				sharedPref.getInt(
-						TipeSettings.CHARACTER_BG_LIGHT, Color.GRAY) };
-    	int colorPick = 0;
+ 
     	
     	for (String string : tmpSuggstStrs) {
     		//Calc to box for the text
@@ -194,11 +192,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     		tmpArea.left  =  screenWidth/tmpSuggstStrs.size() * i;
     		tmpArea.right =  screenWidth/tmpSuggstStrs.size() * (i+1);
     		
-    		//Color switches with every box
-    		//TODO needs testing for a good ui
-    		//mPaint.setColor(colors[(colorPick++)%2]);
-    		mPaint.setColor(colors[1]);
-    		canvas.drawRect(tmpArea, mPaint);
+    
     		
     		//TODO Might come in handy to export to a seperate utils file @jakob -> @ben
     		mPaint.setColor(sharedPref.getInt(TipeSettings.FONT_COLOR,
@@ -223,11 +217,11 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     	//Get view height
     	final int height = getHeight();
     	
-    	//Draw background
-    	mPaint.setColor(sharedPref.getInt(TipeSettings.CHARACTER_BG_DARK, Color.BLACK));	
-    	suggestionsArea.set(0, (int) (height-mPaint.getTextSize()*2), screenWidth, height);	
-    	canvas.drawRect(suggestionsArea, mPaint);
     	
+		 suggestionsArea.set(0, (int) (height-mPaint.getTextSize()*2),
+		 screenWidth, height);
+		
+  
     	drawSuggenstionsText(canvas);
     }
     
