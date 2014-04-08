@@ -52,7 +52,7 @@ public class CharacterView extends View {
 	 * Initialize the view This Character View is programmed for a 6-key layout.
 	 */
 	public void init() {
-		LayoutParams params = new LinearLayout.LayoutParams(720,
+		LayoutParams params = new LinearLayout.LayoutParams(KeyboardHandler.KEYBOARD_WIDTH,
 				KeyboardHandler.CHARACTER_VIEW_HEIGHT);
 		this.setLayoutParams(params);
 
