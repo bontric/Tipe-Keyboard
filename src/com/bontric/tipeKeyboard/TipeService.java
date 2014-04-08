@@ -62,7 +62,7 @@ public class TipeService extends InputMethodService {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-//		mTipeView.init();
+		mTipeView.init();
 	}
 
 	@Override

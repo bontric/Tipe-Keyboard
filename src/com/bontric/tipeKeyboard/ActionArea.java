@@ -39,8 +39,7 @@ public abstract class ActionArea {
 	}
 
 	public void draw(Canvas canvas) {
-		Log.d("Main", "Drawing bg @ : X: " + mSpace.left + ",  ,Y: "
-				+ mSpace.top);
+
 		mPaint.setColor(mBgColor);
 		canvas.drawRect(mSpace, mPaint);
 		mPaint.setColor(KeyboardHandler.CharViewFontColor);

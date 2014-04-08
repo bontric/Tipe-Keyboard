@@ -5,6 +5,14 @@
     android:layout_alignParentBottom="true"
     android:orientation="vertical" >
 
+    
+    <com.bontric.tipeKeyboard.UpperBarView
+        android:id="@+id/upper_bar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:eventsInterceptionEnabled="false" >
+    </com.bontric.tipeKeyboard.UpperBarView>
+    
     <com.bontric.tipeKeyboard.CharacterView
         android:id="@+id/character_view"
         android:layout_width="match_parent"
