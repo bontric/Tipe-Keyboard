@@ -51,7 +51,9 @@ public class LowerBarView extends View {
 
 			@Override
 			public void onTouch() {
-				KeyboardHandler.shiftState = !KeyboardHandler.shiftState;
+				if (!KeyboardHandler.isSymbolSet) {
+					KeyboardHandler.shiftState = !KeyboardHandler.shiftState;
+				}
 				KeyboardHandler.handleShift();
 
 			}
@@ -142,6 +144,5 @@ public class LowerBarView extends View {
 
 		return true;
 	}
-
 
 }

@@ -15,6 +15,7 @@ public class InputHandler {
 	}
 
 	public void sendKey(char c) {
+		
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
 		KeyboardHandler.shiftState = false;
 		KeyboardHandler.handleShift();

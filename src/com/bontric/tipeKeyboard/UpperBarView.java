@@ -36,7 +36,7 @@ public class UpperBarView extends View {
 		this.setBackgroundColor(KeyboardHandler.BackgroundColor);
 		LayoutParams params = new LinearLayout.LayoutParams(
 				KeyboardHandler.KEYBOARD_WIDTH,
-				KeyboardHandler.LOWER_BAR_VIEW_HEIGHT);
+				KeyboardHandler.UPPER_BAR_VIEW_HEIGHT);
 		this.setLayoutParams(params);
 
 		int width = params.width;
