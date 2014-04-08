@@ -29,7 +29,7 @@ public class KeyboardHandler {
 	public static int KEYBOARD_WIDTH;
 	public static int LOWER_BAR_VIEW_HEIGHT = 100;
 
-	public static boolean shiftStateChanged = false;
+	public static boolean charsetChanged = false;
 	/*
 	 * tell handleShift() what to do :)
 	 */
@@ -47,6 +47,7 @@ public class KeyboardHandler {
 	public static float defaultFontSize = 40; // Make this variable
 	private static TipeView mTipeView;
 	public static int BackgroundColor = Color.BLACK;
+
 
 	public static void setLayoutView() {
 
@@ -69,9 +70,10 @@ public class KeyboardHandler {
 				Color.DKGRAY);
 		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
-		BackgroundColor = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR, Color.BLACK);
-		
-	  mTipeView = mTView;
+		BackgroundColor = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
+				Color.BLACK);
+
+		mTipeView = mTView;
 
 	}
 
@@ -97,7 +99,13 @@ public class KeyboardHandler {
 			String cs = CharacterSet.replace('ß', '\uffff');
 			CharacterSet = cs.toLowerCase(Locale.GERMAN).replace('\uffff', 'ß');
 		}
-		shiftStateChanged = true;
+		charsetChanged = true;
+		mTipeView.invalidate();
+	}
+
+	public static void handleSym() {
+		isSymbolSet = !isSymbolSet;
+		charsetChanged = true;
 		mTipeView.invalidate();
 	}
 }

@@ -32,6 +32,8 @@ public class CharacterView extends View {
 
 	private LinkedList<CharacterArea> characterAreas;
 	private PointF touchStartPoint;
+	private int mWidth;
+	private int mHeight;
 
 	public CharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
@@ -52,11 +54,13 @@ public class CharacterView extends View {
 	 * Initialize the view This Character View is programmed for a 6-key layout.
 	 */
 	public void init() {
-		LayoutParams params = new LinearLayout.LayoutParams(KeyboardHandler.KEYBOARD_WIDTH,
+		LayoutParams params = new LinearLayout.LayoutParams(
+				KeyboardHandler.KEYBOARD_WIDTH,
 				KeyboardHandler.CHARACTER_VIEW_HEIGHT);
 		this.setLayoutParams(params);
-
-		initCharAreas(params.width, params.height);
+		mWidth = params.width;
+		mHeight = params.height;
+		initCharAreas();
 	}
 
 	/**
@@ -66,14 +70,14 @@ public class CharacterView extends View {
 	 * @param viewHeight
 	 * @param viewWidth
 	 */
-	private void initCharAreas(int viewWidth, int viewHeight) {
+	private void initCharAreas() {
 
 		// this.setBackgroundColor(Color.RED);
 		characterAreas = new LinkedList<CharacterArea>();
-		float x = getX();
-		float y = getY();
-		float width = viewWidth / 3;
-		float height = viewHeight / 2;
+		float x = 0;
+		float y = 0;
+		float width = mWidth / 3;
+		float height = mHeight / 2;
 
 		characterAreas.add(new CharacterArea(x, y, width, height,
 				KeyboardHandler.CharViewDarkColor));
@@ -152,13 +156,17 @@ public class CharacterView extends View {
 		/**
 		 * check if the touch is out of borders ( we'll then get the min/max
 		 * values for x/y)
+		 * 
+		 * => The touch point is relative to this view. While this.getX()/getY()
+		 * is relative to the Layout(TipeView)
 		 */
-		if (x == this.getX() || x == this.getX() + this.getWidth()
-				|| y == this.getY() || y == this.getY() + this.getHeight()) {
+		Log.d("Main", "width= " + getWidth() + " height= " + this.getHeight()
+				+ " X: " + x + " Y: " + y + " mY: " + getY() + " mX" + getX());
+		if (x <= 0 || x >= this.getWidth() || y <= 0 || y >= this.getHeight()) {
+			Log.d("Main", "PING");
 			return false;
 		}
-		return new RectF(this.getX(), this.getY(), this.getX()
-				+ this.getWidth(), this.getY() + this.getHeight()).contains(x,
+		return new RectF(0, 0, this.getWidth(), this.getHeight()).contains(x,
 				y);
 	}
 
@@ -226,9 +234,9 @@ public class CharacterView extends View {
 		 * a textfield to reproduce this. We'll need to find a proper fix for
 		 * that!
 		 */
-		if (KeyboardHandler.shiftStateChanged) {
+		if (KeyboardHandler.charsetChanged) {
 			setLevelUpChars();
-			KeyboardHandler.shiftStateChanged = false;
+			KeyboardHandler.charsetChanged = false;
 			// tell the Keyboard handler that we handled shift.
 		}
 
