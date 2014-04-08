@@ -2,6 +2,8 @@ package com.bontric.tipeKeyboard;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -33,7 +35,6 @@ public class LowerBarView extends View {
 	}
 
 	public void init() {
-		this.setBackgroundColor(Color.GREEN);
 		LayoutParams params = new LinearLayout.LayoutParams(
 				KeyboardHandler.KEYBOARD_WIDTH,
 				KeyboardHandler.LOWER_BAR_VIEW_HEIGHT);
@@ -41,8 +42,10 @@ public class LowerBarView extends View {
 
 		int width = params.width;
 		int height = params.height;
-		shiftButton = new ActionArea(getX(), getY(), width / 4, height,
-				KeyboardHandler.CharViewLightColor, "^") {
+		Bitmap tempIcon = BitmapFactory.decodeResource(getResources(), R.drawable.sym_keyboard_shift);
+		
+		shiftButton = new ActionArea(getX(), getY(), width / 3, height,
+				KeyboardHandler.BackgroundColor, tempIcon) {
 
 			@Override
 			public void onTouch() {
@@ -51,16 +54,21 @@ public class LowerBarView extends View {
 
 			}
 		};
-		spaceButton = new ActionArea(getX() + width / 4, getY(), width / 2,
-				height, KeyboardHandler.CharViewDarkColor, "SPACE") {
+		
+		tempIcon = BitmapFactory.decodeResource(getResources(), R.drawable.sym_keyboard_space);
+		
+		spaceButton = new ActionArea(getX() + width / 3, getY(), width / 3,
+				height, KeyboardHandler.BackgroundColor, tempIcon) {
 			@Override
 			public void onTouch() {
 				KeyboardHandler.inputConnection.handleSpace();
 
 			}
 		};
-		deleteButton = new ActionArea(getX() + 3 * width / 4, getY(),
-				width / 4, height, KeyboardHandler.CharViewLightColor, "DEL") {
+		
+		tempIcon = BitmapFactory.decodeResource(getResources(), R.drawable.sym_keyboard_delete);
+		deleteButton = new ActionArea(getX() + 2 * width / 3, getY(),
+				width / 3, height, KeyboardHandler.BackgroundColor, tempIcon) {
 			@Override
 			public void onTouch() {
 				KeyboardHandler.inputConnection.handleDelete();

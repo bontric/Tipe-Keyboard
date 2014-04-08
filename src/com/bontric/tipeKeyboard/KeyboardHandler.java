@@ -46,6 +46,7 @@ public class KeyboardHandler {
 	public static InputHandler inputConnection = new InputHandler();
 	public static float defaultFontSize = 40; // Make this variable
 	private static TipeView mTipeView;
+	public static int BackgroundColor = Color.BLACK;
 
 	public static void setLayoutView() {
 
@@ -68,6 +69,7 @@ public class KeyboardHandler {
 				Color.DKGRAY);
 		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
+		BackgroundColor = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR, Color.BLACK);
 		
 	  mTipeView = mTView;
 

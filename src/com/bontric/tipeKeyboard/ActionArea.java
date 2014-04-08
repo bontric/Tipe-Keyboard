@@ -1,7 +1,5 @@
 package com.bontric.tipeKeyboard;
 
-
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,7 +10,7 @@ import android.graphics.Paint.Align;
 import android.util.Log;
 
 public abstract class ActionArea {
-	private Bitmap icon;
+	private Bitmap icon = null;
 	private String label;
 	private RectF mSpace;
 	private Paint mPaint = new Paint();
@@ -49,7 +47,7 @@ public abstract class ActionArea {
 		if (icon != null) {
 			int cx = (int) ((mSpace.width() - icon.getWidth()) / 2);
 			int cy = (int) (mSpace.height() - icon.getHeight()) / 2;
-			canvas.drawBitmap(icon, cx, cy, null);
+			canvas.drawBitmap(icon, mSpace.left + cx, mSpace.top + cy, null);
 		} else {
 			PointF center = getTextCenterToDraw(label, mSpace, mPaint);
 			canvas.drawText(label, center.x, center.y, mPaint);
