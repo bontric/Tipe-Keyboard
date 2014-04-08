@@ -26,6 +26,7 @@ public class KeyboardHandler {
 	public static int CHARACTER_VIEW_HEIGHT = 300;
 	public static int KEYBOARD_WIDTH;
 	public static int LOWER_BAR_VIEW_HEIGHT = 100;
+	public static int UPPER_BAR_VIEW_HEIGHT = 100;
 
 	public static boolean charsetChanged = false;
 	/*

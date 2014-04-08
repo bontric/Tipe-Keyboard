@@ -1,8 +1,7 @@
 /**
- *@name SoftKeyboard
+ *@name CharacterView
  *@author Benedikt John Wieder, Jakob Frick
  *
- * Do not try to understand this!
  * 
  * 
  *  
@@ -18,8 +17,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -92,21 +91,80 @@ public class CharacterView extends View {
 		setLevelUpChars();
 	}
 
+	/*
+	 * ###############################################################
+	 * Unflexible longpress inmplementation
+	 */
+
+	private Runnable longPressActionRunnable = new Runnable() {
+		public void run() {
+
+			isLongPressed = setCharAlternatives();
+		}
+	};
+	private Handler longPressHandler = new Handler();
+	private final int longpressTimeout = 500; // final for now
+	private char mLongPressedChar;
+	private boolean isLongPressed = false;
+
+	/**
+	 * 
+	 * @return Returns true when a pressed character has alternatives false if
+	 *         not => longpress check is still pending
+	 */
+	private boolean setCharAlternatives() {
+		for (String s : this.getResources().getStringArray(
+				R.array.key_alternatives)) {
+			if (s.charAt(0) == mLongPressedChar) {
+				this.setLevelDownChars(s.substring(1, s.length()));
+				this.invalidate();
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	/*
+	 * ################################################################
+	 */
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		double sensitivity = 1.2;
+		PointF pressedPoint = util.getEventMedianPos(event);
+		CharacterArea pressed = getAreaFromTouch(pressedPoint);
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			touchStartPoint = util.getEventMedianPos(event);
-			CharacterArea pressed = getAreaFromTouch(touchStartPoint);
+			touchStartPoint = pressedPoint;
+
 			if (pressed != null) {
 				setLevelDownChars(pressed.getChars());
+				longPressHandler.postDelayed(longPressActionRunnable,
+						longpressTimeout);
+				/*
+				 * we are already in level down state due to setLevelDownState()
+				 * call before! This might look wrong without context..
+				 */
+				mLongPressedChar = pressed.getChars().charAt(0);
 				this.invalidate();
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
+			longPressHandler.removeCallbacks(longPressActionRunnable);
+
+			if (pressed != null && !isLongPressed) {
+				longPressHandler.postDelayed(longPressActionRunnable,
+						longpressTimeout);
+				mLongPressedChar = pressed.getChars().charAt(0);
+			}
+
 			break;
 		case MotionEvent.ACTION_UP:
+			isLongPressed = false;
+			longPressHandler.removeCallbacks(longPressActionRunnable);
+
 			PointF touchEndPoint = util.getEventMedianPos(event);
 			PointF swipeVec = new PointF();
 			/*
@@ -127,7 +185,7 @@ public class CharacterView extends View {
 				released = getAreaFromTouch(touchEndPoint);
 
 			}
-			if (released != null) {
+			if (released != null && !released.getChars().equals("")) {
 				/*
 				 * make sure this only sends one character a time..
 				 */
@@ -157,14 +215,12 @@ public class CharacterView extends View {
 		 * => The touch point is relative to this view. While this.getX()/getY()
 		 * is relative to the Layout(TipeView)
 		 */
-		Log.d("Main", "width= " + getWidth() + " height= " + this.getHeight()
-				+ " X: " + x + " Y: " + y + " mY: " + getY() + " mX" + getX());
 		if (x <= 0 || x >= this.getWidth() || y <= 0 || y >= this.getHeight()) {
-			Log.d("Main", "PING");
+
 			return false;
 		}
-		return new RectF(0, 0, this.getWidth(), this.getHeight()).contains(x,
-				y);
+		return new RectF(0, 0, this.getWidth(), this.getHeight())
+				.contains(x, y);
 	}
 
 	/**
@@ -180,8 +236,6 @@ public class CharacterView extends View {
 		}
 		return null;
 	}
-
-
 
 	// =================From here on downwards drawing related things===========
 	/**
@@ -204,8 +258,12 @@ public class CharacterView extends View {
 
 	private void setLevelDownChars(String charset) {
 
-		for (int i = 0; i < charset.length() && i < characterAreas.size(); ++i) {
-			characterAreas.get(i).setChars("" + charset.charAt(i));
+		for (int i = 0; i < characterAreas.size(); ++i) {
+			if (i < charset.length()) {
+				characterAreas.get(i).setChars("" + charset.charAt(i));
+			} else {
+				characterAreas.get(i).setChars("");
+			}
 		}
 	}
 
@@ -254,8 +312,9 @@ public class CharacterView extends View {
 			float height = Math.abs(mSpace.top - mSpace.bottom) / 2;
 			float x = mSpace.left;
 			float y = mSpace.top;
-			PointF center = util.getTextCenterToDraw("" + mCharacters.charAt(0),
-					new RectF(x, y, x + width, y + height), mPaint);
+			PointF center = util.getTextCenterToDraw(
+					"" + mCharacters.charAt(0), new RectF(x, y, x + width, y
+							+ height), mPaint);
 			textCenters = new LinkedList<PointF>();
 			textCenters.add(center);
 			textCenters.add(new PointF(center.x + width, center.y));
@@ -282,11 +341,11 @@ public class CharacterView extends View {
 				}
 
 			} else {
-				PointF center = util.getTextCenterToDraw(mCharacters, mSpace, mPaint);
+				PointF center = util.getTextCenterToDraw(mCharacters, mSpace,
+						mPaint);
 				canvas.drawText(mCharacters, center.x, center.y, mPaint);
 			}
 		}
-
 
 		public String getChars() {
 			return mCharacters;
@@ -294,7 +353,9 @@ public class CharacterView extends View {
 
 		public void setChars(String chars) {
 			mCharacters = chars;
-			initCenters();
+			if (!mCharacters.equals("")) {
+				initCenters();
+			}
 		}
 	}
 }
