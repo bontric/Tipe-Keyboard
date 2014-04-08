@@ -4,10 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Paint.Align;
-import android.util.Log;
 
 public abstract class ActionArea {
 	private Bitmap icon = null;
@@ -48,7 +46,7 @@ public abstract class ActionArea {
 			int cy = (int) (mSpace.height() - icon.getHeight()) / 2;
 			canvas.drawBitmap(icon, mSpace.left + cx, mSpace.top + cy, null);
 		} else {
-			PointF center = getTextCenterToDraw(label, mSpace, mPaint);
+			PointF center = util.getTextCenterToDraw(label, mSpace, mPaint);
 			canvas.drawText(label, center.x, center.y, mPaint);
 		}
 
@@ -66,15 +64,6 @@ public abstract class ActionArea {
 		this.label = label;
 	}
 
-	private PointF getTextCenterToDraw(String text, RectF region, Paint paint) {
-		// got this from stackoverflow
-		Rect textBounds = new Rect();
-		paint.getTextBounds(text, 0, text.length(), textBounds);
-		float x = region.centerX() - textBounds.width() * 0.4f;
-		float y = region.centerY() + textBounds.height() * 0.4f;
-		return new PointF(x, y);
-
-	}
 
 	public abstract void onTouch();
 }

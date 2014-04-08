@@ -16,16 +16,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class CharacterView extends View {
@@ -100,7 +97,7 @@ public class CharacterView extends View {
 		double sensitivity = 1.2;
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			touchStartPoint = getEventMedianPos(event);
+			touchStartPoint = util.getEventMedianPos(event);
 			CharacterArea pressed = getAreaFromTouch(touchStartPoint);
 			if (pressed != null) {
 				setLevelDownChars(pressed.getChars());
@@ -110,7 +107,7 @@ public class CharacterView extends View {
 		case MotionEvent.ACTION_MOVE:
 			break;
 		case MotionEvent.ACTION_UP:
-			PointF touchEndPoint = getEventMedianPos(event);
+			PointF touchEndPoint = util.getEventMedianPos(event);
 			PointF swipeVec = new PointF();
 			/*
 			 * extend swipe vector by customizable factor (sensitivity)
@@ -184,19 +181,7 @@ public class CharacterView extends View {
 		return null;
 	}
 
-	// Calculates the median of all points of an motion event
-	public PointF getEventMedianPos(MotionEvent event) {
-		int pointerCount = event.getPointerCount();
-		PointF medianPoint = new PointF();
-		medianPoint.x = event.getX(0);
-		medianPoint.y = event.getY(0);
 
-		for (int c = 1; c < pointerCount; c++) {
-			medianPoint.x = (medianPoint.x + event.getX(c)) / 2;
-			medianPoint.y = (medianPoint.y + event.getY(c)) / 2;
-		}
-		return medianPoint;
-	}
 
 	// =================From here on downwards drawing related things===========
 	/**
@@ -269,7 +254,7 @@ public class CharacterView extends View {
 			float height = Math.abs(mSpace.top - mSpace.bottom) / 2;
 			float x = mSpace.left;
 			float y = mSpace.top;
-			PointF center = getTextCenterToDraw("" + mCharacters.charAt(0),
+			PointF center = util.getTextCenterToDraw("" + mCharacters.charAt(0),
 					new RectF(x, y, x + width, y + height), mPaint);
 			textCenters = new LinkedList<PointF>();
 			textCenters.add(center);
@@ -297,21 +282,11 @@ public class CharacterView extends View {
 				}
 
 			} else {
-				PointF center = getTextCenterToDraw(mCharacters, mSpace, mPaint);
+				PointF center = util.getTextCenterToDraw(mCharacters, mSpace, mPaint);
 				canvas.drawText(mCharacters, center.x, center.y, mPaint);
 			}
 		}
 
-		private PointF getTextCenterToDraw(String text, RectF region,
-				Paint paint) {
-			// got this from stackoverflow
-			Rect textBounds = new Rect();
-			paint.getTextBounds(text, 0, text.length(), textBounds);
-			float x = region.centerX() - textBounds.width() * 0.4f;
-			float y = region.centerY() + textBounds.height() * 0.4f;
-			return new PointF(x, y);
-
-		}
 
 		public String getChars() {
 			return mCharacters;

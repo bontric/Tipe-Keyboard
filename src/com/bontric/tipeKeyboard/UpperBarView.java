@@ -73,7 +73,7 @@ public class UpperBarView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		PointF touched = getEventMedianPos(event);
+		PointF touched = util.getEventMedianPos(event);
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 
@@ -92,17 +92,4 @@ public class UpperBarView extends View {
 		return true;
 	}
 
-	// Calculates the median of all points of an motion event
-	public PointF getEventMedianPos(MotionEvent event) {
-		int pointerCount = event.getPointerCount();
-		PointF medianPoint = new PointF();
-		medianPoint.x = event.getX(0);
-		medianPoint.y = event.getY(0);
-
-		for (int c = 1; c < pointerCount; c++) {
-			medianPoint.x = (medianPoint.x + event.getX(c)) / 2;
-			medianPoint.y = (medianPoint.y + event.getY(c)) / 2;
-		}
-		return medianPoint;
-	}
 }

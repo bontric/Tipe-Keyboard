@@ -17,8 +17,6 @@ import com.bontric.tipeSettings.TipeSettings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.hardware.Camera.ShutterCallback;
-import android.inputmethodservice.Keyboard;
 import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
