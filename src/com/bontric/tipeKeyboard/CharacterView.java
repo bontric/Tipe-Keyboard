@@ -16,6 +16,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -23,6 +24,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 public class CharacterView extends View {
 
@@ -31,35 +35,46 @@ public class CharacterView extends View {
 
 	public CharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		init();
 	}
 
 	public CharacterView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		init();
 	}
 
 	public CharacterView(Context context) {
 		super(context);
+		init();
 	}
 
 	/**
-	 * initalize the view This Character View is programmed for a 6-key layout.
+	 * Initialize the view This Character View is programmed for a 6-key layout.
 	 */
 	public void init() {
-		this.getLayoutParams().height = KeyboardHandler.CHARACTER_VIEW_HEIGHT;
-		// this.getLayoutParams().width = KeyboardHandler.CHARACTER_VIEW_WIDTH;
-		initCharAreas();
+		LayoutParams params = new LinearLayout.LayoutParams(720,
+				KeyboardHandler.CHARACTER_VIEW_HEIGHT);
+		this.setLayoutParams(params);
+
+		this.requestLayout();
+		initCharAreas(params.width, params.height);
 	}
 
 	/**
-	 * initalize the character areas this is hard coded for 6 areas! ( due to
+	 * Initialize the character areas this is hard coded for 6 areas! ( due to
 	 * readability)
+	 * 
+	 * @param viewHeight
+	 * @param viewWidth
 	 */
-	private void initCharAreas() {
+	private void initCharAreas(int viewWidth, int viewHeight) {
+
+		// this.setBackgroundColor(Color.RED);
 		characterAreas = new LinkedList<CharacterArea>();
 		float x = getX();
 		float y = getY();
-		float width = getWidth() / 3;
-		float height = getHeight() / 2;
+		float width = viewWidth / 3;
+		float height = viewHeight / 2;
 
 		characterAreas.add(new CharacterArea(x, y, width, height,
 				KeyboardHandler.CharViewDarkColor));
@@ -103,14 +118,13 @@ public class CharacterView extends View {
 					+ (int) ((touchEndPoint.y - touchStartPoint.y) * sensitivity);
 			/*
 			 * if the vector extension brings the touch out of CharacterrView
-			 * We'll just interprete the release point!
+			 * We'll just interpret the release point!
 			 */
 			CharacterArea released = null;
 			if (isInBounds(swipeVec.x, swipeVec.y)) {
 				released = getAreaFromTouch(swipeVec);
-			} else {
+			} else if (isInBounds(touchEndPoint.x, touchEndPoint.y)) {
 				released = getAreaFromTouch(touchEndPoint);
-				Log.d("Main", "X: " + touchEndPoint.x + " Y:" + touchEndPoint.y);
 
 			}
 			if (released != null) {
@@ -119,7 +133,6 @@ public class CharacterView extends View {
 				 */
 				KeyboardHandler.inputConnection.sendKey(released.getChars()
 						.charAt(0));
-				Log.d("Main", "Pressed: " + released.getChars());
 			} else {
 				/*
 				 * this is just for testing! when you release your finger
@@ -137,7 +150,14 @@ public class CharacterView extends View {
 	}
 
 	private boolean isInBounds(float x, float y) {
-
+		/**
+		 * check if the touch is out of borders ( we'll then get the min/max
+		 * values for x/y)
+		 */
+		if (x == this.getX() || x == this.getX() + this.getWidth()
+				|| y == this.getY() || y == this.getY() + this.getHeight()) {
+			return false;
+		}
 		return new RectF(this.getX(), this.getY(), this.getX()
 				+ this.getWidth(), this.getY() + this.getHeight()).contains(x,
 				y);
@@ -148,15 +168,7 @@ public class CharacterView extends View {
 	 * @return null if touch is out of the Characterview Area!
 	 */
 	private CharacterArea getAreaFromTouch(PointF pt) {
-		/**
-		 * check if the touch is out of borders ( we'll get the min/max values
-		 * for x/y)
-		 */
-		if (pt.x == this.getX() || pt.x == this.getX() + this.getWidth()
-				|| pt.y == this.getY()
-				|| pt.y == this.getY() + this.getHeight()) {
-			return null;
-		}
+
 		for (CharacterArea cA : characterAreas) {
 			if (cA.contains(pt)) {
 				return cA;
@@ -207,13 +219,20 @@ public class CharacterView extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 		/*
 		 * The first time the draw is painted. it won't show anything. this is
-		 * due to the IME lifecycle (The first time ini() is called
+		 * due to the IME lifecycle (The first time init() is called
 		 * this.getwidth/height will return 0!) switch keyboard and back within
-		 * a textfield to reproduce this. We'll need to find a propper fix fpr
+		 * a textfield to reproduce this. We'll need to find a proper fix for
 		 * that!
 		 */
+		if (KeyboardHandler.shiftStateChanged) {
+			setLevelUpChars();
+			KeyboardHandler.shiftStateChanged = false;
+			// tell the Keyboard handler that we handled shift.
+		}
+
 		for (CharacterArea ca : characterAreas) {
 			ca.draw(canvas);
 		}
@@ -230,7 +249,7 @@ public class CharacterView extends View {
 				int bg_color) {
 			this.mSpace = new RectF(x, y, x + width, y + height);
 			mBgColor = bg_color;
-			mPaint.setTextSize(KeyboardHandler.CharViewFontSize);
+			mPaint.setTextSize(KeyboardHandler.defaultFontSize);
 
 		}
 

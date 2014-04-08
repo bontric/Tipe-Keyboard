@@ -33,22 +33,25 @@ public class TipeService extends InputMethodService {
 		/*
 		 * Initialize all Views within the TipeViewLayout
 		 */
+		mTipeView = null;
 		mTipeView = (TipeView) this.getLayoutInflater().inflate(
 				R.layout.tipe_view, null);
-		
+		mTipeView.init();
+
 		return mTipeView;
 	}
 
 	public void onFinishInput() {
 		super.onFinishInput();
-
 	}
 
 	public void onFinishInputView(boolean finishingInput) {
 		super.onFinishInputView(finishingInput);
+
 	}
 
 	public void onInitializeInterface() {
+
 	}
 
 	@Override
@@ -60,7 +63,6 @@ public class TipeService extends InputMethodService {
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		mTipeView.init();
-
 	}
 
 	@Override

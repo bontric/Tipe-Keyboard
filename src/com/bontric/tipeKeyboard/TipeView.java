@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 public class TipeView extends LinearLayout {
 
@@ -25,6 +27,7 @@ public class TipeView extends LinearLayout {
 	}
 
 	public void init() {
+		
 		((CharacterView) findViewById(R.id.character_view)).init();
 		((LowerBarView) findViewById(R.id.lower_bar_view)).init();
 	}
