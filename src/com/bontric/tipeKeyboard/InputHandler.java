@@ -32,7 +32,9 @@ public class InputHandler {
 	}
 
 	public void handleSpace() {
+		resetComposedWord();
 		sendKey((char) 32);
+		
 	}
 
 	public void handleDelete() {
