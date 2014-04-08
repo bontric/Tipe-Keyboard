@@ -43,5 +43,16 @@ public class InputHandler {
 		mTipeService.getCurrentInputConnection().sendKeyEvent(
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
-
+	
+	
+	/*------------------------------------------------------------
+	*	From here functions for candidate view
+	*	@Jakob Frick
+	*------------------------------------------------------------*/
+	
+	public void getSuggestionFromCandView(String suggestion){
+		
+	}
+	
+	
 }

@@ -31,6 +31,7 @@
     <string name="cus_symset_summary">Set own symbolset</string>
     <string name="cus_symset_title">Type symbolset</string>
     
+    
 	<string name="word_separators">" .,;:!?()[]*&amp;@{}/&lt;>_+=|"</string>
 	
 </resources>
