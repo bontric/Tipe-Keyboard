@@ -27,7 +27,7 @@ public class KeyboardHandler {
 	// constant for now -> is going to be a setting
 	public static int CHARACTER_VIEW_HEIGHT = 300;
 	public static int KEYBOARD_WIDTH;
-	public static int LOWER_BAR_VIEW_HEIGHT =100;
+	public static int LOWER_BAR_VIEW_HEIGHT = 100;
 
 	public static boolean shiftStateChanged = false;
 	/*
@@ -35,8 +35,7 @@ public class KeyboardHandler {
 	 */
 	public static boolean shiftState = false;
 	public static boolean isSymbolSet = false;
-	
-	
+
 	public static String SymbolSet;
 	public static String CharacterSet;
 	public static int CharViewDarkColor = Color.BLACK;
@@ -46,17 +45,18 @@ public class KeyboardHandler {
 
 	public static InputHandler inputConnection = new InputHandler();
 	public static float defaultFontSize = 40; // Make this variable
+	private static TipeView mTipeView;
 
-	public static void setLayoutView(){
-		
+	public static void setLayoutView() {
+
 	}
-	
-	public static void init(Context context) {
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+	public static void init(Context context, TipeView mTView) {
+		WindowManager wm = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 		KEYBOARD_WIDTH = display.getWidth();
-		
-		
+
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,
 				"CHARSET ERROR! REPORT THIS");
@@ -69,32 +69,33 @@ public class KeyboardHandler {
 		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
 		
-		
+	  mTipeView = mTView;
 
 	}
 
 	public static void handleShift() {
-		
+
 		/*
 		 * String.toUpperCase() is handling the German "ß" wrong (replaces it
 		 * with "SS")... so this is a rather bad 'n' dirty fix..but i have no
 		 * other idea than rewriting the toUpperCase() function
 		 */
 		if (shiftState && !isSymbolSet) {
-			
+
 			String cs = CharacterSet.replace('ß', '\uffff');
 			CharacterSet = cs.toUpperCase(Locale.GERMAN).replace('\uffff', 'ß');
-			
+
 			/*
 			 * note this keyboard is for german use right now.. work on locale
 			 * one day @ben
 			 */
-			
+
 		} else {
 
 			String cs = CharacterSet.replace('ß', '\uffff');
 			CharacterSet = cs.toLowerCase(Locale.GERMAN).replace('\uffff', 'ß');
 		}
 		shiftStateChanged = true;
+		mTipeView.invalidate();
 	}
 }

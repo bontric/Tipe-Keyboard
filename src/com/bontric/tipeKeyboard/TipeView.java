@@ -33,7 +33,7 @@ public class TipeView extends LinearLayout {
 	}
 
 	private void initKeyboardHandler(Context context) {
-		KeyboardHandler.init(context);
+		KeyboardHandler.init(context,this);
 
 	}
 }

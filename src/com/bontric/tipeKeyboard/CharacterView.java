@@ -56,7 +56,6 @@ public class CharacterView extends View {
 				KeyboardHandler.CHARACTER_VIEW_HEIGHT);
 		this.setLayoutParams(params);
 
-		this.requestLayout();
 		initCharAreas(params.width, params.height);
 	}
 

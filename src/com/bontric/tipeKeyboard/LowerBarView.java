@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,7 +38,6 @@ public class LowerBarView extends View {
 				KeyboardHandler.KEYBOARD_WIDTH,
 				KeyboardHandler.LOWER_BAR_VIEW_HEIGHT);
 		this.setLayoutParams(params);
-		this.requestLayout();
 
 		int width = params.width;
 		int height = params.height;
