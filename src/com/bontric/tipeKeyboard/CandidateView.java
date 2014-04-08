@@ -14,6 +14,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -104,7 +105,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 	@Override
     public int computeHorizontalScrollRange() {
-        //TODO make better @jakob
+        
 		return 0;
     }
 
@@ -123,9 +124,9 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 	/**
      * A connection back to the service to communicate with the text field
-     * @param inputHandler
+     * @param ims
      */
-    public void setService(InputHandler inputHandler) {
+    public void setInputHandler(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
     }
     
@@ -247,16 +248,16 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         	// TODO needs testing @jakob
 			case 3:
 
-				if(x < suggestionsArea.left / 3)
-					chosenSuggest = curSuggestions.get(1);
+				if(x < suggestionsArea.right / 3)
+					chosenSuggest = curSuggestions.get(0);
 				else 
-					if(x < suggestionsArea.left/3*2)
-						chosenSuggest = curSuggestions.get(0);
+					if(x < suggestionsArea.right/3*2)
+						chosenSuggest = curSuggestions.get(1);
 					else
 						chosenSuggest = curSuggestions.get(2);
 				break;
 			case 2:
-				if(x > suggestionsArea.left/2)
+				if(x > suggestionsArea.right/2)
 					chosenSuggest = curSuggestions.get(0);
 				else
 					chosenSuggest = curSuggestions.get(1);

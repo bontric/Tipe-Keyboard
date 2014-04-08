@@ -1,13 +1,19 @@
 package com.bontric.tipeKeyboard;
 
+import android.inputmethodservice.InputMethodService;
 import android.view.KeyEvent;
+import android.view.inputmethod.InputConnection;
 
 public class InputHandler {
 
 	private TipeService mTipeService;
-
+	
+	// Word for composing
+	private String 			composedWord;
+	private CandidateView mCandidateView;
+	
 	public InputHandler() {
-
+		
 	}
 
 	public void setIMS(TipeService tService) {
@@ -15,6 +21,10 @@ public class InputHandler {
 	}
 
 	public void sendKey(char c) {
+		composedWord += c;
+		mCandidateView.getSuggestionsForWord(composedWord);
+		mTipeService.setCandidatesViewShown(true);
+		
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
 		KeyboardHandler.shiftState = false;
 		KeyboardHandler.handleShift();
@@ -25,10 +35,22 @@ public class InputHandler {
 	}
 
 	public void handleDelete() {
+		// Match composed word
+		if(composedWord.length() <= 1)
+			composedWord = "";
+		else
+			composedWord = composedWord.substring(0, composedWord.length()-1);
+		mCandidateView.getSuggestionsForWord(composedWord);
+		if(composedWord.isEmpty())
+			mTipeService.setCandidatesViewShown(false);
+		else
+			mTipeService.setCandidatesViewShown(true);
+		
 		keyDownUp(KeyEvent.KEYCODE_DEL);
 	}
 
 	public void handleEnter() {
+		resetComposedWord();
 		keyDownUp(KeyEvent.KEYCODE_ENTER);
 	}
 
@@ -50,8 +72,25 @@ public class InputHandler {
 	*	@Jakob Frick
 	*------------------------------------------------------------*/
 	
-	public void getSuggestionFromCandView(String suggestion){
+	public CandidateView initCandidateView(InputMethodService ims){
+		mCandidateView = new CandidateView(ims);
+		mCandidateView.setInputHandler(this);
+		resetComposedWord();
 		
+		return mCandidateView;
+	}
+	
+	private void resetComposedWord() {
+		composedWord = "";
+		mTipeService.setCandidatesViewShown(true);
+	}
+	
+	public void getSuggestionFromCandView(String suggestion){
+		InputConnection ic = mTipeService.getCurrentInputConnection();
+		
+		ic.deleteSurroundingText(composedWord.length(), 0);
+		ic.commitText(composedWord + " ", composedWord.length() + 1);
+		resetComposedWord();
 	}
 	
 	

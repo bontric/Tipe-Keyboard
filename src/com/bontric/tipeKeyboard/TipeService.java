@@ -75,5 +75,11 @@ public class TipeService extends InputMethodService {
 			int candidatesEnd) {
 
 	}
+	
+	@Override
+	public View onCreateCandidatesView() {
+		//Create Candites view 
+		return KeyboardHandler.inputConnection.initCandidateView(this);
+	}
 
 }
