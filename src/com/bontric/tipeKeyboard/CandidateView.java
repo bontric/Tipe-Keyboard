@@ -239,9 +239,9 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         int x = (int) me.getX();
         int y = (int) me.getY();
         //Test if suggestion was hit
+        //Log.d("Candidate View", "y: " + y + "\tbottom: " + suggestionsArea.bottom + "\ttop: " +suggestionsArea.top);
         if(y > suggestionsArea.bottom || y < suggestionsArea.top || curSuggestions.size() == 0)
         	return true;
-        
         String chosenSuggest;
         switch (curSuggestions.size()) {
         	// Calculate corresponding suggestions to x

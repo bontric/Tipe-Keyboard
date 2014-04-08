@@ -1,6 +1,7 @@
 package com.bontric.tipeKeyboard;
 
 import android.inputmethodservice.InputMethodService;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 
@@ -82,14 +83,14 @@ public class InputHandler {
 	
 	private void resetComposedWord() {
 		composedWord = "";
-		mTipeService.setCandidatesViewShown(true);
+		mTipeService.setCandidatesViewShown(false);
 	}
 	
 	public void getSuggestionFromCandView(String suggestion){
 		InputConnection ic = mTipeService.getCurrentInputConnection();
 		
 		ic.deleteSurroundingText(composedWord.length(), 0);
-		ic.commitText(composedWord + " ", composedWord.length() + 1);
+		ic.commitText(suggestion + " ", composedWord.length() + 1);
 		resetComposedWord();
 	}
 	
