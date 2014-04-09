@@ -105,7 +105,7 @@ public class LowerBarView extends View {
 		}
 	};
 	private Handler longPressHandler = new Handler();
-	private final int longpressTimeout = 100; // final for now
+	private final int longpressTimeout = 250; // final for now
 	private final int repeatIntervall = 70;
 
 	/*
