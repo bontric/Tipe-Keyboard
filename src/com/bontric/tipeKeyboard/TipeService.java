@@ -11,6 +11,7 @@ package com.bontric.tipeKeyboard;
 
 import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
@@ -19,11 +20,13 @@ import android.view.inputmethod.EditorInfo;
 public class TipeService extends InputMethodService {
 
 	static final boolean DEBUG = false;
+	Vibrator mVibrator;
 	TipeView mTipeView;
 
 	public void onCreate() {
 		super.onCreate();
 		getResources();
+		mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		KeyboardHandler.input_connection.setIMS(this);
 	}
@@ -52,6 +55,10 @@ public class TipeService extends InputMethodService {
 
 	public void onInitializeInterface() {
 
+	}
+
+	public Vibrator getCurVibrator(){
+		return mVibrator;
 	}
 
 	@Override

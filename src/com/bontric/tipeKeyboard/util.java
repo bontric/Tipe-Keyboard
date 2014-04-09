@@ -38,4 +38,8 @@ public class util {
 		}
 		return medianPoint;
 	}
+	
+	public static void smallVibrate(){
+		
+	}
 }

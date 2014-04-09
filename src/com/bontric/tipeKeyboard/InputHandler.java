@@ -22,6 +22,8 @@ public class InputHandler {
 	}
 
 	public void sendKey(char c) {
+		smallVibrate();
+
 		composedWord += c;
 		mCandidateView.getSuggestionsForWord(composedWord);
 		mTipeService.setCandidatesViewShown(true);
@@ -32,6 +34,8 @@ public class InputHandler {
 	}
 
 	public void handleSpace() {
+		smallVibrate();
+		
 		resetComposedWord();
 		sendKey((char) 32);
 		
@@ -39,6 +43,8 @@ public class InputHandler {
 
 	public void handleDelete() {
 		// Match composed word
+		smallVibrate();
+
 		if(composedWord.length() <= 1)
 			composedWord = "";
 		else
@@ -53,6 +59,8 @@ public class InputHandler {
 	}
 
 	public void handleEnter() {
+		smallVibrate();
+
 		resetComposedWord();
 		keyDownUp(KeyEvent.KEYCODE_ENTER);
 	}
@@ -94,6 +102,10 @@ public class InputHandler {
 		ic.deleteSurroundingText(composedWord.length(), 0);
 		ic.commitText(suggestion + " ", composedWord.length() + 1);
 		resetComposedWord();
+	}
+	
+	public void smallVibrate(){
+		mTipeService.getCurVibrator().vibrate(60);		
 	}
 	
 	
