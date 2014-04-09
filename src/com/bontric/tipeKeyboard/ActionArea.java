@@ -40,7 +40,8 @@ public abstract class ActionArea {
 
 		mPaint.setColor(mBgColor);
 		canvas.drawRect(mSpace, mPaint);
-		mPaint.setColor(KeyboardHandler.char_view_font_color);
+		mPaint.setColor(KeyboardHandler.default_font_color);
+		mPaint.setFakeBoldText(true);
 		if (icon != null) {
 			int cx = (int) ((mSpace.width() - icon.getWidth()) / 2);
 			int cy = (int) (mSpace.height() - icon.getHeight()) / 2;

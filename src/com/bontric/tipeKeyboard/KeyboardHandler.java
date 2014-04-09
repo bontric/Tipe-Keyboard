@@ -38,7 +38,7 @@ public class KeyboardHandler {
 	
 	public static int char_view_dark_color = Color.BLACK;
 	public static int char_view_light_color = Color.DKGRAY;
-	public static int char_view_font_color = Color.WHITE;
+	public static int default_font_color = Color.WHITE;
 
 	public static InputHandler input_connection = new InputHandler();
 
@@ -47,11 +47,8 @@ public class KeyboardHandler {
 	private static SharedPreferences sharedPrefs;
 	private static TipeView mTipeView;
 
-	public static void setLayoutView() {
 
-	}
-
-	public static void init(Context context, TipeView mTView) {
+	public static void init(Context context, TipeView tipeView) {
 		WindowManager wm = (WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
@@ -66,12 +63,12 @@ public class KeyboardHandler {
 				TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
 		char_view_dark_color = sharedPrefs.getInt(
 				TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
-		char_view_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
+		default_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
 		background_color = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
 				Color.BLACK);
 
-		mTipeView = mTView;
+		mTipeView = tipeView;
 
 	}
 

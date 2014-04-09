@@ -9,6 +9,7 @@
 package com.bontric.tipeSettings;
 
 
+import com.bontric.tipeKeyboard.KeyboardHandler;
 import com.bontric.tipeKeyboard.R;
 
 import android.os.Bundle;
@@ -25,8 +26,7 @@ public class TipeSettings extends PreferenceActivity {
 	 * charsets
 	 */
 
-	public final static String LANGUAGE = "cusLanguage";
-	public final static String CHARSET = "cusCharset";
+	public final static String CHARSET = "cusLanguageCharset";
 	public final static String SYMSET = "cusSymset";
 	/*
 	 * colors
@@ -36,9 +36,15 @@ public class TipeSettings extends PreferenceActivity {
 	public final static String CHARACTER_BG_LIGHT = "background_light";
 	public final static String CHARACTER_BG_DARK = "background_dark";
 	
+	public static boolean settings_changed = false;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
+	}
+	
+	public void onContentChanged(){
+		super.onContentChanged();
+		settings_changed = true;
 	}
 
 }
