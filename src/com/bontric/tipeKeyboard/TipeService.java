@@ -25,7 +25,7 @@ public class TipeService extends InputMethodService {
 		super.onCreate();
 		getResources();
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-		KeyboardHandler.inputConnection.setIMS(this);
+		KeyboardHandler.input_connection.setIMS(this);
 	}
 
 	@SuppressLint("NewApi")
@@ -79,7 +79,7 @@ public class TipeService extends InputMethodService {
 	@Override
 	public View onCreateCandidatesView() {
 		//Create Candites view 
-		return KeyboardHandler.inputConnection.initCandidateView(this);
+		return KeyboardHandler.input_connection.initCandidateView(this);
 	}
 
 }

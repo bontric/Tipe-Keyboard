@@ -27,7 +27,7 @@ public class InputHandler {
 		mTipeService.setCandidatesViewShown(true);
 		
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
-		KeyboardHandler.shiftState = false;
+		KeyboardHandler.shift_state = false;
 		KeyboardHandler.handleShift();
 	}
 

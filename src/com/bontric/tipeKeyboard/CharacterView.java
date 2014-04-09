@@ -51,8 +51,8 @@ public class CharacterView extends View {
 	 */
 	public void init() {
 		LayoutParams params = new LinearLayout.LayoutParams(
-				KeyboardHandler.KEYBOARD_WIDTH,
-				KeyboardHandler.CHARACTER_VIEW_HEIGHT);
+				KeyboardHandler.keyboard_width,
+				KeyboardHandler.character_view_height);
 		this.setLayoutParams(params);
 		mWidth = params.width;
 		mHeight = params.height;
@@ -76,17 +76,17 @@ public class CharacterView extends View {
 		float height = mHeight / 2;
 
 		characterAreas.add(new CharacterArea(x, y, width, height,
-				KeyboardHandler.CharViewDarkColor));
+				KeyboardHandler.char_view_dark_color));
 		characterAreas.add(new CharacterArea(x + width, y, width, height,
-				KeyboardHandler.CharViewLightColor));
+				KeyboardHandler.char_view_light_color));
 		characterAreas.add(new CharacterArea(x + 2 * width, y, width, height,
-				KeyboardHandler.CharViewDarkColor));
+				KeyboardHandler.char_view_dark_color));
 		characterAreas.add(new CharacterArea(x, y + height, width, height,
-				KeyboardHandler.CharViewLightColor));
+				KeyboardHandler.char_view_light_color));
 		characterAreas.add(new CharacterArea(x + width, y + height, width,
-				height, KeyboardHandler.CharViewDarkColor));
+				height, KeyboardHandler.char_view_dark_color));
 		characterAreas.add(new CharacterArea(x + 2 * width, y + height, width,
-				height, KeyboardHandler.CharViewLightColor));
+				height, KeyboardHandler.char_view_light_color));
 
 		setLevelUpChars();
 	}
@@ -189,7 +189,7 @@ public class CharacterView extends View {
 				/*
 				 * make sure this only sends one character a time..
 				 */
-				KeyboardHandler.inputConnection.sendKey(released.getChars()
+				KeyboardHandler.input_connection.sendKey(released.getChars()
 						.charAt(0));
 			} else {
 				/*
@@ -197,7 +197,7 @@ public class CharacterView extends View {
 				 * outside the Character View you'll send a space to the
 				 * inputConnection
 				 */
-				KeyboardHandler.inputConnection.handleSpace();
+				KeyboardHandler.input_connection.handleSpace();
 			}
 			setLevelUpChars();
 			this.invalidate();
@@ -248,8 +248,8 @@ public class CharacterView extends View {
 		/*
 		 * check this if you need more symbol set's
 		 */
-		String charset = (KeyboardHandler.isSymbolSet ? KeyboardHandler.SymbolSet
-				: KeyboardHandler.CharacterSet);
+		String charset = (KeyboardHandler.is_symbol_set ? KeyboardHandler.symbol_set
+				: KeyboardHandler.character_set);
 		for (int i = 0; i < 6; ++i) {
 			characterAreas.get(i).setChars(
 					charset.substring(i * 6, (i + 1) * 6));
@@ -277,9 +277,9 @@ public class CharacterView extends View {
 		 * a textfield to reproduce this. We'll need to find a proper fix for
 		 * that!
 		 */
-		if (KeyboardHandler.charsetChanged) {
+		if (KeyboardHandler.charset_changed) {
 			setLevelUpChars();
-			KeyboardHandler.charsetChanged = false;
+			KeyboardHandler.charset_changed = false;
 			// tell the Keyboard handler that we handled shift.
 		}
 
@@ -299,7 +299,7 @@ public class CharacterView extends View {
 				int bg_color) {
 			this.mSpace = new RectF(x, y, x + width, y + height);
 			mBgColor = bg_color;
-			mPaint.setTextSize(KeyboardHandler.defaultFontSize);
+			mPaint.setTextSize(KeyboardHandler.default_font_size);
 
 		}
 
@@ -330,7 +330,7 @@ public class CharacterView extends View {
 
 			mPaint.setColor(mBgColor);
 			canvas.drawRect(mSpace, mPaint);
-			mPaint.setColor(KeyboardHandler.CharViewFontColor);
+			mPaint.setColor(KeyboardHandler.char_view_font_color);
 			mPaint.setTextAlign(Align.CENTER);
 			int i = 0;
 			if (mCharacters.length() == 6) {

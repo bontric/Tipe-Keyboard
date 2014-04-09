@@ -33,17 +33,17 @@ public class UpperBarView extends View {
 	}
 
 	public void init() {
-		this.setBackgroundColor(KeyboardHandler.BackgroundColor);
+		this.setBackgroundColor(KeyboardHandler.background_color);
 		LayoutParams params = new LinearLayout.LayoutParams(
-				KeyboardHandler.KEYBOARD_WIDTH,
-				KeyboardHandler.UPPER_BAR_VIEW_HEIGHT);
+				KeyboardHandler.keyboard_width,
+				KeyboardHandler.upper_bar_view_height);
 		this.setLayoutParams(params);
 
 		int width = params.width;
 		int height = params.height;
 
 		symButton = new ActionArea(0, 0, width / 3, height,
-				KeyboardHandler.BackgroundColor, "Sym") {
+				KeyboardHandler.background_color, "Sym") {
 
 			@Override
 			public void onTouch() {
@@ -55,10 +55,10 @@ public class UpperBarView extends View {
 				R.drawable.sym_keyboard_return);
 
 		enterButton = new ActionArea(2 * width / 3, 0, width / 3, height,
-				KeyboardHandler.BackgroundColor, tempIcon) {
+				KeyboardHandler.background_color, tempIcon) {
 			@Override
 			public void onTouch() {
-				KeyboardHandler.inputConnection.handleEnter();
+				KeyboardHandler.input_connection.handleEnter();
 
 			}
 		};

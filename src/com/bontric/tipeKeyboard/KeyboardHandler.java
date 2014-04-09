@@ -23,30 +23,29 @@ import android.view.WindowManager;
 
 public class KeyboardHandler {
 	// constant for now -> is going to be a setting
-	public static int CHARACTER_VIEW_HEIGHT = 300;
-	public static int KEYBOARD_WIDTH;
-	public static int LOWER_BAR_VIEW_HEIGHT = 100;
-	public static int UPPER_BAR_VIEW_HEIGHT = 100;
+	public static int character_view_height = 300;
+	public static int keyboard_width;
+	public static int lower_bar_view_height = 100;
+	public static int upper_bar_view_height = 100;
+	public static float default_font_size = 40; // Make this variable
 
-	public static boolean charsetChanged = false;
-	/*
-	 * tell handleShift() what to do :)
-	 */
-	public static boolean shiftState = false;
-	public static boolean isSymbolSet = false;
+	public static boolean charset_changed = false;
+	public static boolean shift_state = false;
+	public static boolean is_symbol_set = false;
 
-	public static String SymbolSet;
-	public static String CharacterSet;
-	public static int CharViewDarkColor = Color.BLACK;
-	public static int CharViewLightColor = Color.DKGRAY;
-	public static int CharViewFontColor = Color.WHITE;
+	public static String symbol_set;
+	public static String character_set;
+	
+	public static int char_view_dark_color = Color.BLACK;
+	public static int char_view_light_color = Color.DKGRAY;
+	public static int char_view_font_color = Color.WHITE;
+
+	public static InputHandler input_connection = new InputHandler();
+
+	public static int background_color = Color.BLACK;
+
 	private static SharedPreferences sharedPrefs;
-
-	public static InputHandler inputConnection = new InputHandler();
-	public static float defaultFontSize = 40; // Make this variable
 	private static TipeView mTipeView;
-	public static int BackgroundColor = Color.BLACK;
-
 
 	public static void setLayoutView() {
 
@@ -56,20 +55,20 @@ public class KeyboardHandler {
 		WindowManager wm = (WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
-		KEYBOARD_WIDTH = display.getWidth();
+		keyboard_width = display.getWidth();
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SymbolSet = sharedPrefs.getString(TipeSettings.SYMSET,
+		symbol_set = sharedPrefs.getString(TipeSettings.SYMSET,
 				"CHARSET ERROR! REPORT THIS");
-		CharacterSet = sharedPrefs.getString(TipeSettings.CHARSET,
+		character_set = sharedPrefs.getString(TipeSettings.CHARSET,
 				"CHARSET ERROR! REPORT THIS");
-		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_DARK,
-				Color.BLACK);
-		CharViewDarkColor = sharedPrefs.getInt(TipeSettings.CHARACTER_BG_LIGHT,
-				Color.DKGRAY);
-		CharViewFontColor = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
+		char_view_dark_color = sharedPrefs.getInt(
+				TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
+		char_view_dark_color = sharedPrefs.getInt(
+				TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
+		char_view_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
-		BackgroundColor = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
+		background_color = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
 				Color.BLACK);
 
 		mTipeView = mTView;
@@ -83,10 +82,11 @@ public class KeyboardHandler {
 		 * with "SS")... so this is a rather bad 'n' dirty fix..but i have no
 		 * other idea than rewriting the toUpperCase() function
 		 */
-		if (shiftState && !isSymbolSet) {
+		if (shift_state && !is_symbol_set) {
 
-			String cs = CharacterSet.replace('ß', '\uffff');
-			CharacterSet = cs.toUpperCase(Locale.GERMAN).replace('\uffff', 'ß');
+			String cs = character_set.replace('ß', '\uffff');
+			character_set = cs.toUpperCase(Locale.GERMAN)
+					.replace('\uffff', 'ß');
 
 			/*
 			 * note this keyboard is for german use right now.. work on locale
@@ -95,16 +95,17 @@ public class KeyboardHandler {
 
 		} else {
 
-			String cs = CharacterSet.replace('ß', '\uffff');
-			CharacterSet = cs.toLowerCase(Locale.GERMAN).replace('\uffff', 'ß');
+			String cs = character_set.replace('ß', '\uffff');
+			character_set = cs.toLowerCase(Locale.GERMAN)
+					.replace('\uffff', 'ß');
 		}
-		charsetChanged = true;
+		charset_changed = true;
 		mTipeView.invalidate();
 	}
 
 	public static void handleSym() {
-		isSymbolSet = !isSymbolSet;
-		charsetChanged = true;
+		is_symbol_set = !is_symbol_set;
+		charset_changed = true;
 		mTipeView.invalidate();
 	}
 }

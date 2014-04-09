@@ -18,7 +18,7 @@ public abstract class ActionArea {
 			int bg_color, String label) {
 		this.mSpace = new RectF(x, y, x + width, y + height);
 		mBgColor = bg_color;
-		mPaint.setTextSize(KeyboardHandler.defaultFontSize);
+		mPaint.setTextSize(KeyboardHandler.default_font_size);
 		mPaint.setTextAlign(Align.CENTER);
 		this.label = label;
 	}
@@ -27,7 +27,7 @@ public abstract class ActionArea {
 			int bg_color, Bitmap icon) {
 		this.mSpace = new RectF(x, y, x + width, y + height);
 		mBgColor = bg_color;
-		mPaint.setTextSize(KeyboardHandler.defaultFontSize);
+		mPaint.setTextSize(KeyboardHandler.default_font_size);
 		mPaint.setTextAlign(Align.CENTER);
 		this.icon = icon;
 	}
@@ -40,7 +40,7 @@ public abstract class ActionArea {
 
 		mPaint.setColor(mBgColor);
 		canvas.drawRect(mSpace, mPaint);
-		mPaint.setColor(KeyboardHandler.CharViewFontColor);
+		mPaint.setColor(KeyboardHandler.char_view_font_color);
 		if (icon != null) {
 			int cx = (int) ((mSpace.width() - icon.getWidth()) / 2);
 			int cy = (int) (mSpace.height() - icon.getHeight()) / 2;

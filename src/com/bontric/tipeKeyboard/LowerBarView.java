@@ -35,10 +35,10 @@ public class LowerBarView extends View {
 	}
 
 	public void init() {
-		this.setBackgroundColor(KeyboardHandler.BackgroundColor);
+		this.setBackgroundColor(KeyboardHandler.background_color);
 		LayoutParams params = new LinearLayout.LayoutParams(
-				KeyboardHandler.KEYBOARD_WIDTH,
-				KeyboardHandler.LOWER_BAR_VIEW_HEIGHT);
+				KeyboardHandler.keyboard_width,
+				KeyboardHandler.lower_bar_view_height);
 		this.setLayoutParams(params);
 
 		int width = params.width;
@@ -47,12 +47,12 @@ public class LowerBarView extends View {
 				R.drawable.sym_keyboard_shift);
 
 		shiftButton = new ActionArea(0, 0, width / 3, height,
-				KeyboardHandler.BackgroundColor, tempIcon) {
+				KeyboardHandler.background_color, tempIcon) {
 
 			@Override
 			public void onTouch() {
-				if (!KeyboardHandler.isSymbolSet) {
-					KeyboardHandler.shiftState = !KeyboardHandler.shiftState;
+				if (!KeyboardHandler.is_symbol_set) {
+					KeyboardHandler.shift_state = !KeyboardHandler.shift_state;
 				}
 				KeyboardHandler.handleShift();
 
@@ -63,10 +63,10 @@ public class LowerBarView extends View {
 				R.drawable.sym_keyboard_space);
 
 		spaceButton = new ActionArea(width / 3, 0, width / 3, height,
-				KeyboardHandler.BackgroundColor, tempIcon) {
+				KeyboardHandler.background_color, tempIcon) {
 			@Override
 			public void onTouch() {
-				KeyboardHandler.inputConnection.handleSpace();
+				KeyboardHandler.input_connection.handleSpace();
 
 			}
 		};
@@ -74,10 +74,10 @@ public class LowerBarView extends View {
 		tempIcon = BitmapFactory.decodeResource(getResources(),
 				R.drawable.sym_keyboard_delete);
 		deleteButton = new ActionArea(2 * width / 3, 0, width / 3, height,
-				KeyboardHandler.BackgroundColor, tempIcon) {
+				KeyboardHandler.background_color, tempIcon) {
 			@Override
 			public void onTouch() {
-				KeyboardHandler.inputConnection.handleDelete();
+				KeyboardHandler.input_connection.handleDelete();
 
 			}
 		};
