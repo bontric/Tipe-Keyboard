@@ -11,7 +11,7 @@
         android:defaultValue="@string/defaultCharset"
         android:entries="@array/lang_list_names"
         android:entryValues="@array/lang_list_values"
-        android:key="cusLanguage"
+        android:key="cusLanguageCharset"
         android:title="@string/chose_lang_title" />
 
     <PreferenceScreen android:title="Custom Colors" >

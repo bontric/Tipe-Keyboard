@@ -9,6 +9,8 @@
  */
 package com.bontric.tipeKeyboard;
 
+import com.bontric.tipeSettings.TipeSettings;
+
 import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
 import android.preference.PreferenceManager;
@@ -25,11 +27,14 @@ public class TipeService extends InputMethodService {
 		super.onCreate();
 		getResources();
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-		KeyboardHandler.input_connection.setIMS(this);
 	}
 
 	@SuppressLint("NewApi")
 	public View onCreateInputView() {
+		/*
+		 * reset settings -> Handles changes in preferences
+		 */
+		KeyboardHandler.input_connection.setIMS(this);
 		/*
 		 * Initialize all Views within the TipeViewLayout
 		 */
@@ -62,7 +67,14 @@ public class TipeService extends InputMethodService {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		mTipeView.init();
+		/*
+		 * Initalize the keyboard if the settings have changed
+		 */
+		if (true) {
+			mTipeView.initKeyboardHandler(this);
+			mTipeView.init();
+			TipeSettings.settings_changed = false;
+		}
 	}
 
 	@Override
@@ -75,10 +87,10 @@ public class TipeService extends InputMethodService {
 			int candidatesEnd) {
 
 	}
-	
+
 	@Override
 	public View onCreateCandidatesView() {
-		//Create Candites view 
+		// Create Candites view
 		return KeyboardHandler.input_connection.initCandidateView(this);
 	}
 

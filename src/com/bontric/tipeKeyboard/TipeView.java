@@ -29,7 +29,7 @@ public class TipeView extends LinearLayout {
 		((UpperBarView) findViewById(R.id.upper_bar_view)).init();
 	}
 
-	private void initKeyboardHandler(Context context) {
+	public void initKeyboardHandler(Context context) {
 		KeyboardHandler.init(context,this);
 
 	}

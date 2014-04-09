@@ -330,7 +330,8 @@ public class CharacterView extends View {
 
 			mPaint.setColor(mBgColor);
 			canvas.drawRect(mSpace, mPaint);
-			mPaint.setColor(KeyboardHandler.char_view_font_color);
+			mPaint.setColor(KeyboardHandler.default_font_color);
+			mPaint.setFakeBoldText(true);
 			mPaint.setTextAlign(Align.CENTER);
 			int i = 0;
 			if (mCharacters.length() == 6) {
