@@ -77,11 +77,11 @@ public class TipeService extends InputMethodService {
 		/*
 		 * Initalize the keyboard if the settings have changed
 		 */
-		if (true) {
+		
 			mTipeView.initKeyboardHandler(this);
 			mTipeView.init();
 			TipeSettings.settings_changed = false;
-		}
+		
 	}
 
 	@Override

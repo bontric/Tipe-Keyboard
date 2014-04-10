@@ -2,88 +2,121 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="Tipe Settings" >
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="swypeActive"
-        android:title="Wischen Aktivieren" />
+    <PreferenceCategory
+        android:key="pref_key_storage_settings"
+        android:title="@string/general_settings_title" >
+        <ListPreference
+            android:defaultValue="@string/defaultCharset"
+            android:entries="@array/lang_list_names"
+            android:entryValues="@array/lang_list_values"
+            android:key="cusLanguageCharset"
+            android:title="@string/chose_lang_title" />
 
-    <ListPreference
-        android:defaultValue="@string/defaultCharset"
-        android:entries="@array/lang_list_names"
-        android:entryValues="@array/lang_list_values"
-        android:key="cusLanguageCharset"
-        android:title="@string/chose_lang_title" />
-
-    <PreferenceScreen android:title="Custom Colors" >
-      
-
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="false"
-            android:defaultValue="@color/normTextColor"
-            android:key="normFontColor"
-            android:summary="@string/fontColor_summary"
-            android:title="@string/fontColor_title" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="true"
-            android:defaultValue="@color/backgroundDark"
-            android:key="backgroundColor"
-            android:summary="Overall Background Color"
-            android:title="Background Color " />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="true"
-            android:defaultValue="@color/backgroundLight"
-            android:key="background_light"
-            android:summary="Lighter Background color of the tiles"
-            android:title="Background 2 for 6x6 grid" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="true"
-            android:defaultValue="@color/backgroundDark"
-            android:key="background_dark"
-            android:summary="Darker Background color of the tiles"
-            android:title="Background 2 for 6x6 grid" />
-    </PreferenceScreen>
-    <PreferenceScreen android:title="Feinschliff" >
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="useAdvancedCharset"
-            android:title="Use advanced charset" />
+            android:key="showSuggestions"
+            android:title="Display Suggestions when typing" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useAudioFeedback"
+            android:title="Sound on touch" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="useHapticFeedback"
+            android:title="Vibrate on touch" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="autoapitalization"
+            android:summary="Capital Letters after &apos;.&apos;"
+            android:title="Automatic capitalization" />
 
         <net.jayschwa.android.preference.SliderPreference
-            android:defaultValue="@string/swipe_sensitivity_default"
-            android:dependency="swypeActive"
-            android:dialogMessage="Set Sensitivity"
-            android:key="swipe_sensitivity"
-            android:title="Swipe sensitivity" />
+            android:defaultValue="0.5"
+            android:dialogMessage="250-750ms"
+            android:key="longpress_timeout"
+            android:title="Long press timeout" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="useCustomCharset"
-            android:title="@string/cus_charset_title" />
+        <PreferenceScreen android:title="Custom Colors" >
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                alphaSlider="false"
+                android:defaultValue="@color/normTextColor"
+                android:key="normFontColor"
+                android:summary="@string/fontColor_summary"
+                android:title="@string/fontColor_title" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                alphaSlider="false"
+                android:defaultValue="@color/backgroundDark"
+                android:key="candidateBackgroundColor"
+                android:summary="Custom Background Color for Suggestions"
+                android:title="Suggestions Bakcground Color" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                alphaSlider="false"
+                android:defaultValue="@color/backgroundDark"
+                android:key="backgroundColor"
+                android:summary="Overall Background Color"
+                android:title="Background Color " />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                alphaSlider="false"
+                android:defaultValue="@color/backgroundLight"
+                android:key="background_light"
+                android:summary="Lighter Background color of the tiles"
+                android:title="Background Color 1 for 6x6 grid" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                alphaSlider="false"
+                android:defaultValue="@color/backgroundDark"
+                android:key="background_dark"
+                android:summary="Darker Background color of the tiles"
+                android:title="Background Color 2 for 6x6 grid" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_storage_settings"
+        android:title="Sonstiges" >
+        <PreferenceScreen android:title="Erweiterte Einstellungen" >
+            <net.jayschwa.android.preference.SliderPreference
+                android:defaultValue="0.7"
+                android:title="Keyboard Height"
+                android:key="keyboard_height"
+                android:dialogMessage="30-60% Screen height" />
+            <net.jayschwa.android.preference.SliderPreference
+                android:defaultValue="1"
+                android:title="Keyboard Width"
+                android:key="keyboard_width"
+                android:dialogMessage="50-100% Screen width" />
 
-        <EditTextPreference
-            android:defaultValue="@string/defaultCharset"
-            android:dependency="useCustomCharset"
-            android:dialogMessage="@string/cus_charset_dialogMess"
-            android:dialogTitle="@string/cus_charset_dialogTitle"
-            android:key="cusCharset"
-            android:summary="@string/cus_charset_summary"
-            android:title="@string/cus_charset_title" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="useAdvancedCharset"
+                android:title="Use advanced charset" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="useCustomCharset"
+                android:title="@string/cus_charset_title" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="useCustomSymset"
-            android:title="@string/cus_symset_checkbox" />
+            <EditTextPreference
+                android:defaultValue="@string/defaultCharset"
+                android:dependency="useCustomCharset"
+                android:dialogMessage="@string/cus_charset_dialogMess"
+                android:dialogTitle="@string/cus_charset_dialogTitle"
+                android:key="cusCharset"
+                android:summary="@string/cus_charset_summary"
+                android:title="@string/cus_charset_title" />
 
-        <EditTextPreference
-            android:defaultValue="@string/SymbolSet"
-            android:dependency="useCustomSymset"
-            android:dialogMessage="@string/cus_symset_dialogMess"
-            android:dialogTitle="@string/cus_symset_dialogTitle"
-            android:key="cusSymset"
-            android:summary="@string/cus_symset_summary"
-            android:title="@string/cus_symset_title" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="useCustomSymset"
+                android:title="@string/cus_symset_checkbox" />
+
+            <EditTextPreference
+                android:defaultValue="@string/SymbolSet"
+                android:dependency="useCustomSymset"
+                android:dialogMessage="@string/cus_symset_dialogMess"
+                android:dialogTitle="@string/cus_symset_dialogTitle"
+                android:key="cusSymset"
+                android:summary="@string/cus_symset_summary"
+                android:title="@string/cus_symset_title" />
     >
-    </PreferenceScreen>
-preferenceScreen>
+        </PreferenceScreen>
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -17,58 +17,92 @@ import com.bontric.tipeSettings.TipeSettings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
 
 public class KeyboardHandler {
 	// constant for now -> is going to be a setting
-	public static int character_view_height = 300;
-	public static int keyboard_width;
-	public static int lower_bar_view_height = 100;
-	public static int upper_bar_view_height = 100;
-	public static float default_font_size = 40; // Make this variable
+	public static int character_view_height;
+	public static int lower_bar_view_height;
+	public static int upper_bar_view_height;
+	public static float default_font_size; // Make this variable
 
 	public static boolean charset_changed = false;
 	public static boolean shift_state = false;
 	public static boolean is_symbol_set = false;
+	public static boolean use_audio_feedback;
+	public static boolean use_haptic_feedback;
+	public static boolean use_auto_capitalization;
 
 	public static String symbol_set;
 	public static String character_set;
-	
-	public static int char_view_dark_color = Color.BLACK;
-	public static int char_view_light_color = Color.DKGRAY;
-	public static int default_font_color = Color.WHITE;
+
+	public static int char_view_dark_color;
+	public static int char_view_light_color;
+	public static int default_font_color;
+	public static int background_color;
+	public static int candidate_view_background_color;
+
+	public static int longpress_timeout;
+	public static int keyboard_width;
+	public static int keyboard_height;
 
 	public static InputHandler input_connection = new InputHandler();
-
-	public static int background_color = Color.BLACK;
 
 	private static SharedPreferences sharedPrefs;
 	private static TipeView mTipeView;
 
-
 	public static void init(Context context, TipeView tipeView) {
-		WindowManager wm = (WindowManager) context
-				.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		keyboard_width = display.getWidth();
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		// ===== COLORS=====================
 		symbol_set = sharedPrefs.getString(TipeSettings.SYMSET,
 				"CHARSET ERROR! REPORT THIS");
 		character_set = sharedPrefs.getString(TipeSettings.CHARSET,
 				"CHARSET ERROR! REPORT THIS");
 		char_view_dark_color = sharedPrefs.getInt(
 				TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
-		char_view_dark_color = sharedPrefs.getInt(
+		char_view_light_color = sharedPrefs.getInt(
 				TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
 		default_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
 				Color.WHITE);
 		background_color = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
 				Color.BLACK);
+		candidate_view_background_color = sharedPrefs.getInt(
+				TipeSettings.CANDIDATE_VIEW_BACKGROUND, Color.BLACK);
 
+		// ====== BOOLEANS ===
+		use_audio_feedback = sharedPrefs.getBoolean(
+				TipeSettings.USE_AUDIO_FEEDBACK, false);
+		use_haptic_feedback = sharedPrefs.getBoolean(
+				TipeSettings.USE_HAPTIC_FEEDBACK, false);
+		use_auto_capitalization = sharedPrefs.getBoolean(
+				TipeSettings.USE_AUTO_CAPITALIZATION, false);
+
+		// ======= ADVANCED ===
+		longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(
+				TipeSettings.LONGPRESS_TIMEOUT, (float) 0.5));
 		mTipeView = tipeView;
+
+		// ====== KeyboardSize ====
+		WindowManager wm = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+		Point size = new Point();
+		wm.getDefaultDisplay().getSize(size);
+		;
+		keyboard_height = (int) (size.y * (0.3 + 0.3 * sharedPrefs.getFloat(
+				TipeSettings.KEYBOARD_HEIGHT, 1)));
+		keyboard_width = (int) (size.x * (0.3 + 0.7 * sharedPrefs.getFloat(
+				TipeSettings.KEYBOARD_WIDTH, 1)));
+		character_view_height = (int) (0.65 * keyboard_height);
+		lower_bar_view_height = (int) (0.20 * keyboard_height);
+		upper_bar_view_height = (int) (0.15 * keyboard_height);
+		default_font_size = (int) (20 + 15 * (sharedPrefs.getFloat(
+				TipeSettings.KEYBOARD_HEIGHT, 1) + sharedPrefs.getFloat(
+				TipeSettings.KEYBOARD_HEIGHT, 1)));
 
 	}
 

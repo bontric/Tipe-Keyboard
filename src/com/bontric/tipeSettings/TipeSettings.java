@@ -9,7 +9,6 @@
 package com.bontric.tipeSettings;
 
 
-import com.bontric.tipeKeyboard.KeyboardHandler;
 import com.bontric.tipeKeyboard.R;
 
 import android.os.Bundle;
@@ -35,6 +34,16 @@ public class TipeSettings extends PreferenceActivity {
 	public final static String BACKGROUND_COLOR = "backgroundColor";
 	public final static String CHARACTER_BG_LIGHT = "background_light";
 	public final static String CHARACTER_BG_DARK = "background_dark";
+	public final static String CANDIDATE_VIEW_BACKGROUND = "candidateBackgroundColor";
+
+	public final static String USE_AUDIO_FEEDBACK = "useAudioFeedback";
+	public final static String USE_HAPTIC_FEEDBACK = "useHapticFeedback";
+	public final static String USE_AUTO_CAPITALIZATION = "autoapitalization";
+	public final static String SHOW_SUGGESTIONS = "showSuggestions";
+	
+	public final static String KEYBOARD_HEIGHT = "keyboard_height";
+	public final static String KEYBOARD_WIDTH = "keyboard_width";
+	public final static String LONGPRESS_TIMEOUT = "longpress_timeout";
 	
 	public static boolean settings_changed = false;
 	public void onCreate(Bundle savedInstanceState) {

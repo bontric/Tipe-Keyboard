@@ -98,7 +98,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 	public void initView(){
 
-	  	this.setBackgroundColor(KeyboardHandler.background_color);
+	  	this.setBackgroundColor(KeyboardHandler.candidate_view_background_color);
 		curSuggestions = new ArrayList<String>();
 		setWillNotDraw(false);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
