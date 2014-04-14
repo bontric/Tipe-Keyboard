@@ -10,10 +10,9 @@
     <string name="label_default_lang">Standard</string>
     
      <!--  Here goes the strings for the preferenceses -->
-    <string name="activ_swipe_tile">Wischen Aktivieren</string>
     
-    <string name="chose_lang_title">Wähle ein Sprachzeichensatz</string>
-    
+    <string name="chose_lang_title">Sprachspezifische Zeichen</string>
+    <string name="general_settings_title">Allgemeine Einstellungen</string>
     <string name="finetuning_title">Feinschliff</string>
     
     <string name="cus_charset_checkbox">Benutzerdefinierte Zeichenanordnung</string>

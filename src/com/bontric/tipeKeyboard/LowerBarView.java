@@ -123,8 +123,8 @@ public class LowerBarView extends View {
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
-			longPressHandler.removeCallbacks(longPressActionRunnable);
-			if (deleteButton.contains(touched)) {
+			if (!deleteButton.contains(touched)) {
+				longPressHandler.removeCallbacks(longPressActionRunnable);
 				longPressHandler.postDelayed(longPressActionRunnable,
 						longpressTimeout);
 			}

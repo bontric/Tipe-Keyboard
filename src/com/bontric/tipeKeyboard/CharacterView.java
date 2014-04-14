@@ -103,7 +103,7 @@ public class CharacterView extends View {
 		}
 	};
 	private Handler longPressHandler = new Handler();
-	private final int longpressTimeout = 500; // final for now
+	private final int longpressTimeout = KeyboardHandler.longpress_timeout;
 	private char mLongPressedChar;
 	private boolean isLongPressed = false;
 

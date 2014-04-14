@@ -23,10 +23,12 @@ public class InputHandler {
 
 	public void sendKey(char c) {
 		smallVibrate();
-
-		composedWord += c;
-		mCandidateView.getSuggestionsForWord(composedWord);
-		mTipeService.setCandidatesViewShown(true);
+		
+		if(composedWord != null){
+			composedWord += c;
+			mCandidateView.getSuggestionsForWord(composedWord);
+			mTipeService.setCandidatesViewShown(true);
+		}
 		
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
 		KeyboardHandler.shift_state = false;
@@ -44,18 +46,20 @@ public class InputHandler {
 	public void handleDelete() {
 		// Match composed word
 		smallVibrate();
-
-		if(composedWord.length() <= 1)
-			composedWord = "";
-		else
-			composedWord = composedWord.substring(0, composedWord.length()-1);
-		mCandidateView.getSuggestionsForWord(composedWord);
 		
-		if(composedWord.isEmpty())
-			mTipeService.setCandidatesViewShown(false);
-		else
-			mTipeService.setCandidatesViewShown(true);
+		if(composedWord != null){
+			if(composedWord.length() <= 1)
+				composedWord = "";
+			else
+				composedWord = composedWord.substring(0, composedWord.length()-1);
 		
+			mCandidateView.getSuggestionsForWord(composedWord);
+	
+			if(composedWord.isEmpty())
+				mTipeService.setCandidatesViewShown(false);
+			else
+				mTipeService.setCandidatesViewShown(true);
+		}
 		keyDownUp(KeyEvent.KEYCODE_DEL);
 	}
 
@@ -88,17 +92,19 @@ public class InputHandler {
 		mCandidateView = new CandidateView(ims);
 		mCandidateView.setInputHandler(this);
 		resetComposedWord();
+		composedWord = "";
 		
 		return mCandidateView;
 	}
 	
 	public void resetComposedWord() {
-		composedWord = "";
+		composedWord = null;
 		mTipeService.setCandidatesViewShown(false);
 	}
 	
 	public void setComposedWord(String soFarComposed){
 		composedWord = soFarComposed;
+		mCandidateView.getSuggestionsForWord(composedWord);
 		mTipeService.setCandidatesViewShown(true);
 	}
 	

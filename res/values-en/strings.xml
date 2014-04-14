@@ -10,10 +10,8 @@
     <string name="label_default_lang">Default</string>
     
     <!--  Here goes the strings for the preferenceses -->
-    <string name="activ_swipe_tile">Activate swipe</string>
-    
     <string name="chose_lang_title">Choose a language charset</string>
-    
+      <string name="general_settings_title">General Settings</string>
     <string name="finetuning_title">More settings</string>
     
     <string name="cus_charset_checkbox">Custom charset</string>
