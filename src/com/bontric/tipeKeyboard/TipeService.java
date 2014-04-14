@@ -9,15 +9,17 @@
  */
 package com.bontric.tipeKeyboard;
 
-import com.bontric.tipeSettings.TipeSettings;
-
 import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
+
+import com.bontric.tipeSettings.TipeSettings;
 
 public class TipeService extends InputMethodService {
 
@@ -25,6 +27,8 @@ public class TipeService extends InputMethodService {
 	Vibrator mVibrator;
 	TipeView mTipeView;
 
+	boolean showCandidates;
+	
 	public void onCreate() {
 		super.onCreate();
 		getResources();
@@ -51,6 +55,7 @@ public class TipeService extends InputMethodService {
 
 	public void onFinishInput() {
 		super.onFinishInput();
+		KeyboardHandler.input_connection.resetComposedWord();
 	}
 
 	public void onFinishInputView(boolean finishingInput) {
@@ -77,6 +82,13 @@ public class TipeService extends InputMethodService {
 		/*
 		 * Initalize the keyboard if the settings have changed
 		 */
+		
+		// Show candidates for text or in doubt
+	/*	showCandidates = 
+		(attribute.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT ||
+		(attribute.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_NULL ||
+		(attribute.inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_TEXT_VARIATION_NORMAL ;*/
+		
 		if (true) {
 			mTipeView.initKeyboardHandler(this);
 			mTipeView.init();
@@ -98,7 +110,14 @@ public class TipeService extends InputMethodService {
 	@Override
 	public View onCreateCandidatesView() {
 		// Create Candites view
-		return KeyboardHandler.input_connection.initCandidateView(this);
+		if(!showCandidates) 
+			return null;
+		else
+			return KeyboardHandler.input_connection.initCandidateView(this);
+	}
+	
+	public void onExtractedCursorMovement (int dx, int dy){
+		Log.d("onExtractedCursorMovement", "Here is cursor movment");
 	}
 
 }

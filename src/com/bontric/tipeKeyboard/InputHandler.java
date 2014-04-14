@@ -50,6 +50,7 @@ public class InputHandler {
 		else
 			composedWord = composedWord.substring(0, composedWord.length()-1);
 		mCandidateView.getSuggestionsForWord(composedWord);
+		
 		if(composedWord.isEmpty())
 			mTipeService.setCandidatesViewShown(false);
 		else
@@ -91,9 +92,14 @@ public class InputHandler {
 		return mCandidateView;
 	}
 	
-	private void resetComposedWord() {
+	public void resetComposedWord() {
 		composedWord = "";
 		mTipeService.setCandidatesViewShown(false);
+	}
+	
+	public void setComposedWord(String soFarComposed){
+		composedWord = soFarComposed;
+		mTipeService.setCandidatesViewShown(true);
 	}
 	
 	public void getSuggestionFromCandView(String suggestion){
