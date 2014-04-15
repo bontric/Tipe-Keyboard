@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
@@ -35,9 +36,11 @@ public class KeyboardHandler {
 	public static boolean use_audio_feedback;
 	public static boolean use_haptic_feedback;
 	public static boolean use_auto_capitalization;
+	public static boolean show_suggestions;
 
 	public static String symbol_set;
 	public static String character_set;
+	public static String word_separators;
 
 	public static int char_view_dark_color;
 	public static int char_view_light_color;
@@ -58,11 +61,17 @@ public class KeyboardHandler {
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+		// ===== Strings=====================
+
+		if (sharedPrefs.getBoolean(TipeSettings.USE_CUSTOM_SYMSET, false)) {
+			symbol_set = sharedPrefs.getString(TipeSettings.CUSTOM_SYMSET, "");
+		} else {
+			symbol_set = context.getResources().getString(R.string.SymbolSet);
+		}
+		character_set = sharedPrefs.getString(TipeSettings.CHARSET, "");
+		word_separators = context.getResources().getString(
+				R.string.word_separators);
 		// ===== COLORS=====================
-		symbol_set = sharedPrefs.getString(TipeSettings.SYMSET,
-				"CHARSET ERROR! REPORT THIS");
-		character_set = sharedPrefs.getString(TipeSettings.CHARSET,
-				"CHARSET ERROR! REPORT THIS");
 		char_view_dark_color = sharedPrefs.getInt(
 				TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
 		char_view_light_color = sharedPrefs.getInt(
@@ -81,13 +90,15 @@ public class KeyboardHandler {
 				TipeSettings.USE_HAPTIC_FEEDBACK, false);
 		use_auto_capitalization = sharedPrefs.getBoolean(
 				TipeSettings.USE_AUTO_CAPITALIZATION, false);
+		show_suggestions = sharedPrefs.getBoolean(
+				TipeSettings.SHOW_SUGGESTIONS, false);
 
 		// ======= ADVANCED ===
 		longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(
 				TipeSettings.LONGPRESS_TIMEOUT, (float) 0.5));
 		mTipeView = tipeView;
 
-		// ====== KeyboardSize ====
+		// ====== Keyboard Size (TESTING) !====
 		WindowManager wm = (WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE);
 		Point size = new Point();
@@ -100,9 +111,9 @@ public class KeyboardHandler {
 		character_view_height = (int) (0.65 * keyboard_height);
 		lower_bar_view_height = (int) (0.20 * keyboard_height);
 		upper_bar_view_height = (int) (0.15 * keyboard_height);
-		default_font_size = (int) (20 + 15 * (sharedPrefs.getFloat(
+		default_font_size = (int) (30 + 10 * (sharedPrefs.getFloat(
 				TipeSettings.KEYBOARD_HEIGHT, 1) + sharedPrefs.getFloat(
-				TipeSettings.KEYBOARD_HEIGHT, 1)));
+				TipeSettings.KEYBOARD_WIDTH, 1)));
 
 	}
 
@@ -139,4 +150,5 @@ public class KeyboardHandler {
 		charset_changed = true;
 		mTipeView.invalidate();
 	}
+
 }

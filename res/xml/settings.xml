@@ -9,7 +9,7 @@
             android:defaultValue="@string/defaultCharset"
             android:entries="@array/lang_list_names"
             android:entryValues="@array/lang_list_values"
-            android:key="cusLanguageCharset"
+            android:key="languageCharset"
             android:title="@string/chose_lang_title" />
 
         <CheckBoxPreference
@@ -74,20 +74,16 @@
         android:title="Sonstiges" >
         <PreferenceScreen android:title="Erweiterte Einstellungen" >
             <net.jayschwa.android.preference.SliderPreference
-                android:defaultValue="0.7"
+                android:defaultValue="0.5"
                 android:title="Keyboard Height"
                 android:key="keyboard_height"
                 android:dialogMessage="30-60% Screen height" />
             <net.jayschwa.android.preference.SliderPreference
-                android:defaultValue="1"
+                android:defaultValue="1.0"
                 android:title="Keyboard Width"
                 android:key="keyboard_width"
                 android:dialogMessage="50-100% Screen width" />
 
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="useAdvancedCharset"
-                android:title="Use advanced charset" />
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="useCustomCharset"

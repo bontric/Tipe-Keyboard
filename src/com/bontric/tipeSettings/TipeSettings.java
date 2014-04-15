@@ -25,8 +25,10 @@ public class TipeSettings extends PreferenceActivity {
 	 * charsets
 	 */
 
-	public final static String CHARSET = "cusLanguageCharset";
-	public final static String SYMSET = "cusSymset";
+	public final static String CHARSET = "languageCharset";
+	public final static String SYMSET = "symset";
+	public final static String CUSTOM_CHARSET = "cusCharset";
+	public final static String CUSTOM_SYMSET = "cusSymset";
 	/*
 	 * colors
 	 */
@@ -39,6 +41,8 @@ public class TipeSettings extends PreferenceActivity {
 	public final static String USE_AUDIO_FEEDBACK = "useAudioFeedback";
 	public final static String USE_HAPTIC_FEEDBACK = "useHapticFeedback";
 	public final static String USE_AUTO_CAPITALIZATION = "autoapitalization";
+	public final static String USE_CUSTOM_SYMSET = "useCustomSymset";
+	public final static String USE_CUSTOM_CHARSET = "useCustomCharset";
 	public final static String SHOW_SUGGESTIONS = "showSuggestions";
 	
 	public final static String KEYBOARD_HEIGHT = "keyboard_height";

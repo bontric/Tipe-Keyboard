@@ -8,13 +8,13 @@ import android.view.inputmethod.InputConnection;
 public class InputHandler {
 
 	private TipeService mTipeService;
-	
+
 	// Word for composing
-	private String 			composedWord;
+	private String composedWord;
 	private CandidateView mCandidateView;
-	
+
 	public InputHandler() {
-		
+
 	}
 
 	public void setIMS(TipeService tService) {
@@ -22,39 +22,56 @@ public class InputHandler {
 	}
 
 	public void sendKey(char c) {
-		smallVibrate();
+		/*
+		 * this could be interesting.. maybe it helps learning :) but you don't
+		 * recognize it very much..
+		 */
+		smallVibrate(c);
 
 		composedWord += c;
 		mCandidateView.getSuggestionsForWord(composedWord);
 		mTipeService.setCandidatesViewShown(true);
-		
+
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
-		KeyboardHandler.shift_state = false;
-		KeyboardHandler.handleShift();
+
+		/*
+		 * Handle capitalization okay this is hardcoded.. but i want to test
+		 * this feature fore now :)
+		 */
+		if (KeyboardHandler.use_auto_capitalization
+				&& (c == '.' || c == '!' || c == '?')) {
+			KeyboardHandler.shift_state = true;
+			KeyboardHandler.handleShift();
+		} else {
+			if (!KeyboardHandler.word_separators.contains("" + c)) {
+				KeyboardHandler.shift_state = false;
+				KeyboardHandler.handleShift();
+			}
+		}
 	}
 
 	public void handleSpace() {
 		smallVibrate();
-		
+
 		resetComposedWord();
 		sendKey((char) 32);
-		
+
 	}
 
 	public void handleDelete() {
 		// Match composed word
 		smallVibrate();
 
-		if(composedWord.length() <= 1)
+		if (composedWord.length() <= 1)
 			composedWord = "";
 		else
-			composedWord = composedWord.substring(0, composedWord.length()-1);
+			composedWord = composedWord.substring(0, composedWord.length() - 1);
 		mCandidateView.getSuggestionsForWord(composedWord);
-		if(composedWord.isEmpty())
+		if (composedWord.isEmpty())
 			mTipeService.setCandidatesViewShown(false);
 		else
 			mTipeService.setCandidatesViewShown(true);
-		
+
 		keyDownUp(KeyEvent.KEYCODE_DEL);
 	}
 
@@ -76,37 +93,46 @@ public class InputHandler {
 		mTipeService.getCurrentInputConnection().sendKeyEvent(
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
-	
-	
+
 	/*------------------------------------------------------------
-	*	From here functions for candidate view
-	*	@Jakob Frick
-	*------------------------------------------------------------*/
-	
-	public CandidateView initCandidateView(InputMethodService ims){
+	 *	From here functions for candidate view
+	 *	@Jakob Frick
+	 *------------------------------------------------------------*/
+
+	public CandidateView initCandidateView(InputMethodService ims) {
 		mCandidateView = new CandidateView(ims);
 		mCandidateView.setInputHandler(this);
 		resetComposedWord();
-		
+
 		return mCandidateView;
 	}
-	
+
 	private void resetComposedWord() {
 		composedWord = "";
 		mTipeService.setCandidatesViewShown(false);
 	}
-	
-	public void getSuggestionFromCandView(String suggestion){
+
+	public void getSuggestionFromCandView(String suggestion) {
 		InputConnection ic = mTipeService.getCurrentInputConnection();
-		
+
 		ic.deleteSurroundingText(composedWord.length(), 0);
 		ic.commitText(suggestion + " ", composedWord.length() + 1);
 		resetComposedWord();
 	}
-	
-	public void smallVibrate(){
-		mTipeService.getCurVibrator().vibrate(60);		
+
+	/*
+	 * This should be somewhere else :)
+	 */
+	public void smallVibrate() {
+		if (KeyboardHandler.use_haptic_feedback) {
+			mTipeService.getCurVibrator().vibrate(30);
+		}
 	}
-	
-	
+
+	public void smallVibrate(int length) {
+		if (KeyboardHandler.use_haptic_feedback) {
+			mTipeService.getCurVibrator().vibrate(length);
+		}
+	}
+
 }

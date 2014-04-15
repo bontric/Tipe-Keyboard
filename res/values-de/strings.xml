@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DoubleTab</string>
+    <string name="app_name">Tipe Keyboard</string>
     
     <string name="label_keyboard_key_go">Los</string>
     <string name="label_keyboard_key_send">Senden</string>

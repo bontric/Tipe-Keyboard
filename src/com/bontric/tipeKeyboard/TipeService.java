@@ -62,7 +62,7 @@ public class TipeService extends InputMethodService {
 
 	}
 
-	public Vibrator getCurVibrator(){
+	public Vibrator getCurVibrator() {
 		return mVibrator;
 	}
 
@@ -77,11 +77,11 @@ public class TipeService extends InputMethodService {
 		/*
 		 * Initalize the keyboard if the settings have changed
 		 */
-		
-			mTipeView.initKeyboardHandler(this);
-			mTipeView.init();
-			TipeSettings.settings_changed = false;
-		
+
+		mTipeView.initKeyboardHandler(this);
+		mTipeView.init();
+		TipeSettings.settings_changed = false;
+
 	}
 
 	@Override
@@ -97,8 +97,12 @@ public class TipeService extends InputMethodService {
 
 	@Override
 	public View onCreateCandidatesView() {
+		mTipeView.initKeyboardHandler(this);
 		// Create Candites view
-		return KeyboardHandler.input_connection.initCandidateView(this);
+		CandidateView cv = KeyboardHandler.input_connection.initCandidateView(this);
+		if (KeyboardHandler.show_suggestions) {
+			return cv;
+		}
+		return null;
 	}
-
 }

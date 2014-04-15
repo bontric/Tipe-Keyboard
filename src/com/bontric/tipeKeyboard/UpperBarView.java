@@ -44,10 +44,17 @@ public class UpperBarView extends View {
 
 		symButton = new ActionArea(0, 0, width / 3, height,
 				KeyboardHandler.background_color, "Sym") {
+			private boolean symState = false;
 
 			@Override
 			public void onTouch() {
 				KeyboardHandler.handleSym();
+				symState = !symState;
+				if (symState) {
+					setLabel("qwe");
+				} else {
+					setLabel("Sym");
+				}
 			}
 		};
 
