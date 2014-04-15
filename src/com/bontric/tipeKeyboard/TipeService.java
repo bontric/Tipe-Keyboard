@@ -9,15 +9,19 @@
  */
 package com.bontric.tipeKeyboard;
 
-import com.bontric.tipeSettings.TipeSettings;
-
 import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard.Key;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+
+import com.bontric.tipeSettings.TipeSettings;
 
 public class TipeService extends InputMethodService {
 
@@ -25,6 +29,8 @@ public class TipeService extends InputMethodService {
 	Vibrator mVibrator;
 	TipeView mTipeView;
 
+	boolean showCandidates;
+	
 	public void onCreate() {
 		super.onCreate();
 		getResources();
@@ -51,6 +57,7 @@ public class TipeService extends InputMethodService {
 
 	public void onFinishInput() {
 		super.onFinishInput();
+		KeyboardHandler.input_connection.resetComposedWord();
 	}
 
 	public void onFinishInputView(boolean finishingInput) {
@@ -75,13 +82,25 @@ public class TipeService extends InputMethodService {
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		/*
-		 * Initalize the keyboard if the settings have changed
+		 * Show candidates for text or in doubt
 		 */
 
+		showCandidates =
+		((attribute.inputType & InputType.TYPE_MASK_CLASS) != InputType.TYPE_NUMBER_VARIATION_PASSWORD) &&
+		((attribute.inputType & InputType.TYPE_MASK_CLASS) != InputType.TYPE_TEXT_VARIATION_PASSWORD) &&
+		((attribute.inputType & InputType.TYPE_MASK_CLASS) != InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD) ;
+		
+		Log.d("onStartInput", "Show canies " + showCandidates);
+		if(!showCandidates){
+			this.setCandidatesViewShown(false);
+			KeyboardHandler.input_connection.resetComposedWord();
+		}
+			
+		
 		mTipeView.initKeyboardHandler(this);
 		mTipeView.init();
 		TipeSettings.settings_changed = false;
-
+	
 	}
 
 	@Override
@@ -92,7 +111,24 @@ public class TipeService extends InputMethodService {
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
-
+		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
+		
+		KeyboardHandler.input_connection.resetComposedWord();
+		// Check if text was selected
+		if(newSelEnd - newSelStart > 0){
+			if(showCandidates)
+				KeyboardHandler.input_connection.setComposedWord(
+					 getCurrentInputConnection().getSelectedText(0).toString());
+		}
+		else {
+			if(showCandidates && newSelStart - candidatesStart > 0){
+				KeyboardHandler.input_connection.setComposedWord(
+						getCurrentInputConnection().getTextBeforeCursor(
+								newSelStart - candidatesStart, 0).toString());
+				
+			}
+		}
+		
 	}
 
 	@Override
@@ -105,4 +141,5 @@ public class TipeService extends InputMethodService {
 		}
 		return null;
 	}
+
 }

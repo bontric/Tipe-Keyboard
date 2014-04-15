@@ -28,9 +28,14 @@ public class InputHandler {
 		 */
 		smallVibrate(c);
 
-		composedWord += c;
-		mCandidateView.getSuggestionsForWord(composedWord);
-		mTipeService.setCandidatesViewShown(true);
+
+		
+		if(composedWord != null){
+			composedWord += c;
+			mCandidateView.getSuggestionsForWord(composedWord);
+			mTipeService.setCandidatesViewShown(true);
+		}
+		
 
 		mTipeService.getCurrentInputConnection().commitText("" + c, 1);
 
@@ -62,16 +67,20 @@ public class InputHandler {
 		// Match composed word
 		smallVibrate();
 
-		if (composedWord.length() <= 1)
-			composedWord = "";
-		else
-			composedWord = composedWord.substring(0, composedWord.length() - 1);
-		mCandidateView.getSuggestionsForWord(composedWord);
-		if (composedWord.isEmpty())
-			mTipeService.setCandidatesViewShown(false);
-		else
-			mTipeService.setCandidatesViewShown(true);
-
+		
+		if(composedWord != null){
+			if(composedWord.length() <= 1)
+				composedWord = "";
+			else
+				composedWord = composedWord.substring(0, composedWord.length()-1);
+		
+			mCandidateView.getSuggestionsForWord(composedWord);
+	
+			if(composedWord.isEmpty())
+				mTipeService.setCandidatesViewShown(false);
+			else
+				mTipeService.setCandidatesViewShown(true);
+		}
 		keyDownUp(KeyEvent.KEYCODE_DEL);
 	}
 
@@ -104,15 +113,25 @@ public class InputHandler {
 		mCandidateView.setInputHandler(this);
 		resetComposedWord();
 
+		composedWord = "";
+		
 		return mCandidateView;
 	}
 
-	private void resetComposedWord() {
-		composedWord = "";
+
+	public void resetComposedWord() {
+		composedWord = null;
 		mTipeService.setCandidatesViewShown(false);
 	}
 
-	public void getSuggestionFromCandView(String suggestion) {
+
+	public void setComposedWord(String soFarComposed){
+		composedWord = soFarComposed;
+		mCandidateView.getSuggestionsForWord(composedWord);
+		mTipeService.setCandidatesViewShown(true);
+	}
+	
+	public void getSuggestionFromCandView(String suggestion){
 		InputConnection ic = mTipeService.getCurrentInputConnection();
 
 		ic.deleteSurroundingText(composedWord.length(), 0);

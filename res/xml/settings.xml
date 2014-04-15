@@ -74,15 +74,15 @@
         android:title="Sonstiges" >
         <PreferenceScreen android:title="Erweiterte Einstellungen" >
             <net.jayschwa.android.preference.SliderPreference
-                android:defaultValue="0.5"
-                android:title="Keyboard Height"
+                android:defaultValue="0.4"
+                android:dialogMessage="30-60% Screen height"
                 android:key="keyboard_height"
-                android:dialogMessage="30-60% Screen height" />
+                android:title="Keyboard Height" />
             <net.jayschwa.android.preference.SliderPreference
                 android:defaultValue="1.0"
-                android:title="Keyboard Width"
+                android:dialogMessage="50-100% Screen width"
                 android:key="keyboard_width"
-                android:dialogMessage="50-100% Screen width" />
+                android:title="Keyboard Width" />
 
             <CheckBoxPreference
                 android:defaultValue="false"

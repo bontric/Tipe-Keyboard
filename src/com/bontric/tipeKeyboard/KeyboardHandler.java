@@ -68,10 +68,12 @@ public class KeyboardHandler {
 		} else {
 			symbol_set = context.getResources().getString(R.string.SymbolSet);
 		}
-		character_set = sharedPrefs.getString(TipeSettings.CHARSET, "");
+		character_set = sharedPrefs.getString(TipeSettings.CHARSET, context
+				.getResources().getString(R.string.defaultCharset));
 		word_separators = context.getResources().getString(
 				R.string.word_separators);
 		// ===== COLORS=====================
+
 		char_view_dark_color = sharedPrefs.getInt(
 				TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
 		char_view_light_color = sharedPrefs.getInt(
