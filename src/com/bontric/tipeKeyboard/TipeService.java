@@ -121,16 +121,18 @@ public class TipeService extends InputMethodService {
 		}
 		else {
 			//Calculate if you are in a word
+			if(getCurrentInputConnection() == null){
 			
-			String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
-			int spacePos = currentInputtxt.lastIndexOf(" ") + 1 ;
-			
-			
-			if(showCandidates && newSelStart - spacePos > 0 ){
-				KeyboardHandler.input_connection.setComposedWord(
-						getCurrentInputConnection().getTextBeforeCursor(
-								newSelStart - spacePos, 0).toString());
+				String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
+				int spacePos = currentInputtxt.lastIndexOf(" ") + 1 ;
 				
+				
+				if(showCandidates && newSelStart - spacePos > 0 ){
+					KeyboardHandler.input_connection.setComposedWord(
+							getCurrentInputConnection().getTextBeforeCursor(
+									newSelStart - spacePos, 0).toString());
+					
+				}
 			}
 		} 
 		
