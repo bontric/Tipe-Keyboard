@@ -93,7 +93,7 @@ public class TipeService extends InputMethodService {
 		Log.d("onStartInput", "Show canies " + showCandidates);
 		if(!showCandidates){
 			this.setCandidatesViewShown(false);
-			KeyboardHandler.input_connection.resetComposedWord();
+			KeyboardHandler.input_connection.setComposing(false);
 		}
 			
 		
@@ -113,7 +113,6 @@ public class TipeService extends InputMethodService {
 			int candidatesEnd) {
 		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
 		
-		KeyboardHandler.input_connection.resetComposedWord();
 		// Check if text was selected
 		if(newSelEnd - newSelStart > 0){
 			if(showCandidates)
@@ -121,13 +120,19 @@ public class TipeService extends InputMethodService {
 					 getCurrentInputConnection().getSelectedText(0).toString());
 		}
 		else {
-			if(showCandidates && newSelStart - candidatesStart > 0){
+			//Calculate if you are in a word
+			
+			String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
+			int spacePos = currentInputtxt.lastIndexOf(" ") + 1 ;
+			
+			
+			if(showCandidates && newSelStart - spacePos > 0 ){
 				KeyboardHandler.input_connection.setComposedWord(
 						getCurrentInputConnection().getTextBeforeCursor(
-								newSelStart - candidatesStart, 0).toString());
+								newSelStart - spacePos, 0).toString());
 				
 			}
-		}
+		} 
 		
 	}
 

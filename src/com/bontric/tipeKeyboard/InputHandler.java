@@ -12,6 +12,7 @@ public class InputHandler {
 	// Word for composing
 	private String composedWord;
 	private CandidateView mCandidateView;
+	private boolean isComposing;
 
 	public InputHandler() {
 
@@ -30,7 +31,7 @@ public class InputHandler {
 
 
 		
-		if(composedWord != null){
+		if(isComposing){
 			composedWord += c;
 			mCandidateView.getSuggestionsForWord(composedWord);
 			mTipeService.setCandidatesViewShown(true);
@@ -68,7 +69,7 @@ public class InputHandler {
 		smallVibrate();
 
 		
-		if(composedWord != null){
+		if(isComposing){
 			if(composedWord.length() <= 1)
 				composedWord = "";
 			else
@@ -82,6 +83,14 @@ public class InputHandler {
 				mTipeService.setCandidatesViewShown(true);
 		}
 		keyDownUp(KeyEvent.KEYCODE_DEL);
+	}
+
+	public boolean isComposing() {
+		return isComposing;
+	}
+
+	public void setComposing(boolean isComposing) {
+		this.isComposing = isComposing;
 	}
 
 	public void handleEnter() {
@@ -114,28 +123,29 @@ public class InputHandler {
 		resetComposedWord();
 
 		composedWord = "";
-		
+		isComposing = true;
 		return mCandidateView;
 	}
 
 
 	public void resetComposedWord() {
-		composedWord = null;
+		composedWord = "";
 		mTipeService.setCandidatesViewShown(false);
 	}
 
 
 	public void setComposedWord(String soFarComposed){
 		composedWord = soFarComposed;
+		Log.d("setComposedWord", composedWord);
 		mCandidateView.getSuggestionsForWord(composedWord);
 		mTipeService.setCandidatesViewShown(true);
 	}
 	
 	public void getSuggestionFromCandView(String suggestion){
 		InputConnection ic = mTipeService.getCurrentInputConnection();
-
+		Log.d("getSuggestionFromCand", composedWord);
 		ic.deleteSurroundingText(composedWord.length(), 0);
-		ic.commitText(suggestion + " ", composedWord.length() + 1);
+		ic.commitText(suggestion + " ", suggestion.length() + 1);
 		resetComposedWord();
 	}
 
