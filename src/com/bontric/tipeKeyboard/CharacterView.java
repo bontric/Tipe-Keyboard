@@ -62,7 +62,6 @@ public class CharacterView extends View {
      */
     private void initCharAreas() {
 
-        // this.setBackgroundColor(Color.RED);
         characterAreas = new LinkedList<CharacterArea>();
         float x = 0;
         float y = 0;
