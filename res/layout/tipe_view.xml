@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.bontric.tipeKeyboard.TipeView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:orientation="vertical" 
-    android:gravity="right"
-    android:layout_gravity="right"
-    >
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_alignParentBottom="true"
+                                   android:orientation="vertical"
+                                   android:gravity="right"
+                                   android:layout_gravity="right"
+        >
 
-    
+
     <com.bontric.tipeKeyboard.UpperBarView
-        android:id="@+id/upper_bar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:eventsInterceptionEnabled="false" 
-        android:layout_alignParentBottom="true"> 
-    </com.bontric.tipeKeyboard.UpperBarView >
-    
+            android:id="@+id/upper_bar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:eventsInterceptionEnabled="false"
+            android:layout_alignParentBottom="true">
+    </com.bontric.tipeKeyboard.UpperBarView>
+
     <com.bontric.tipeKeyboard.CharacterView
-        android:id="@+id/character_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:eventsInterceptionEnabled="false" 
-        android:layout_alignParentBottom="true">
+            android:id="@+id/character_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:eventsInterceptionEnabled="false"
+            android:layout_alignParentBottom="true">
     </com.bontric.tipeKeyboard.CharacterView>
 
     <com.bontric.tipeKeyboard.LowerBarView
-        android:id="@+id/lower_bar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:eventsInterceptionEnabled="false" 
-        android:layout_alignParentBottom="true">
+            android:id="@+id/lower_bar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:eventsInterceptionEnabled="false"
+            android:layout_alignParentBottom="true">
     </com.bontric.tipeKeyboard.LowerBarView>
 
 </com.bontric.tipeKeyboard.TipeView>

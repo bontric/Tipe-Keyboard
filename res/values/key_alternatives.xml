@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array
-        name="key_alternatives">
+            name="key_alternatives">
         <item>aàâãåæä</item>
         <item>AÁÂÃÅÆÀ</item>
         <item>cç©¢œ</item>
         <item>CÇŒ</item>
         <item>e€Œèéêë</item>
-        <item >EÈÉÊË</item>
+        <item>EÈÉÊË</item>
         <item>IÌÍÎÏ</item>
         <item>iìíîï</item>
         <item>NÑ</item>

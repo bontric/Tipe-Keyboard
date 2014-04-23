@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tipe Keyboard</string>
-    
+
     <string name="label_keyboard_key_go">Los</string>
     <string name="label_keyboard_key_send">Senden</string>
     <string name="label_keyboard_key_next">Weiter</string>
     <string name="label_keyboard_key_done">Fertig</string>
-    
+
     <string name="label_default_lang">Standard</string>
-    
-     <!--  Here goes the strings for the preferenceses -->
-    
+
+    <!--  Here goes the strings for the preferenceses -->
+
     <string name="chose_lang_title">Sprachspezifische Zeichen</string>
     <string name="general_settings_title">Allgemeine Einstellungen</string>
     <string name="finetuning_title">Feinschliff</string>
-    
+
     <string name="cus_charset_checkbox">Benutzerdefinierte Zeichenanordnung</string>
     <string name="cus_charset_dialogTitle">Benutzerdefinierte Zeichenanordnung</string>
     <string name="cus_charset_dialogMess">Hier können sie ihre eigene Zeichenanordnung setzten.</string>
     <string name="cus_charset_summary">Eigene Zeichenanordnung für die Tastatur festlegen</string>
     <string name="cus_charset_title">Zeichenanordnung eingeben</string>
-    
+
     <string name="cus_symset_checkbox">Benutzerdefinierte Symbolanordnung</string>
     <string name="cus_symset_dialogTitle">Benutzerdefinierte Symbolanordnung</string>
     <string name="cus_symset_dialogMess">Hier können sie ihre eigene Symbolanordnung setzten.</string>
     <string name="cus_symset_summary">Eigene Symbolanordnung für die Tastatur festlegen</string>
     <string name="cus_symset_title">Symbolanordnung eingeben</string>
-    
-	<string name="word_separators">" .,;:!?()[]*&amp;@{}/&lt;>_+=|"</string>
+
+    <string name="word_separators">" .,;:!?()[]*&amp;@{}/&lt;>_+=|"</string>
 </resources>

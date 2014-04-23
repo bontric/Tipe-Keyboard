@@ -4,5 +4,5 @@
     <color name="backgroundLight">#333333</color>
     <color name="backgroundDark">#000000</color>
     <color name="normTextColor">#ffffff</color>
-	<color name="candidate_background">#ffffff</color>
+    <color name="candidate_background">#ffffff</color>
 </resources>

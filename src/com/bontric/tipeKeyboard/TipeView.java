@@ -6,31 +6,31 @@ import android.widget.LinearLayout;
 
 public class TipeView extends LinearLayout {
 
-	public TipeView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TipeView(Context context, AttributeSet attrs, int defStyleAttr) {
 
-		super(context, attrs, defStyleAttr);
-		initKeyboardHandler(context);
-	}
+        super(context, attrs, defStyleAttr);
+        initKeyboardHandler(context);
+    }
 
-	public TipeView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initKeyboardHandler(context);
-	}
+    public TipeView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initKeyboardHandler(context);
+    }
 
-	public TipeView(Context context) {
-		super(context);
-		initKeyboardHandler(context);
-	}
+    public TipeView(Context context) {
+        super(context);
+        initKeyboardHandler(context);
+    }
 
-	public void init() {
-		
-		((CharacterView) findViewById(R.id.character_view)).init();
-		((LowerBarView) findViewById(R.id.lower_bar_view)).init();
-		((UpperBarView) findViewById(R.id.upper_bar_view)).init();
-	}
+    public void init() {
 
-	public void initKeyboardHandler(Context context) {
-		KeyboardHandler.init(context,this);
+        ((CharacterView) findViewById(R.id.character_view)).init();
+        ((LowerBarView) findViewById(R.id.lower_bar_view)).init();
+        ((UpperBarView) findViewById(R.id.upper_bar_view)).init();
+    }
 
-	}
+    public void initKeyboardHandler(Context context) {
+        KeyboardHandler.init(context, this);
+
+    }
 }
