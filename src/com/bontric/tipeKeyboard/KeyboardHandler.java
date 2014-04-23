@@ -78,15 +78,15 @@ public class KeyboardHandler {
         word_separators = context.getResources().getString(
                 R.string.word_separators);
         // ===== COLORS=====================
-
-        char_view_dark_color = sharedPrefs.getInt(
-                TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
+        background_color = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
+                Color.BLACK);
+        char_view_dark_color = background_color;
+        //sharedPrefs.getInt( TipeSettings.CHARACTER_BG_DARK, Color.BLACK);
         char_view_light_color = sharedPrefs.getInt(
                 TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
         default_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
                 Color.WHITE);
-        background_color = sharedPrefs.getInt(TipeSettings.BACKGROUND_COLOR,
-                Color.BLACK);
+
         candidate_view_background_color = sharedPrefs.getInt(
                 TipeSettings.CANDIDATE_VIEW_BACKGROUND, Color.BLACK);
 

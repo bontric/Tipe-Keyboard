@@ -41,7 +41,7 @@ public class TipeService extends InputMethodService {
 		 */
         KeyboardHandler.input_connection.setIMS(this);
         /*
-		 * Initialize all Views within the TipeViewLayout
+         * Initialize all Views within the TipeViewLayout
 		 */
         mTipeView = null;
         mTipeView = (TipeView) this.getLayoutInflater().inflate(
@@ -80,11 +80,8 @@ public class TipeService extends InputMethodService {
 		/*
 		 * well this should work.. documentation on this is kinda confusing..
 		 */
-        showCandidates =
-                (attribute.inputType & EditorInfo.TYPE_NUMBER_VARIATION_PASSWORD) == 0 &&
-                        (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) == 0 &&
-                        (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD) == 0 &&
-                        KeyboardHandler.show_suggestions;
+        showCandidates = (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) == 0 &&
+                KeyboardHandler.show_suggestions;
 
         Log.d("onStartInput", "Show canies " + showCandidates);
         if (!showCandidates) {
