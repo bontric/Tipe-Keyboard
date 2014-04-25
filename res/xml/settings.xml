@@ -18,15 +18,15 @@
                 android:title="Display Suggestions when typing"/>
         <CheckBoxPreference
                 android:defaultValue="false"
-                android:key="useAudioFeedback"
-                android:title="Sound on touch"/>
+                android:key="spaceLeavingCharacterArea"
+                android:title="Type space when swiping off the Character Area"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="useHapticFeedback"
                 android:title="Vibrate on touch"/>
         <CheckBoxPreference
                 android:defaultValue="false"
-                android:key="autoapitalization"
+                android:key="autocapitalization"
                 android:summary="Capital Letters after &apos;.&apos;"
                 android:title="Automatic capitalization"/>
 
@@ -46,12 +46,6 @@
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                     alphaSlider="false"
                     android:defaultValue="@color/backgroundDark"
-                    android:key="candidateBackgroundColor"
-                    android:summary="Custom Background Color for Suggestions"
-                    android:title="Suggestions Bakcground Color"/>
-            <net.margaritov.preference.colorpicker.ColorPickerPreference
-                    alphaSlider="false"
-                    android:defaultValue="@color/backgroundDark"
                     android:key="backgroundColor"
                     android:summary="Overall Background Color"
                     android:title="Background Color "/>
@@ -61,12 +55,6 @@
                     android:key="background_light"
                     android:summary="Lighter Background color of the tiles"
                     android:title="Background Color 1 for 6x6 grid"/>
-            <net.margaritov.preference.colorpicker.ColorPickerPreference
-                    alphaSlider="false"
-                    android:defaultValue="@color/backgroundDark"
-                    android:key="background_dark"
-                    android:summary="Darker Background color of the tiles"
-                    android:title="Background Color 2 for 6x6 grid"/>
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory

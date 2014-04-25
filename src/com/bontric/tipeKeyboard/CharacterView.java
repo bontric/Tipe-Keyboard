@@ -27,6 +27,7 @@ public class CharacterView extends View {
     private PointF touchStartPoint;
     private int mWidth;
     private int mHeight;
+    Paint seperatorPaint = new Paint();
 
     public CharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -53,6 +54,9 @@ public class CharacterView extends View {
         this.setLayoutParams(params);
         mWidth = params.width;
         mHeight = params.height;
+;
+        seperatorPaint.setStrokeWidth(2);
+        seperatorPaint.setColor(KeyboardHandler.default_font_color);
         initCharAreas();
     }
 
@@ -185,11 +189,13 @@ public class CharacterView extends View {
                             .charAt(0));
                 } else {
                 /*
-				 * this is just for testing! when you release your finger
+				 * If activated :  when you release your finger
 				 * outside the Character View you'll send a space to the
 				 * inputConnection
 				 */
+                    if(KeyboardHandler.space_leaving_char_area){
                     KeyboardHandler.input_connection.handleSpace();
+                    }
                 }
                 setLevelUpChars();
                 this.invalidate();
@@ -272,9 +278,6 @@ public class CharacterView extends View {
              *   & it does @ Jakob
              *   @now for testing!
              */
-        Paint seperatorPaint = new Paint();
-        seperatorPaint.setStrokeWidth(2);
-        seperatorPaint.setColor(Color.WHITE);
         canvas.drawLine(0, getHeight(), getWidth(), getHeight(), seperatorPaint);
         canvas.drawLine(0, 0, getWidth(), 0, seperatorPaint);
     }
@@ -284,14 +287,18 @@ public class CharacterView extends View {
         private RectF mSpace;
         private int mBgColor;
         private Paint mPaint = new Paint();
+        private Paint mBgPaint = new Paint();
         private LinkedList<PointF> textCenters;
 
         public CharacterArea(float x, float y, float width, float height,
                              int bg_color) {
             this.mSpace = new RectF(x, y, x + width, y + height);
             mBgColor = bg_color;
+            mBgPaint.setColor(mBgColor);
             mPaint.setTextSize(KeyboardHandler.default_font_size);
-
+            mPaint.setColor(KeyboardHandler.default_font_color);
+            mPaint.setFakeBoldText(true);
+            mPaint.setTextAlign(Align.CENTER);
         }
 
         public boolean contains(PointF pt) {
@@ -319,11 +326,11 @@ public class CharacterView extends View {
 
         public void draw(Canvas canvas) {
 
-            mPaint.setColor(mBgColor);
-            canvas.drawRect(mSpace, mPaint);
-            mPaint.setColor(KeyboardHandler.default_font_color);
-            mPaint.setFakeBoldText(true);
-            mPaint.setTextAlign(Align.CENTER);
+
+            //canvas.drawRect(mSpace, seperatorPaint);
+            //canvas.drawRect(mSpace.left+1,mSpace.top+1,mSpace.right-1,mSpace.bottom-1, mBgPaint);
+            canvas.drawRect(mSpace, mBgPaint);
+
             int i = 0;
             if (mCharacters.length() == 6) {
                 for (PointF center : textCenters) {

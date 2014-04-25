@@ -30,10 +30,10 @@ public class KeyboardHandler {
     public static boolean charset_changed = false;
     public static boolean shift_state = false;
     public static boolean is_symbol_set = false;
-    public static boolean use_audio_feedback;
     public static boolean use_haptic_feedback;
     public static boolean use_auto_capitalization;
     public static boolean show_suggestions;
+    public static boolean space_leaving_char_area;
 
     public static String symbol_set;
     public static String character_set;
@@ -44,7 +44,6 @@ public class KeyboardHandler {
     public static int char_view_light_color;
     public static int default_font_color;
     public static int background_color;
-    public static int candidate_view_background_color;
 
     public static int longpress_timeout;
     public static int keyboard_width;
@@ -87,12 +86,8 @@ public class KeyboardHandler {
         default_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
                 Color.WHITE);
 
-        candidate_view_background_color = sharedPrefs.getInt(
-                TipeSettings.CANDIDATE_VIEW_BACKGROUND, Color.BLACK);
-
         // ====== BOOLEANS ===
-        use_audio_feedback = sharedPrefs.getBoolean(
-                TipeSettings.USE_AUDIO_FEEDBACK, false);
+
         use_haptic_feedback = sharedPrefs.getBoolean(
                 TipeSettings.USE_HAPTIC_FEEDBACK, false);
         use_auto_capitalization = sharedPrefs.getBoolean(
@@ -100,6 +95,8 @@ public class KeyboardHandler {
         show_suggestions = sharedPrefs.getBoolean(
                 TipeSettings.SHOW_SUGGESTIONS, false);
         is_symbol_set = false;
+        space_leaving_char_area = sharedPrefs.getBoolean(
+                TipeSettings.SPACE_LEAVING_CHARACTER_AREA, false);
 
         // ======= ADVANCED ===
         longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(
@@ -140,7 +137,7 @@ public class KeyboardHandler {
                         .replace('\uffff', 'ß');
 
 			/*
-			 * note this keyboard is for german use right now.. work on locale
+             * note this keyboard is for german use right now.. work on locale
 			 * one day @ben
 			 */
 

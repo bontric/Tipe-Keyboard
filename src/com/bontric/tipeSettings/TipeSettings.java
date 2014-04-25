@@ -24,7 +24,6 @@ public class TipeSettings extends PreferenceActivity {
 	 */
 
     public final static String CHARSET = "languageCharset";
-    public final static String SYMSET = "symset";
     public final static String CUSTOM_CHARSET = "cusCharset";
     public final static String CUSTOM_SYMSET = "cusSymset";
     /*
@@ -33,12 +32,10 @@ public class TipeSettings extends PreferenceActivity {
     public final static String FONT_COLOR = "normFontColor";
     public final static String BACKGROUND_COLOR = "backgroundColor";
     public final static String CHARACTER_BG_LIGHT = "background_light";
-    public final static String CHARACTER_BG_DARK = "background_dark";
-    public final static String CANDIDATE_VIEW_BACKGROUND = "candidateBackgroundColor";
 
-    public final static String USE_AUDIO_FEEDBACK = "useAudioFeedback";
+    public final static String SPACE_LEAVING_CHARACTER_AREA = "spaceLeavingCharacterArea";
     public final static String USE_HAPTIC_FEEDBACK = "useHapticFeedback";
-    public final static String USE_AUTO_CAPITALIZATION = "autoapitalization";
+    public final static String USE_AUTO_CAPITALIZATION = "autocapitalization";
     public final static String USE_CUSTOM_SYMSET = "useCustomSymset";
     public final static String USE_CUSTOM_CHARSET = "useCustomCharset";
     public final static String SHOW_SUGGESTIONS = "showSuggestions";
