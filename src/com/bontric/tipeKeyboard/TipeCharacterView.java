@@ -1,5 +1,5 @@
 /**
- *@name CharacterView
+ *@name TipeCharacterView
  *@author Benedikt John Wieder, Jakob Frick
  *
  *
@@ -21,7 +21,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import java.util.LinkedList;
 
-public class CharacterView extends View {
+public class TipeCharacterView extends View {
 
     private LinkedList<CharacterArea> characterAreas;
     private PointF touchStartPoint;
@@ -29,17 +29,17 @@ public class CharacterView extends View {
     private int mHeight;
     Paint seperatorPaint = new Paint();
 
-    public CharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TipeCharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public CharacterView(Context context, AttributeSet attrs) {
+    public TipeCharacterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CharacterView(Context context) {
+    public TipeCharacterView(Context context) {
         super(context);
         init();
     }
@@ -171,7 +171,7 @@ public class CharacterView extends View {
                 swipeVec.y = touchStartPoint.y
                         + (int) ((touchEndPoint.y - touchStartPoint.y) * sensitivity);
             /*
-             * if the vector extension brings the touch out of CharacterView
+             * if the vector extension brings the touch out of TipeCharacterView
 			 * We'll just interpret the release point!
 			 */
                 CharacterArea released = null;
@@ -204,15 +204,16 @@ public class CharacterView extends View {
 
         return true;
     }
-
+    
+    /**
+     * check if the touch is out of borders ( we'll then get the min/max
+     * values for x/y)
+     *
+     * => The touch point is relative to this view. While this.getX()/getY()
+     * is relative to the Layout(TipeView)
+     */
     private boolean isInBounds(float x, float y) {
-        /**
-         * check if the touch is out of borders ( we'll then get the min/max
-         * values for x/y)
-         *
-         * => The touch point is relative to this view. While this.getX()/getY()
-         * is relative to the Layout(TipeView)
-         */
+
         if (x <= 0 || x >= this.getWidth() || y <= 0 || y >= this.getHeight()) {
 
             return false;

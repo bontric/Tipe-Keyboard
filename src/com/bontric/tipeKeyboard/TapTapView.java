@@ -4,33 +4,31 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public class TipeView extends LinearLayout {
+public class TapTapView extends TipeView {
 
-    public TipeView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TapTapView(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
         initKeyboardHandler(context);
     }
 
-    public TipeView(Context context, AttributeSet attrs) {
+    public TapTapView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initKeyboardHandler(context);
     }
 
-    public TipeView(Context context) {
+    public TapTapView(Context context) {
         super(context);
         initKeyboardHandler(context);
     }
 
+    @Override
     public void init() {
 
-        ((TipeCharacterView) findViewById(R.id.character_view)).init();
+        ((TapTapCharacterView) findViewById(R.id.character_view)).init();
         ((LowerBarView) findViewById(R.id.lower_bar_view)).init();
         ((UpperBarView) findViewById(R.id.upper_bar_view)).init();
     }
 
-    public void initKeyboardHandler(Context context) {
-        KeyboardHandler.init(context, this);
 
-    }
 }

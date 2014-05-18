@@ -28,12 +28,13 @@ public class KeyboardHandler {
     public static float default_font_size; // Make this variable
 
     public static boolean charset_changed = false;
-    public static boolean shift_state = false;
+    public static boolean shift_state = true;
     public static boolean is_symbol_set = false;
     public static boolean use_haptic_feedback;
     public static boolean use_auto_capitalization;
     public static boolean show_suggestions;
     public static boolean space_leaving_char_area;
+    public static boolean use_tap_tap_mode = false;
 
     public static String symbol_set;
     public static String character_set;
@@ -87,6 +88,8 @@ public class KeyboardHandler {
                 Color.WHITE);
 
         // ====== BOOLEANS ===
+        use_tap_tap_mode = sharedPrefs.getBoolean(
+                TipeSettings.USE_TAP_TAP_MODE, false);
 
         use_haptic_feedback = sharedPrefs.getBoolean(
                 TipeSettings.USE_HAPTIC_FEEDBACK, false);
@@ -119,6 +122,7 @@ public class KeyboardHandler {
         default_font_size = (int) (30 + 10 * (sharedPrefs.getFloat(
                 TipeSettings.KEYBOARD_HEIGHT, 1) + sharedPrefs.getFloat(
                 TipeSettings.KEYBOARD_WIDTH, 1)));
+        handleShift();
 
     }
 

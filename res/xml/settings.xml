@@ -11,7 +11,10 @@
                 android:entryValues="@array/lang_list_values"
                 android:key="languageCharset"
                 android:title="@string/chose_lang_title"/>
-
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="tapTapMode"
+                android:title="Double Tab instead of tab and swipe"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="showSuggestions"

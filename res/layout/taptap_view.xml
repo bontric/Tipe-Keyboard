@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.bontric.tipeKeyboard.TipeView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.bontric.tipeKeyboard.TapTapView xmlns:android="http://schemas.android.com/apk/res/android"
                                    android:layout_width="match_parent"
                                    android:layout_height="wrap_content"
                                    android:layout_alignParentBottom="true"
@@ -17,13 +17,13 @@
             android:layout_alignParentBottom="true">
     </com.bontric.tipeKeyboard.UpperBarView>
 
-    <com.bontric.tipeKeyboard.TipeCharacterView
+    <com.bontric.tipeKeyboard.TapTapCharacterView
             android:id="@+id/character_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:eventsInterceptionEnabled="false"
             android:layout_alignParentBottom="true">
-    </com.bontric.tipeKeyboard.TipeCharacterView>
+    </com.bontric.tipeKeyboard.TapTapCharacterView>
 
     <com.bontric.tipeKeyboard.LowerBarView
             android:id="@+id/lower_bar_view"
@@ -33,4 +33,4 @@
             android:layout_alignParentBottom="true">
     </com.bontric.tipeKeyboard.LowerBarView>
 
-</com.bontric.tipeKeyboard.TipeView>
+</com.bontric.tipeKeyboard.TapTapView>

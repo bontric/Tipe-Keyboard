@@ -44,8 +44,15 @@ public class TipeService extends InputMethodService {
          * Initialize all Views within the TipeViewLayout
 		 */
         mTipeView = null;
-        mTipeView = (TipeView) this.getLayoutInflater().inflate(
-                R.layout.tipe_view, null);
+        if(KeyboardHandler.use_tap_tap_mode){
+        mTipeView = (TapTapView) this.getLayoutInflater().inflate(
+                R.layout.taptap_view, null);
+
+        }else{
+            mTipeView = (TipeView) this.getLayoutInflater().inflate(
+                    R.layout.tipe_view, null);
+
+        }
         mTipeView.init();
 
         return mTipeView;
@@ -80,7 +87,7 @@ public class TipeService extends InputMethodService {
 		/*
 		 * well this should work.. documentation on this is kinda confusing..
 		 */
-        showCandidates = (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) == 0 &&
+        showCandidates = (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) != EditorInfo.TYPE_TEXT_VARIATION_PASSWORD &&
                 KeyboardHandler.show_suggestions;
 
         Log.d("onStartInput", "Show canies " + showCandidates);
