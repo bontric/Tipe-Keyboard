@@ -15,7 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  *
- * TODO Remove stuff not needed here -> extends TipeCharacterView
  *
  */
 
@@ -30,11 +29,12 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 
 import java.util.LinkedList;
 
-public class TapTapCharacterView extends TipeCharacterView {
+public class TapTapCharacterView extends View {
 
     private LinkedList<CharacterArea> characterAreas;
     private int mWidth;
@@ -138,7 +138,7 @@ public class TapTapCharacterView extends TipeCharacterView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        PointF pos = util.getEventMedianPos(event);
+        PointF pos = Util.getEventMedianPos(event);
         CharacterArea pressed = getAreaFromTouch(pos);
 
         switch (event.getAction()) {
@@ -146,10 +146,6 @@ public class TapTapCharacterView extends TipeCharacterView {
                 if (pressed != null && isLevelDown && pressed.getChars().length()>0) {
                     longPressHandler.postDelayed(longPressActionRunnable,
                             longpressTimeout);
-                /*
-                 * we are already in level down state due to setLevelDownState()
-				 * call before! This might look wrong without context..
-				 */
                     mLongPressedChar = pressed.getChars().charAt(0);
                     this.invalidate();
                 }
@@ -198,7 +194,7 @@ public class TapTapCharacterView extends TipeCharacterView {
      * values for x/y)
      * <p/>
      * => The touch point is relative to this view. While this.getX()/getY()
-     * is relative to the Layout(TipeView)
+     * is relative to the whole Layout
      */
     private boolean isInBounds(float x, float y) {
 
@@ -262,11 +258,7 @@ public class TapTapCharacterView extends TipeCharacterView {
         for (CharacterArea ca : characterAreas) {
             ca.draw(canvas);
         }
-              /*
-             *   might look nice..
-             *   & it does @ Jakob
-             *   @now for testing!
-             */
+
         canvas.drawLine(0, getHeight(), getWidth(), getHeight(), seperatorPaint);
         canvas.drawLine(0, 0, getWidth(), 0, seperatorPaint);
     }
@@ -299,9 +291,10 @@ public class TapTapCharacterView extends TipeCharacterView {
             float height = Math.abs(mSpace.top - mSpace.bottom) / 2;
             float x = mSpace.left;
             float y = mSpace.top;
-            PointF center = util.getTextCenterToDraw(
+            PointF center = Util.getTextCenterToDraw(
                     "" + mCharacters.charAt(0), new RectF(x, y, x + width, y
-                    + height), mPaint);
+                            + height), mPaint
+            );
             textCenters = new LinkedList<PointF>();
             textCenters.add(center);
             textCenters.add(new PointF(center.x + width, center.y));
@@ -314,10 +307,6 @@ public class TapTapCharacterView extends TipeCharacterView {
         }
 
         public void draw(Canvas canvas) {
-
-
-            //canvas.drawRect(mSpace, seperatorPaint);
-            //canvas.drawRect(mSpace.left+1,mSpace.top+1,mSpace.right-1,mSpace.bottom-1, mBgPaint);
             canvas.drawRect(mSpace, mBgPaint);
 
             int i = 0;
@@ -329,7 +318,7 @@ public class TapTapCharacterView extends TipeCharacterView {
                 }
 
             } else {
-                PointF center = util.getTextCenterToDraw(mCharacters, mSpace,
+                PointF center = Util.getTextCenterToDraw(mCharacters, mSpace,
                         mPaint);
                 canvas.drawText(mCharacters, center.x, center.y, mPaint);
             }

@@ -134,7 +134,7 @@ public class LowerBarView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        PointF touched = util.getEventMedianPos(event);
+        PointF touched = Util.getEventMedianPos(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (deleteButton.contains(touched)) {

@@ -137,7 +137,7 @@ public class TipeCharacterView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         double sensitivity = 1.2;
-        PointF pressedPoint = util.getEventMedianPos(event);
+        PointF pressedPoint = Util.getEventMedianPos(event);
         CharacterArea pressed = getAreaFromTouch(pressedPoint);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -169,7 +169,7 @@ public class TipeCharacterView extends View {
                 isLongPressed = false;
                 longPressHandler.removeCallbacks(longPressActionRunnable);
 
-                PointF touchEndPoint = util.getEventMedianPos(event);
+                PointF touchEndPoint = Util.getEventMedianPos(event);
                 PointF swipeVec = new PointF();
             /*
              * extend swipe vector
@@ -318,9 +318,10 @@ public class TipeCharacterView extends View {
             float height = Math.abs(mSpace.top - mSpace.bottom) / 2;
             float x = mSpace.left;
             float y = mSpace.top;
-            PointF center = util.getTextCenterToDraw(
+            PointF center = Util.getTextCenterToDraw(
                     "" + mCharacters.charAt(0), new RectF(x, y, x + width, y
-                    + height), mPaint);
+                            + height), mPaint
+            );
             textCenters = new LinkedList<PointF>();
             textCenters.add(center);
             textCenters.add(new PointF(center.x + width, center.y));
@@ -348,7 +349,7 @@ public class TipeCharacterView extends View {
                 }
 
             } else {
-                PointF center = util.getTextCenterToDraw(mCharacters, mSpace,
+                PointF center = Util.getTextCenterToDraw(mCharacters, mSpace,
                         mPaint);
                 canvas.drawText(mCharacters, center.x, center.y, mPaint);
             }

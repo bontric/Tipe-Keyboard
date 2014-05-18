@@ -1,5 +1,5 @@
 /**
- *@name util
+ *@name Util
  *@author Benedikt John Wieder, Jakob Frick
  *
  * Copyright  2014 Benedikt Wieder, Jakob Frick
@@ -28,7 +28,7 @@ import android.view.MotionEvent;
 /**
  * @author koogle Class for some usefull definitions used across classes
  */
-public class util {
+public class Util {
 
     public static PointF getTextCenterToDraw(String text, RectF region,
                                              Paint paint) {

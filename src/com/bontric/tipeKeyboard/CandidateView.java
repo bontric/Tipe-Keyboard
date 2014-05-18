@@ -199,7 +199,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
             * You might as well do it like this @Jakob. -> Do we need a saparate color for Candidate View?
             */
             mPaint.setColor(KeyboardHandler.default_font_color);
-            PointF textP = util.getTextCenterToDraw(string, tmpArea, mPaint);
+            PointF textP = Util.getTextCenterToDraw(string, tmpArea, mPaint);
 
             canvas.drawText(string, (float) (textP.x + mPaint.measureText(string) * 0.5), textP.y, mPaint);
             i++;

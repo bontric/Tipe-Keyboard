@@ -63,7 +63,7 @@ public abstract class ActionArea {
             int cy = (int) (mSpace.height() - icon.getHeight()) / 2;
             canvas.drawBitmap(icon, mSpace.left + cx, mSpace.top + cy, null);
         } else {
-            PointF center = util.getTextCenterToDraw(label, mSpace, mPaint);
+            PointF center = Util.getTextCenterToDraw(label, mSpace, mPaint);
             canvas.drawText(label, center.x, center.y, mPaint);
         }
 

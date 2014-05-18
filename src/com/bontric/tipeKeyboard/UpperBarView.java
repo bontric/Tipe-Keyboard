@@ -97,7 +97,7 @@ public class UpperBarView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        PointF touched = util.getEventMedianPos(event);
+        PointF touched = Util.getEventMedianPos(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
