@@ -34,17 +34,14 @@ public class TapTapCharacterView extends TipeCharacterView {
 
     public TapTapCharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     public TapTapCharacterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public TapTapCharacterView(Context context) {
         super(context);
-        init();
     }
 
     /**
@@ -58,7 +55,6 @@ public class TapTapCharacterView extends TipeCharacterView {
         this.setLayoutParams(params);
         mWidth = params.width;
         mHeight = params.height;
-        ;
         seperatorPaint.setStrokeWidth(2);
         seperatorPaint.setColor(KeyboardHandler.default_font_color);
         initCharAreas();
@@ -137,7 +133,7 @@ public class TapTapCharacterView extends TipeCharacterView {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (pressed != null && isLevelDown) {
+                if (pressed != null && isLevelDown && pressed.getChars().length()>0) {
                     longPressHandler.postDelayed(longPressActionRunnable,
                             longpressTimeout);
                 /*
@@ -150,7 +146,7 @@ public class TapTapCharacterView extends TipeCharacterView {
                 break;
             case MotionEvent.ACTION_MOVE:
                 longPressHandler.removeCallbacks(longPressActionRunnable);
-                if (pressed != null && !isLongPressed && isLevelDown) {
+                if (pressed != null && !isLongPressed && isLevelDown && pressed.getChars().length()>0) {
                     longPressHandler.postDelayed(longPressActionRunnable,
                             longpressTimeout);
                     mLongPressedChar = pressed.getChars().charAt(0);
@@ -158,6 +154,11 @@ public class TapTapCharacterView extends TipeCharacterView {
 
                 break;
             case MotionEvent.ACTION_UP:
+                if(pressed == null){
+                    this.setLevelUpChars();
+                    this.invalidate();
+                    return false;
+                }
                 if (isLongPressed) {
                     isLongPressed = false;
                 } else if (!isLevelDown) {
@@ -240,7 +241,6 @@ public class TapTapCharacterView extends TipeCharacterView {
 
     @Override
     public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
 
 
         if (KeyboardHandler.charset_changed) {

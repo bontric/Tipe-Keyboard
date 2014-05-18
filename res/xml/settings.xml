@@ -14,7 +14,8 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="tapTapMode"
-                android:title="Double Tab instead of tab and swipe"/>
+                android:title="TapTap Mode"
+                android:summary="Double Tap instead of tab and swipe"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="showSuggestions"
@@ -61,19 +62,14 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
-            android:key="pref_key_storage_settings"
+            android:key="others"
             android:title="Sonstiges">
-        <PreferenceScreen android:title="Erweiterte Einstellungen">
+        <PreferenceScreen android:title="Extended Settings">
             <net.jayschwa.android.preference.SliderPreference
                     android:defaultValue="0.4"
                     android:dialogMessage="30-60% Screen height"
                     android:key="keyboard_height"
                     android:title="Keyboard Height"/>
-            <net.jayschwa.android.preference.SliderPreference
-                    android:defaultValue="1.0"
-                    android:dialogMessage="50-100% Screen width"
-                    android:key="keyboard_width"
-                    android:title="Keyboard Width"/>
 
             <CheckBoxPreference
                     android:defaultValue="false"

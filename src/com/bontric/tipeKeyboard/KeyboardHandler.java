@@ -114,8 +114,7 @@ public class KeyboardHandler {
         ;
         keyboard_height = (int) (size.y * (0.3 + 0.3 * sharedPrefs.getFloat(
                 TipeSettings.KEYBOARD_HEIGHT, 1)));
-        keyboard_width = (int) (size.x * (0.3 + 0.7 * sharedPrefs.getFloat(
-                TipeSettings.KEYBOARD_WIDTH, 1)));
+        keyboard_width = size.x; // custom width might be a feature one day
         character_view_height = (int) (0.60 * keyboard_height);
         lower_bar_view_height = (int) (0.20 * keyboard_height);
         upper_bar_view_height = (int) (0.20 * keyboard_height);

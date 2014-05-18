@@ -27,7 +27,7 @@ public class InputHandler {
          * this could be interesting.. maybe it helps learning :) but you don't
 		 * recognize it very much..
 		 */
-        smallVibrate(c);
+        smallVibrate();
 
 
         if (isComposing) {
@@ -65,7 +65,6 @@ public class InputHandler {
     public void handleDelete() {
         // Match composed word
         smallVibrate();
-
 
         if (isComposing) {
             if (composedWord.length() <= 1)
@@ -150,10 +149,6 @@ public class InputHandler {
         }
     }
 
-    public void smallVibrate(int length) {
-        if (KeyboardHandler.use_haptic_feedback) {
-            mTipeService.getCurVibrator().vibrate(length);
-        }
-    }
+
 
 }

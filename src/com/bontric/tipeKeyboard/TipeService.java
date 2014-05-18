@@ -23,7 +23,7 @@ public class TipeService extends InputMethodService {
 
     static final boolean DEBUG = false;
     Vibrator mVibrator;
-    TipeView mTipeView;
+    TipeView mTipeView = null;
 
     boolean showCandidates;
 
@@ -43,17 +43,9 @@ public class TipeService extends InputMethodService {
         /*
          * Initialize all Views within the TipeViewLayout
 		 */
-        mTipeView = null;
-        if(KeyboardHandler.use_tap_tap_mode){
-        mTipeView = (TapTapView) this.getLayoutInflater().inflate(
-                R.layout.taptap_view, null);
+        mTipeView = (TipeView) this.getLayoutInflater().inflate(
+                R.layout.tipe_view, null);
 
-        }else{
-            mTipeView = (TipeView) this.getLayoutInflater().inflate(
-                    R.layout.tipe_view, null);
-
-        }
-        mTipeView.init();
 
         return mTipeView;
     }
@@ -84,8 +76,10 @@ public class TipeService extends InputMethodService {
 
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		/*
-		 * well this should work.. documentation on this is kinda confusing..
+
+        KeyboardHandler.input_connection.setIMS(this);
+        /*
+         * well this should work.. documentation on this is kinda confusing..
 		 */
         showCandidates = (attribute.inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) != EditorInfo.TYPE_TEXT_VARIATION_PASSWORD &&
                 KeyboardHandler.show_suggestions;
@@ -99,6 +93,16 @@ public class TipeService extends InputMethodService {
             KeyboardHandler.input_connection.setComposing(true);
         }
 
+        if (KeyboardHandler.use_tap_tap_mode) {
+            mTipeView = (TapTapView) this.getLayoutInflater().inflate(
+                    R.layout.taptap_view, null);
+
+        } else {
+            mTipeView = (TipeView) this.getLayoutInflater().inflate(
+                    R.layout.tipe_view, null);
+
+        }
+        this.setInputView(mTipeView);
 
         mTipeView.initKeyboardHandler(this);
         mTipeView.init();
@@ -132,7 +136,8 @@ public class TipeService extends InputMethodService {
                 if (showCandidates && newSelStart - spacePos > 0) {
                     KeyboardHandler.input_connection.setComposedWord(
                             getCurrentInputConnection().getTextBeforeCursor(
-                                    newSelStart - spacePos, 0).toString());
+                                    newSelStart - spacePos, 0).toString()
+                    );
 
                 }
             }
@@ -145,5 +150,6 @@ public class TipeService extends InputMethodService {
         mTipeView.initKeyboardHandler(this);
         return KeyboardHandler.input_connection.initCandidateView(this);
     }
+
 
 }

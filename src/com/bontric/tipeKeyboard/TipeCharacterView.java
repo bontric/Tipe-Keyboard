@@ -31,17 +31,14 @@ public class TipeCharacterView extends View {
 
     public TipeCharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     public TipeCharacterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public TipeCharacterView(Context context) {
         super(context);
-        init();
     }
 
     /**
@@ -87,6 +84,7 @@ public class TipeCharacterView extends View {
 
         setLevelUpChars();
     }
+
 
 	/*
      * ###############################################################
@@ -262,7 +260,6 @@ public class TipeCharacterView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
 
 
         if (KeyboardHandler.charset_changed) {
