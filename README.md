@@ -26,7 +26,7 @@ When using Tipe you should issue any idea you have to improve the concept.
 Tipe is concidered a *concept* study to improve typing on smartphones. We'll try to improve it as much as we can
 but we might not have the time to implement every little featre. 
 
-## How to use!
+## How to use
 When holding down one buton the characters inside that button get distributed on all the buttons. While still holding down you swipe to the character you want to type. 
 When using this keyboard you should learn the *moves* pretty fast. As soon as you know where single characters are placed you'll be able to type easily as fast as with a normal softkeyboard. The biggest differnece is, due to the bigger buttons, that you'll be able to type with percision. 
 
