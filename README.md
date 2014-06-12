@@ -19,12 +19,8 @@ limitations under the License.
 ## What is Tipe?
 Tipe stands for Tap & Swipe and offers the user a new typing experience on Android smartphones. 
 Tipe is designed to give users the ability to type without auto correction and annoying errors. Instead of shrinking a full sized keyboard we only use 6 buttons. Tipe is developed by two studends and should therefore be concidered a *concept* since we are not able to implement fancy features payed keyboards have. Tipe itself and the concept are young 
-and might improve in the future. we are not able to tell what the future will bring. 
+and might improve in the future. 
 When using Tipe you should issue any idea you have to improve the concept. 
-
-## What Tipe is NOT
-Tipe is concidered a *concept* study to improve typing on smartphones. We'll try to improve it as much as we can
-but we might not have the time to implement every little featre. 
 
 ## How to use
 When holding down one buton the characters inside that button get distributed on all the buttons. While still holding down you swipe to the character you want to type. 
