@@ -132,10 +132,13 @@ public class TipeService extends InputMethodService {
                                   int newSelStart, int newSelEnd, int candidatesStart,
                                   int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-
+        if (getCurrentInputConnection().getSelectedText(0) == "") {
+            return;
+        }
         // Check if text was selected
         if (newSelEnd - newSelStart > 0) {
             if (showCandidates)
+
                 KeyboardHandler.input_connection.setComposedWord(
                         getCurrentInputConnection().getSelectedText(0).toString());
         } else {

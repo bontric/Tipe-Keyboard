@@ -14,16 +14,17 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="tapTapMode"
-                android:title="TapTap Mode"
-                android:summary="Double Tap instead of tab and swipe"/>
+                android:title="TapTap Mode (Beta)"
+                android:summary="Double Tap instead of tab and swipe "/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="showSuggestions"
-                android:title="Display Suggestions when typing"/>
+                android:title="Display Suggestions (Beta)"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="spaceLeavingCharacterArea"
-                android:title="Type space when swiping off the Character Area"/>
+                android:title="Auto Space"
+                android:summary="Type space when swiping off the Character Area"/>
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="useHapticFeedback"

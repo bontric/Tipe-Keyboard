@@ -264,6 +264,7 @@ public class TapTapCharacterView extends View {
     }
 
     private class CharacterArea {
+
         private String mCharacters;
         private RectF mSpace;
         private int mBgColor;
