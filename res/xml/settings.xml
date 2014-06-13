@@ -23,7 +23,7 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="spaceLeavingCharacterArea"
-                android:title="Auto Space"
+                android:title="Fast Space"
                 android:summary="Type space when swiping off the Character Area"/>
         <CheckBoxPreference
                 android:defaultValue="false"
