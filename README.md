@@ -1,5 +1,6 @@
 #Tipe Keyboard
-
+###Join the Beta!
+https://plus.google.com/communities/107656278694546527715
 ##Copyright
 ####Copyright  2014 Benedikt Wieder, Jakob Frick
 
