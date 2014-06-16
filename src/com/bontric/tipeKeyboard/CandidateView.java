@@ -169,7 +169,9 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
     //Draw the suggestions into the view
     public void drawSuggenstionsText(Canvas canvas) {
-        prepareSuggestions();
+      //  this.setVisibility(this.VISIBLE);
+
+    	prepareSuggestions();
 
 
         //Copy current Suggestions and check for oversize
@@ -204,6 +206,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
             canvas.drawText(string, (float) (textP.x + mPaint.measureText(string) * 0.5), textP.y, mPaint);
             i++;
         }
+     //   this.invalidate();
 
     }
 

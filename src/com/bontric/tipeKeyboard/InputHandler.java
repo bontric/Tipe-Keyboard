@@ -21,6 +21,7 @@ limitations under the License.
 package com.bontric.tipeKeyboard;
 
 import android.inputmethodservice.InputMethodService;
+import android.transition.Visibility;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
@@ -53,6 +54,7 @@ public class InputHandler {
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
+            mCandidateView.setVisibility(mCandidateView.VISIBLE);
         }
 
 
@@ -93,7 +95,6 @@ public class InputHandler {
                 composedWord = composedWord.substring(0, composedWord.length() - 1);
 
             mCandidateView.getSuggestionsForWord(composedWord);
-
         }
         keyDownUp(KeyEvent.KEYCODE_DEL);
     }
@@ -108,7 +109,7 @@ public class InputHandler {
 
     public void handleEnter() {
         smallVibrate();
-
+        
         resetComposedWord();
         keyDownUp(KeyEvent.KEYCODE_ENTER);
     }
@@ -142,18 +143,21 @@ public class InputHandler {
 
     public void resetComposedWord() {
         composedWord = "";
+        mCandidateView.clear();
+        mCandidateView.setVisibility(mCandidateView.INVISIBLE);
     }
 
 
     public void setComposedWord(String soFarComposed) {
         composedWord = soFarComposed;
-        Log.d("setComposedWord", composedWord);
+      //  Log.d("setComposedWord", composedWord);
         mCandidateView.getSuggestionsForWord(composedWord);
+        mCandidateView.setVisibility(mCandidateView.VISIBLE);
     }
 
     public void getSuggestionFromCandView(String suggestion) {
         InputConnection ic = mTipeService.getCurrentInputConnection();
-        Log.d("getSuggestionFromCand", composedWord);
+       // Log.d("getSuggestionFromCand", composedWord);
         ic.deleteSurroundingText(composedWord.length(), 0);
         ic.commitText((char) 32 + suggestion + (char) 32, suggestion.length() + 2);
         resetComposedWord();
