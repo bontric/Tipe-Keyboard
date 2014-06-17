@@ -53,6 +53,7 @@ public class TipeSettings extends PreferenceActivity {
     public final static String USE_CUSTOM_CHARSET = "useCustomCharset";
     public final static String SHOW_SUGGESTIONS = "showSuggestions";
     public final static String USE_TAP_TAP_MODE = "tapTapMode";
+    public final static String USE_ZOOM_MODE="zoomMode";
 
     public final static String KEYBOARD_HEIGHT = "keyboard_height";
     public final static String KEYBOARD_WIDTH = "keyboard_width";

@@ -18,6 +18,11 @@
                 android:summary="Double Tap instead of tab and swipe "/>
         <CheckBoxPreference
                 android:defaultValue="false"
+                android:key="zoomMode"
+                android:title="Zoom Mode (Alpha)"
+                android:summary="Zooms in the selected area on touch (Do not activate TapTap and Zoom at the same Time!) "/>
+        <CheckBoxPreference
+                android:defaultValue="false"
                 android:key="showSuggestions"
                 android:title="Display Suggestions (Beta)"/>
         <CheckBoxPreference

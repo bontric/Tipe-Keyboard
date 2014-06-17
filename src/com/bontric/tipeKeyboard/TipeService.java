@@ -64,8 +64,10 @@ public class TipeService extends InputMethodService {
     }
 
     public void onFinishInput() {
-        super.onFinishInput();
-        KeyboardHandler.input_connection.resetComposedWord();
+        //super.onFinishInput();
+        if (KeyboardHandler.input_connection != null) {
+            KeyboardHandler.input_connection.resetComposedWord();
+        }
     }
 
     public void onFinishInputView(boolean finishingInput) {
@@ -106,15 +108,18 @@ public class TipeService extends InputMethodService {
             KeyboardHandler.input_connection.setComposing(true);
         }
 
+        mTipeView = (TipeView) this.getLayoutInflater().inflate(
+                R.layout.tipe_view, null);
         if (KeyboardHandler.use_tap_tap_mode) {
             mTipeView = (TapTapView) this.getLayoutInflater().inflate(
                     R.layout.taptap_view, null);
 
-        } else {
-            mTipeView = (TipeView) this.getLayoutInflater().inflate(
-                    R.layout.tipe_view, null);
-
         }
+        if (KeyboardHandler.use_zoom_mode) {
+            mTipeView = (ZoomView) this.getLayoutInflater().inflate(
+                    R.layout.zoom_view, null);
+        }
+
         this.setInputView(mTipeView);
 
         mTipeView.initKeyboardHandler(this);

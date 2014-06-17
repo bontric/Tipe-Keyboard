@@ -44,10 +44,7 @@ public class InputHandler {
     }
 
     public void sendKey(char c) {
-        /*
-         * this could be interesting.. maybe it helps learning :) but you don't
-		 * recognize it very much..
-		 */
+
         smallVibrate();
 
 

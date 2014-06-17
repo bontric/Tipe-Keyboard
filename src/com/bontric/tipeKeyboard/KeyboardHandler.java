@@ -47,6 +47,9 @@ public class KeyboardHandler {
     public static boolean show_suggestions;
     public static boolean space_leaving_char_area;
     public static boolean use_tap_tap_mode = false;
+    public static boolean use_zoom_mode = false;
+
+
 
     public static String symbol_set;
     public static String character_set;
@@ -102,6 +105,8 @@ public class KeyboardHandler {
         // ====== BOOLEANS ===
         use_tap_tap_mode = sharedPrefs.getBoolean(
                 TipeSettings.USE_TAP_TAP_MODE, false);
+        use_zoom_mode = sharedPrefs.getBoolean(
+                TipeSettings.USE_ZOOM_MODE, false);
 
         use_haptic_feedback = sharedPrefs.getBoolean(
                 TipeSettings.USE_HAPTIC_FEEDBACK, false);
