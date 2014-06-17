@@ -142,7 +142,9 @@ public class ZoomCharacterView extends View {
 
                 break;
             case MotionEvent.ACTION_UP:
-                KeyboardHandler.input_connection.sendKey(selected.getCharFromPoint(Util.getEventMedianPos(event)));
+                if (isInBounds(Util.getEventMedianPos(event).x, Util.getEventMedianPos(event).y)) {
+                    KeyboardHandler.input_connection.sendKey(selected.getCharFromPoint(Util.getEventMedianPos(event)));
+                }
                 selected = null;
                 isZoom = false;
                 this.invalidate();
@@ -211,7 +213,7 @@ public class ZoomCharacterView extends View {
         for (CharacterArea ca : characterAreas) {
             ca.draw(canvas);
         }
-        if(isZoom){
+        if (isZoom) {
             selected.drawZoom(canvas);
         }
               /*
@@ -224,6 +226,7 @@ public class ZoomCharacterView extends View {
     }
 
     private class CharacterArea {
+        private double zoomFactor = 1; // some value between 1 and 2
         private String mCharacters;
         private RectF mSpace;
         private RectF mZoomSpace;
@@ -240,12 +243,13 @@ public class ZoomCharacterView extends View {
             this.mSpace = new RectF(x, y, x + width, y + height);
             mBgColor = bg_color;
             mBgPaint.setColor(mBgColor);
-            mZoomBgPaint.setColor(Color.BLACK);
-            mZoomBgPaint.setAlpha(245);
+            mZoomBgPaint.setColor(mBgColor);
+            mZoomBgPaint.setAlpha(220);
             mPaint.setTextSize(KeyboardHandler.default_font_size);
             mPaint.setColor(KeyboardHandler.default_font_color);
             mPaint.setFakeBoldText(true);
             mPaint.setTextAlign(Align.CENTER);
+            zoomFactor  = KeyboardHandler.zoom_factor;
         }
 
         public boolean contains(PointF pt) {
@@ -292,23 +296,41 @@ public class ZoomCharacterView extends View {
 
         public void drawZoom(Canvas canvas) {
             if (mZoomSpace == null) {
+                float width = (float) (mSpace.width()*zoomFactor);
+                float height = (float) (mSpace.height()*zoomFactor);
                 if (mSpace.left == 0) {
-                    // oben & unten links
-                    mZoomSpace = new RectF(0, 0, mSpace.width() * 2, mSpace.height() * 2);
+                    if(mSpace.top == 0){
+                        //upper left area
+                        mZoomSpace = new RectF(0, 0, width, height);
+                    }else{
+                        //lower left area
+                        mZoomSpace = new RectF(0, mSpace.bottom-height, width, mSpace.bottom);
+                    }
+
 
                 } else if (mSpace.right == mWidth) {
-                    //oben & unten rechts
-                    mZoomSpace = new RectF(mSpace.left - mSpace.width(), 0, mSpace.right, mSpace.height() * 2);
+                    if(mSpace.top == 0){
+                        // upper right area
+                        mZoomSpace = new RectF(mSpace.right-width, 0, mSpace.right, height);
+                    }else{
+                        // upper left area
+                        mZoomSpace = new RectF(mSpace.right-width, mSpace.bottom-height, mSpace.right, mSpace.bottom);
+                    }
                 } else {
-                    //oben & unten mitte
-                    mZoomSpace = new RectF(mSpace.left - mSpace.width() / 2, 0, mSpace.right + mSpace.width() / 2, mSpace.height() * 2);
+                    if(mSpace.top == 0){
+                        //upper center area
+                        mZoomSpace = new RectF(mSpace.centerX()-width/2, 0, mSpace.centerX()+width/2, height);
+                    }else{
+                        //lower center area
+                        mZoomSpace = new RectF(mSpace.centerX()-width/2, mSpace.bottom-height, mSpace.centerX()+width/2, mSpace.bottom);
+                    }
 
                 }
             }
 
             if (mCharacters != "") {
                 initCenters(mZoomSpace);
-                canvas.drawRoundRect(mZoomSpace,50,50, mZoomBgPaint);
+                canvas.drawRoundRect(mZoomSpace, 50, 50, mZoomBgPaint);
 
                 int i = 0;
 
@@ -323,17 +345,17 @@ public class ZoomCharacterView extends View {
 
         }
 
-        public char getCharFromPoint(PointF touch){
+        public char getCharFromPoint(PointF touch) {
             PointF sel = null;
-            double shortestDist = Math.sqrt(Math.pow(touch.x - textCenters.get(0).x,2) +Math.pow(touch.y - textCenters.get(0).y,2));
-            for(PointF tC : textCenters){
-                double dist = Math.sqrt(Math.pow(touch.x - tC.x,2) +Math.pow(touch.y - tC.y,2));
-                if(shortestDist > dist){
+            double shortestDist = Math.sqrt(Math.pow(touch.x - textCenters.get(0).x, 2) + Math.pow(touch.y - textCenters.get(0).y, 2));
+            for (PointF tC : textCenters) {
+                double dist = Math.sqrt(Math.pow(touch.x - tC.x, 2) + Math.pow(touch.y - tC.y, 2));
+                if (shortestDist > dist) {
                     sel = tC;
-                    shortestDist =dist;
+                    shortestDist = dist;
                 }
             }
-            if(sel == null){
+            if (sel == null) {
                 return mCharacters.charAt(0);
             }
             return mCharacters.charAt(textCenters.indexOf(sel));

@@ -50,7 +50,6 @@ public class KeyboardHandler {
     public static boolean use_zoom_mode = false;
 
 
-
     public static String symbol_set;
     public static String character_set;
     public static String current_charset;
@@ -64,11 +63,13 @@ public class KeyboardHandler {
     public static int longpress_timeout;
     public static int keyboard_width;
     public static int keyboard_height;
+    public static float zoom_factor;
 
     public static InputHandler input_connection = new InputHandler();
 
     private static SharedPreferences sharedPrefs;
     private static TipeView mTipeView;
+
 
     public static void init(Context context, TipeView tipeView) {
 
@@ -121,6 +122,7 @@ public class KeyboardHandler {
         // ======= ADVANCED ===
         longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(
                 TipeSettings.LONGPRESS_TIMEOUT, (float) 0.5));
+        zoom_factor = (float) (1 + sharedPrefs.getFloat(TipeSettings.ZOOM_FACTOR, (float) 0.5));
         mTipeView = tipeView;
 
         // ====== Keyboard Size (TESTING) !====
