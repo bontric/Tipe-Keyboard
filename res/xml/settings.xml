@@ -62,6 +62,12 @@
                     android:key="normFontColor"
                     android:summary="@string/fontColor_summary"
                     android:title="@string/fontColor_title"/>
+           <net.margaritov.preference.colorpicker.ColorPickerPreference
+                    alphaSlider="false"
+                    android:defaultValue="@color/highTextColor"
+                    android:key="highFontColor"
+                    android:summary="@string/high_fontColor_summary"
+                    android:title="@string/high_fontColor_title"/>
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                     alphaSlider="false"
                     android:defaultValue="@color/backgroundDark"

@@ -58,6 +58,7 @@ public class KeyboardHandler {
     public static int char_view_dark_color;
     public static int char_view_light_color;
     public static int default_font_color;
+    public static int highlight_font_color;
     public static int background_color;
 
     public static int longpress_timeout;
@@ -102,6 +103,8 @@ public class KeyboardHandler {
                 TipeSettings.CHARACTER_BG_LIGHT, Color.DKGRAY);
         default_font_color = sharedPrefs.getInt(TipeSettings.FONT_COLOR,
                 Color.WHITE);
+        highlight_font_color = sharedPrefs.getInt(TipeSettings.HIGH_FONT_COLOR,
+                Color.YELLOW);
 
         // ====== BOOLEANS ===
         use_tap_tap_mode = sharedPrefs.getBoolean(

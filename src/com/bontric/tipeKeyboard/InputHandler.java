@@ -44,10 +44,8 @@ public class InputHandler {
     }
 
     public void sendKey(char c) {
-
         smallVibrate();
-
-
+        
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
@@ -75,23 +73,29 @@ public class InputHandler {
 
     public void handleSpace() {
         smallVibrate();
-
+        if(mCandidateView.count() >= 3) {
+        	mCandidateView.pickSuggestions(1);
+        }
+        else {
+        	sendKey((char) 32);
+        }
         resetComposedWord();
-        sendKey((char) 32);
-
     }
 
     public void handleDelete() {
         // Match composed word
         smallVibrate();
-
+        
         if (isComposing) {
-            if (composedWord.length() <= 1)
-                composedWord = "";
-            else
+            if (composedWord.length() <= 1){
+            	composedWord = "";
+            	mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+            }
+                
+            else {
                 composedWord = composedWord.substring(0, composedWord.length() - 1);
-
-            mCandidateView.getSuggestionsForWord(composedWord);
+                mCandidateView.getSuggestionsForWord(composedWord);
+            }
         }
         keyDownUp(KeyEvent.KEYCODE_DEL);
     }
@@ -156,7 +160,7 @@ public class InputHandler {
         InputConnection ic = mTipeService.getCurrentInputConnection();
        // Log.d("getSuggestionFromCand", composedWord);
         ic.deleteSurroundingText(composedWord.length(), 0);
-        ic.commitText((char) 32 + suggestion + (char) 32, suggestion.length() + 2);
+        ic.commitText(suggestion + (char) 32, suggestion.length() + 2);
         resetComposedWord();
     }
 

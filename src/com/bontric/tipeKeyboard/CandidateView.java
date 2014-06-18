@@ -22,6 +22,7 @@ limitations under the License.
 package com.bontric.tipeKeyboard;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.*;
@@ -37,10 +38,11 @@ import android.view.WindowManager;
 import android.view.textservice.*;
 import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import com.bontric.tipeSettings.TipeSettings;
-
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("NewApi")
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class CandidateView extends View implements SpellCheckerSessionListener {
 
     private Context ctx;
@@ -160,8 +162,8 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         curSuggestions.clear();
         if (mSuggestions.size() >= 3) {
             curSuggestions.add(mSuggestions.get(mSuggestions.size() - 1));
-            curSuggestions.add(mSuggestions.get(mSuggestions.size() - 2));
             curSuggestions.add(mSuggestions.get(mSuggestions.size() - 3));
+            curSuggestions.add(mSuggestions.get(mSuggestions.size() - 2));
         } else
             curSuggestions = new ArrayList<String>(mSuggestions);
     }
@@ -192,6 +194,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
         for (String string : tmpSuggstStrs) {
             //Calc to box for the text
+        	
             tmpArea.set(suggestionsArea);
             tmpArea.left = screenWidth / tmpSuggstStrs.size() * i;
             tmpArea.right = screenWidth / tmpSuggstStrs.size() * (i + 1);
@@ -200,8 +203,12 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
             /*TODO Might come in handy to export to a seperate utils file @jakob -> @ben
             * You might as well do it like this @Jakob. -> Do we need a saparate color for Candidate View?
             */
-            mPaint.setColor(KeyboardHandler.default_font_color);
-            PointF textP = Util.getTextCenterToDraw(string, tmpArea, mPaint);
+            if(i==1) {
+            	mPaint.setColor(KeyboardHandler.highlight_font_color);
+            } else 
+            	mPaint.setColor(KeyboardHandler.default_font_color);
+            
+            	PointF textP = Util.getTextCenterToDraw(string, tmpArea, mPaint);
 
             canvas.drawText(string, (float) (textP.x + mPaint.measureText(string) * 0.5), textP.y, mPaint);
             i++;
@@ -248,35 +255,39 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         //Test if suggestion was hit
         if (y > suggestionsArea.bottom || y < suggestionsArea.top || curSuggestions.size() == 0)
             return true;
-        String chosenSuggest;
+       
         switch (curSuggestions.size()) {
             // Calculate corresponding suggestions to x
             // TODO needs testing @jakob
             case 3:
 
                 if (x < suggestionsArea.right / 3)
-                    chosenSuggest = curSuggestions.get(0);
+                	 return pickSuggestions(0);
                 else if (x < suggestionsArea.right / 3 * 2)
-                    chosenSuggest = curSuggestions.get(1);
+                	 return pickSuggestions(1);
                 else
-                    chosenSuggest = curSuggestions.get(2);
-                break;
+                	 return pickSuggestions(2);
+                
             case 2:
                 if (x > suggestionsArea.right / 2)
-                    chosenSuggest = curSuggestions.get(0);
+                	 return pickSuggestions(0);
                 else
-                    chosenSuggest = curSuggestions.get(1);
-                break;
+                    return pickSuggestions(1);
+           
             case 1:
-                chosenSuggest = curSuggestions.get(0);
-                break;
+            	return pickSuggestions(0);
+                
 
             default:
                 //Something strange happend
                 Log.d("Tipe", "onTouchEvent: problem with size => " + curSuggestions.size());
                 return true;
         }
-        //Something was found, clear the old stuff
+    }
+    
+    public boolean pickSuggestions(int index) {
+    	String chosenSuggest =  curSuggestions.get(index);
+    	//Something was found, clear the old stuff
         curSuggestions.clear();
         mSuggestions.clear();
         //Tell Service what was picked
@@ -371,6 +382,10 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
     public boolean hasSuggestions() {
         return !mSuggestions.isEmpty();
+    }
+    
+    public int count() {
+    	return mSuggestions.size();
     }
 
 }

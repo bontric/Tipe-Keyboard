@@ -12,5 +12,6 @@
     <string name="pref_category">Category</string>
     <string name="fontColor_title">Text Color</string>
     <string name="fontColor_summary">White by default</string>
-
+	<string name="high_fontColor_title">Text Highlight Color</string>
+    <string name="high_fontColor_summary">Yellow by default</string>
 </resources>

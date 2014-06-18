@@ -43,6 +43,7 @@ public class TipeSettings extends PreferenceActivity {
      * colors
      */
     public final static String FONT_COLOR = "normFontColor";
+    public final static String HIGH_FONT_COLOR = "highFontColor";
     public final static String BACKGROUND_COLOR = "backgroundColor";
     public final static String CHARACTER_BG_LIGHT = "background_light";
 
