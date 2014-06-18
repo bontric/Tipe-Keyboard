@@ -45,7 +45,7 @@ public class InputHandler {
 
     public void sendKey(char c) {
         smallVibrate();
-        
+
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
@@ -56,7 +56,7 @@ public class InputHandler {
         mTipeService.getCurrentInputConnection().commitText("" + c, 1);
 
 		/*
-		 * Handle capitalization okay this is hardcoded.. but i want to test
+         * Handle capitalization okay this is hardcoded.. but i want to test
 		 * this feature fore now :)
 		 */
         if (KeyboardHandler.use_auto_capitalization
@@ -73,11 +73,10 @@ public class InputHandler {
 
     public void handleSpace() {
         smallVibrate();
-        if(mCandidateView.count() >= 3) {
-        	mCandidateView.pickSuggestions(1);
-        }
-        else {
-        	sendKey((char) 32);
+        if (mCandidateView.count() >= 3) {
+            mCandidateView.pickSuggestions(1);
+        } else {
+            sendKey((char) 32);
         }
         resetComposedWord();
     }
@@ -85,14 +84,12 @@ public class InputHandler {
     public void handleDelete() {
         // Match composed word
         smallVibrate();
-        
+
         if (isComposing) {
-            if (composedWord.length() <= 1){
-            	composedWord = "";
-            	mCandidateView.setVisibility(mCandidateView.INVISIBLE);
-            }
-                
-            else {
+            if (composedWord.length() <= 1) {
+                composedWord = "";
+                mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+            } else {
                 composedWord = composedWord.substring(0, composedWord.length() - 1);
                 mCandidateView.getSuggestionsForWord(composedWord);
             }
@@ -110,14 +107,13 @@ public class InputHandler {
 
     public void handleEnter() {
         smallVibrate();
-        
+
         resetComposedWord();
         keyDownUp(KeyEvent.KEYCODE_ENTER);
     }
 
     /**
      * use this for enter & delete key!
-     *
      */
     private void keyDownUp(int keyEventCode) {
         mTipeService.getCurrentInputConnection().sendKeyEvent(
@@ -144,21 +140,23 @@ public class InputHandler {
 
     public void resetComposedWord() {
         composedWord = "";
-        mCandidateView.clear();
-        mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+        if (mCandidateView != null) {
+            mCandidateView.clear();
+            mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+        }
     }
 
 
     public void setComposedWord(String soFarComposed) {
         composedWord = soFarComposed;
-      //  Log.d("setComposedWord", composedWord);
+        //  Log.d("setComposedWord", composedWord);
         mCandidateView.getSuggestionsForWord(composedWord);
         mCandidateView.setVisibility(mCandidateView.VISIBLE);
     }
 
     public void getSuggestionFromCandView(String suggestion) {
         InputConnection ic = mTipeService.getCurrentInputConnection();
-       // Log.d("getSuggestionFromCand", composedWord);
+        // Log.d("getSuggestionFromCand", composedWord);
         ic.deleteSurroundingText(composedWord.length(), 0);
         ic.commitText(suggestion + (char) 32, suggestion.length() + 2);
         resetComposedWord();
@@ -172,7 +170,6 @@ public class InputHandler {
             mTipeService.getCurVibrator().vibrate(30);
         }
     }
-
 
 
 }

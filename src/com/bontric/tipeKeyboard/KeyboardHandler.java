@@ -125,14 +125,16 @@ public class KeyboardHandler {
         // ======= ADVANCED ===
         longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(
                 TipeSettings.LONGPRESS_TIMEOUT, (float) 0.5));
-        zoom_factor = (float) (1 + sharedPrefs.getFloat(TipeSettings.ZOOM_FACTOR, (float) 0.5));
+        zoom_factor = (float) (1 + sharedPrefs.getFloat(TipeSettings.ZOOM_FACTOR, (float) 0.5)*2);
         mTipeView = tipeView;
 
         // ====== Keyboard Size (TESTING) !====
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         Point size = new Point();
-        wm.getDefaultDisplay().getSize(size);
+        size.x = wm.getDefaultDisplay().getWidth();
+        size.y = wm.getDefaultDisplay().getHeight();
+        // Compatibility with older versions!
         keyboard_height = (int) (size.y * (0.3 + 0.3 * sharedPrefs.getFloat(
                 TipeSettings.KEYBOARD_HEIGHT, 1)));
         keyboard_width = size.x; // custom width might be a feature one day

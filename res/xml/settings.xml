@@ -23,7 +23,7 @@
                 android:summary="Zooms in the selected area on touch (Do not activate TapTap and Zoom at the same Time!) "/>
         <net.jayschwa.android.preference.SliderPreference
                 android:defaultValue="0.5"
-                android:dialogMessage="1-2"
+                android:dialogMessage="1-3"
                 android:key="zoomFactor"
                 android:dependency="zoomMode"
                 android:title="Zoom Factor"

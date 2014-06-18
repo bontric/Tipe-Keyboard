@@ -139,7 +139,14 @@ public class ZoomCharacterView extends View {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-
+                // TODO @Ben just tamporary..
+                if (KeyboardHandler.zoom_factor == 1) {
+                    CharacterArea temp = getAreaFromTouch(Util.getEventMedianPos(event));
+                    if (!selected.equals(temp)) {
+                        selected = temp;
+                    }
+                    this.invalidate();
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 if (isInBounds(Util.getEventMedianPos(event).x, Util.getEventMedianPos(event).y)) {
@@ -226,7 +233,7 @@ public class ZoomCharacterView extends View {
     }
 
     private class CharacterArea {
-        private double zoomFactor = 1; // some value between 1 and 2
+        private double zoomFactor = 2; // some value between 1 and 3
         private String mCharacters;
         private RectF mSpace;
         private RectF mZoomSpace;
@@ -249,7 +256,7 @@ public class ZoomCharacterView extends View {
             mPaint.setColor(KeyboardHandler.default_font_color);
             mPaint.setFakeBoldText(true);
             mPaint.setTextAlign(Align.CENTER);
-            zoomFactor  = KeyboardHandler.zoom_factor;
+            zoomFactor = KeyboardHandler.zoom_factor;
         }
 
         public boolean contains(PointF pt) {
@@ -296,33 +303,38 @@ public class ZoomCharacterView extends View {
 
         public void drawZoom(Canvas canvas) {
             if (mZoomSpace == null) {
-                float width = (float) (mSpace.width()*zoomFactor);
-                float height = (float) (mSpace.height()*zoomFactor);
+                float width = (float) (mSpace.width() * zoomFactor);
+                float height;
+                if (zoomFactor < 2) {
+                    height = (float) (mSpace.height() * zoomFactor);
+                } else {
+                    height = (float) (mSpace.height() * 2);
+                }
                 if (mSpace.left == 0) {
-                    if(mSpace.top == 0){
+                    if (mSpace.top == 0) {
                         //upper left area
                         mZoomSpace = new RectF(0, 0, width, height);
-                    }else{
+                    } else {
                         //lower left area
-                        mZoomSpace = new RectF(0, mSpace.bottom-height, width, mSpace.bottom);
+                        mZoomSpace = new RectF(0, mSpace.bottom - height, width, mSpace.bottom);
                     }
 
 
                 } else if (mSpace.right == mWidth) {
-                    if(mSpace.top == 0){
+                    if (mSpace.top == 0) {
                         // upper right area
-                        mZoomSpace = new RectF(mSpace.right-width, 0, mSpace.right, height);
-                    }else{
+                        mZoomSpace = new RectF(mSpace.right - width, 0, mSpace.right, height);
+                    } else {
                         // upper left area
-                        mZoomSpace = new RectF(mSpace.right-width, mSpace.bottom-height, mSpace.right, mSpace.bottom);
+                        mZoomSpace = new RectF(mSpace.right - width, mSpace.bottom - height, mSpace.right, mSpace.bottom);
                     }
                 } else {
-                    if(mSpace.top == 0){
+                    if (mSpace.top == 0) {
                         //upper center area
-                        mZoomSpace = new RectF(mSpace.centerX()-width/2, 0, mSpace.centerX()+width/2, height);
-                    }else{
+                        mZoomSpace = new RectF(mSpace.centerX() - width / 2, 0, mSpace.centerX() + width / 2, height);
+                    } else {
                         //lower center area
-                        mZoomSpace = new RectF(mSpace.centerX()-width/2, mSpace.bottom-height, mSpace.centerX()+width/2, mSpace.bottom);
+                        mZoomSpace = new RectF(mSpace.centerX() - width / 2, mSpace.bottom - height, mSpace.centerX() + width / 2, mSpace.bottom);
                     }
 
                 }
@@ -369,5 +381,13 @@ public class ZoomCharacterView extends View {
             mCharacters = chars;
 
         }
+
+        public boolean equals(CharacterArea a) {
+            if(a == null){
+                return false;
+            }
+            return this.mCharacters.compareTo(a.getChars()) == 0;
+        }
+
     }
 }
