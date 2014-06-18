@@ -19,12 +19,15 @@ limitations under the License.
  */
 package com.bontric.tipeKeyboard;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 public class TipeView extends LinearLayout {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public TipeView(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);

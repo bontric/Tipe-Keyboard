@@ -118,7 +118,16 @@ public class ZoomCharacterView extends View {
      * not => longpress check is still pending
      */
     private boolean setCharAlternatives() {
-        return true;
+        for (String s : this.getResources().getStringArray(
+                R.array.key_alternatives)) {
+            if (s.charAt(0) == mLongPressedChar) {
+                selected.setChars(s.substring(1, s.length()));
+                this.invalidate();
+                return true;
+            }
+        }
+
+        return false;
     }
 
 	/*
@@ -127,14 +136,18 @@ public class ZoomCharacterView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        PointF touched = Util.getEventMedianPos(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                selected = getAreaFromTouch(Util.getEventMedianPos(event));
+
+                selected = getAreaFromTouch(touched);
 
                 if (selected != null) {
-                    Log.d("main", "ping");
                     isZoom = true;
+                    longPressHandler.postDelayed(longPressActionRunnable,
+                            longpressTimeout);
+
+                    mLongPressedChar = selected.getCharFromPoint(touched);
                     this.invalidate();
                 }
                 break;
@@ -147,13 +160,27 @@ public class ZoomCharacterView extends View {
                     }
                     this.invalidate();
                 }
+
+                if (selected.getCharFromPoint(touched) != mLongPressedChar && !isLongPressed) {
+                    longPressHandler.removeCallbacks(longPressActionRunnable);
+                    longPressHandler.postDelayed(longPressActionRunnable,
+                            longpressTimeout);
+                    mLongPressedChar = selected.getCharFromPoint(touched);
+                }
                 break;
             case MotionEvent.ACTION_UP:
+                isLongPressed = false;
+                longPressHandler.removeCallbacks(longPressActionRunnable);
                 if (isInBounds(Util.getEventMedianPos(event).x, Util.getEventMedianPos(event).y)) {
                     KeyboardHandler.input_connection.sendKey(selected.getCharFromPoint(Util.getEventMedianPos(event)));
+                }else{
+                    if(KeyboardHandler.space_leaving_char_area){
+                        KeyboardHandler.input_connection.handleSpace();
+                    }
                 }
                 selected = null;
                 isZoom = false;
+                this.setLevelUpChars();
                 this.invalidate();
                 break;
 
@@ -251,7 +278,8 @@ public class ZoomCharacterView extends View {
             mBgColor = bg_color;
             mBgPaint.setColor(mBgColor);
             mZoomBgPaint.setColor(mBgColor);
-            mZoomBgPaint.setAlpha(220);
+            mZoomBgPaint.setAlpha(230);
+            mZoomBgPaint.setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
             mPaint.setTextSize(KeyboardHandler.default_font_size);
             mPaint.setColor(KeyboardHandler.default_font_color);
             mPaint.setFakeBoldText(true);
@@ -302,6 +330,7 @@ public class ZoomCharacterView extends View {
         }
 
         public void drawZoom(Canvas canvas) {
+
             if (mZoomSpace == null) {
                 float width = (float) (mSpace.width() * zoomFactor);
                 float height;
@@ -342,6 +371,9 @@ public class ZoomCharacterView extends View {
 
             if (mCharacters != "") {
                 initCenters(mZoomSpace);
+                mPaint.setAlpha(200);
+                canvas.drawRoundRect(mZoomSpace, 50, 50, mPaint);
+                mPaint.setAlpha(255);
                 canvas.drawRoundRect(mZoomSpace, 50, 50, mZoomBgPaint);
 
                 int i = 0;
@@ -367,7 +399,7 @@ public class ZoomCharacterView extends View {
                     shortestDist = dist;
                 }
             }
-            if (sel == null) {
+            if (sel == null || textCenters.indexOf(sel)>= mCharacters.length()) {
                 return mCharacters.charAt(0);
             }
             return mCharacters.charAt(textCenters.indexOf(sel));

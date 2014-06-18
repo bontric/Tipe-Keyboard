@@ -10,14 +10,16 @@
 
         <service android:permission="android.permission.BIND_INPUT_METHOD"
                  android:name="com.bontric.tipeKeyboard.TipeService"
-                 android:description="@string/app_name">
+                 android:description="@string/app_name"
+                >
             <intent-filter>
                 <action android:name="android.view.InputMethod"></action>
             </intent-filter>
             <meta-data android:resource="@xml/method" android:name="android.view.im"></meta-data>
         </service>
         <activity android:name="com.bontric.tipeSettings.TipeSettings"
-                  android:label="Tipe Keyboard Settings">
+                  android:label="Tipe Keyboard Settings"
+                  android:hardwareAccelerated="false">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
