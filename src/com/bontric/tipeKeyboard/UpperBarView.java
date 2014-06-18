@@ -80,11 +80,13 @@ public class UpperBarView extends View {
 
         enterButton = new ActionArea(2 * width / 3, 0, width / 3, height,
                 KeyboardHandler.background_color, tempIcon) {
+
             @Override
             public void onTouch() {
                 KeyboardHandler.input_connection.handleEnter();
 
             }
+
         };
 
     }

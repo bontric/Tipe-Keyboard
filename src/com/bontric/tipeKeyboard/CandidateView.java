@@ -123,7 +123,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int measuredWidth = resolveSize(50, widthMeasureSpec);
 
-        final int desiredHeight = ((int) mPaint.getTextSize()) + 40;
+        final int desiredHeight = ((int) mPaint.getTextSize())*3;
 
         //	Log.d("Width", measuredWidth + "\t|\t" + desiredHeight);
         // Maximum possible width and desired height

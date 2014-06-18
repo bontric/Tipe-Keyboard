@@ -28,6 +28,7 @@ public abstract class ActionArea {
     private String label;
     private RectF mSpace;
     private Paint mPaint = new Paint();
+    private Paint iconPaint = new Paint();
     private int mBgColor;
 
     public ActionArea(float x, float y, float width, float height,
@@ -37,6 +38,11 @@ public abstract class ActionArea {
         mPaint.setTextSize(KeyboardHandler.default_font_size);
         mPaint.setTextAlign(Align.CENTER);
         this.label = label;
+        iconPaint = new Paint(KeyboardHandler.highlight_font_color);
+        ColorFilter filter = new LightingColorFilter(KeyboardHandler.highlight_font_color, 1);
+        iconPaint.setColorFilter(filter);
+
+        mPaint.setFakeBoldText(true);
     }
 
     public ActionArea(float x, float y, float width, float height,
@@ -46,6 +52,12 @@ public abstract class ActionArea {
         mPaint.setTextSize(KeyboardHandler.default_font_size);
         mPaint.setTextAlign(Align.CENTER);
         this.icon = icon;
+        iconPaint = new Paint(KeyboardHandler.highlight_font_color);
+        ColorFilter filter = new LightingColorFilter(KeyboardHandler.highlight_font_color, 1);
+        iconPaint.setColorFilter(filter);
+
+        mPaint.setFakeBoldText(true);
+
     }
 
     public boolean contains(PointF pt) {
@@ -56,12 +68,11 @@ public abstract class ActionArea {
 
         mPaint.setColor(mBgColor);
         canvas.drawRect(mSpace, mPaint);
-        mPaint.setColor(KeyboardHandler.default_font_color);
-        mPaint.setFakeBoldText(true);
+        mPaint.setColor(KeyboardHandler.highlight_font_color);
         if (icon != null) {
             int cx = (int) ((mSpace.width() - icon.getWidth()) / 2);
             int cy = (int) (mSpace.height() - icon.getHeight()) / 2;
-            canvas.drawBitmap(icon, mSpace.left + cx, mSpace.top + cy, null);
+            canvas.drawBitmap(icon, mSpace.left + cx, mSpace.top + cy, iconPaint);
         } else {
             PointF center = Util.getTextCenterToDraw(label, mSpace, mPaint);
             canvas.drawText(label, center.x, center.y, mPaint);
