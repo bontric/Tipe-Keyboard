@@ -172,4 +172,8 @@ public class InputHandler {
     }
 
 
+    public void handleSpaceOnly() {
+        sendKey((char) 32);
+        resetComposedWord();
+    }
 }

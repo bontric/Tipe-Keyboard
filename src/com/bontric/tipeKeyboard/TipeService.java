@@ -142,11 +142,15 @@ public class TipeService extends InputMethodService {
         }
         // Check if text was selected
         if (newSelEnd - newSelStart > 0) {
-            if (showCandidates)
+            if (showCandidates) {
+                String s = getCurrentInputConnection().getSelectedText(0).toString();
+                if (s != null) {
+                    KeyboardHandler.input_connection.setComposedWord(s);
+                }
+            }
+        } else
 
-                KeyboardHandler.input_connection.setComposedWord(
-                        getCurrentInputConnection().getSelectedText(0).toString());
-        } else {
+        {
             //Calculate if you are in a word
             if (getCurrentInputConnection() == null) {
 

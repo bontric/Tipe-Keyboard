@@ -77,21 +77,39 @@ public class ZoomCharacterView extends View {
         characterAreas = new LinkedList<CharacterArea>();
         float x = 0;
         float y = 0;
-        float width = mWidth / 3;
-        float height = mHeight / 2;
+        //TODO do this nice @me
+        if (KeyboardHandler.character_set.length() > 36) {
 
-        characterAreas.add(new CharacterArea(x, y, width, height,
-                KeyboardHandler.char_view_dark_color));
-        characterAreas.add(new CharacterArea(x + width, y, width, height,
-                KeyboardHandler.char_view_light_color));
-        characterAreas.add(new CharacterArea(x + 2 * width, y, width, height,
-                KeyboardHandler.char_view_dark_color));
-        characterAreas.add(new CharacterArea(x, y + height, width, height,
-                KeyboardHandler.char_view_light_color));
-        characterAreas.add(new CharacterArea(x + width, y + height, width,
-                height, KeyboardHandler.char_view_dark_color));
-        characterAreas.add(new CharacterArea(x + 2 * width, y + height, width,
-                height, KeyboardHandler.char_view_light_color));
+            float width = mWidth / 10;
+            float height = mHeight / 2;
+            characterAreas.add(new CharacterArea(x, y, width * 3, height,
+                    KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x + width * 3, y, width * 4, height,
+                    KeyboardHandler.char_view_light_color));
+            characterAreas.add(new CharacterArea(x + width * 7, y, width * 3, height,
+                    KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x, y + height, width * 3, height,
+                    KeyboardHandler.char_view_light_color));
+            characterAreas.add(new CharacterArea(x + width * 3, y + height, width * 4,
+                    height, KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x + width * 7, y + height, width * 3,
+                    height, KeyboardHandler.char_view_light_color));
+        } else {
+            float width = mWidth / 3;
+            float height = mHeight / 2;
+            characterAreas.add(new CharacterArea(x, y, width, height,
+                    KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x + width, y, width, height,
+                    KeyboardHandler.char_view_light_color));
+            characterAreas.add(new CharacterArea(x + 2 * width, y, width, height,
+                    KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x, y + height, width, height,
+                    KeyboardHandler.char_view_light_color));
+            characterAreas.add(new CharacterArea(x + width, y + height, width,
+                    height, KeyboardHandler.char_view_dark_color));
+            characterAreas.add(new CharacterArea(x + 2 * width, y + height, width,
+                    height, KeyboardHandler.char_view_light_color));
+        }
 
         setLevelUpChars();
     }
@@ -136,24 +154,27 @@ public class ZoomCharacterView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        PointF touched = Util.getEventMedianPos(event);
+        PointF touch = Util.getEventMedianPos(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
-                selected = getAreaFromTouch(touched);
+                selected = getAreaFromTouch(touch);
 
                 if (selected != null) {
                     isZoom = true;
                     longPressHandler.postDelayed(longPressActionRunnable,
                             longpressTimeout);
 
-                    mLongPressedChar = selected.getCharFromPoint(touched);
+                    mLongPressedChar = selected.getCharFromPoint(touch);
                     this.invalidate();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (touch == null){
+                    return true;
+                }
                 // TODO @Ben just tamporary..
-                if (KeyboardHandler.zoom_factor == 1) {
+                if (KeyboardHandler.zoom_factor == 1 && isInBounds(touch.x, touch.y)) {
                     CharacterArea temp = getAreaFromTouch(Util.getEventMedianPos(event));
                     if (!selected.equals(temp)) {
                         selected = temp;
@@ -161,11 +182,11 @@ public class ZoomCharacterView extends View {
                     this.invalidate();
                 }
 
-                if (selected.getCharFromPoint(touched) != mLongPressedChar && !isLongPressed) {
+                if (selected.getCharFromPoint(touch) != mLongPressedChar && !isLongPressed) {
                     longPressHandler.removeCallbacks(longPressActionRunnable);
                     longPressHandler.postDelayed(longPressActionRunnable,
                             longpressTimeout);
-                    mLongPressedChar = selected.getCharFromPoint(touched);
+                    mLongPressedChar = selected.getCharFromPoint(touch);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -173,8 +194,8 @@ public class ZoomCharacterView extends View {
                 longPressHandler.removeCallbacks(longPressActionRunnable);
                 if (isInBounds(Util.getEventMedianPos(event).x, Util.getEventMedianPos(event).y)) {
                     KeyboardHandler.input_connection.sendKey(selected.getCharFromPoint(Util.getEventMedianPos(event)));
-                }else{
-                    if(KeyboardHandler.space_leaving_char_area){
+                } else {
+                    if (KeyboardHandler.space_leaving_char_area) {
                         KeyboardHandler.input_connection.handleSpace();
                     }
                 }
@@ -225,11 +246,24 @@ public class ZoomCharacterView extends View {
     private void setLevelUpChars() {
         /*
          * check this if you need more symbol set's
+         *  TODO do this right @me
 		 */
         String charset = KeyboardHandler.current_charset;
-        for (int i = 0; i < 6; ++i) {
-            characterAreas.get(i).setChars(
-                    charset.substring(i * 6, (i + 1) * 6));
+        if (charset.length() == 36) {
+            for (int i = 0; i < 6; ++i) {
+                characterAreas.get(i).setChars(
+                        charset.substring(i * 6, (i + 1) * 6));
+            }
+        }
+
+        if (charset.length() == 40) {
+            Log.d("main",charset);
+            characterAreas.get(0).setChars(charset.substring(0, 6));
+            characterAreas.get(1).setChars(charset.substring(6, 14));
+            characterAreas.get(2).setChars(charset.substring(14, 20));
+            characterAreas.get(3).setChars(charset.substring(20, 26));
+            characterAreas.get(4).setChars(charset.substring(26, 34));
+            characterAreas.get(5).setChars(charset.substring(34, 40));
         }
     }
 
@@ -292,7 +326,12 @@ public class ZoomCharacterView extends View {
         }
 
         private void initCenters(RectF area) {
-            float width = Math.abs(area.left - area.right) / 3;
+
+            int charsPerLine = mCharacters.length() / 2;
+            if (charsPerLine == 0) {
+                return;
+            }
+            float width = Math.abs(area.left - area.right) / charsPerLine;
             float height = Math.abs(area.top - area.bottom) / 2;
             float x = area.left;
             float y = area.top;
@@ -300,18 +339,24 @@ public class ZoomCharacterView extends View {
                     "" + mCharacters.charAt(0), new RectF(x, y, x + width, y
                             + height), mPaint
             );
+
             textCenters = new LinkedList<PointF>();
             textCenters.add(center);
-            textCenters.add(new PointF(center.x + width, center.y));
-            textCenters.add(new PointF(center.x + width * 2, center.y));
-            textCenters.add(new PointF(center.x, center.y + height));
-            textCenters.add(new PointF(center.x + width, center.y + height));
-            textCenters
-                    .add(new PointF(center.x + width * 2, center.y + height));
+
+            int i = 1;
+            for (char c : mCharacters.toCharArray()) {
+                if (i / charsPerLine < 1) {
+                    textCenters.add(new PointF(center.x + i * width, center.y));
+                } else {
+                    textCenters.add(new PointF(center.x + (i % charsPerLine) * width, center.y + height));
+                }
+                ++i;
+            }
 
         }
 
         public void draw(Canvas canvas) {
+
             if (mCharacters != "") {
                 initCenters(mSpace);
 
@@ -399,7 +444,7 @@ public class ZoomCharacterView extends View {
                     shortestDist = dist;
                 }
             }
-            if (sel == null || textCenters.indexOf(sel)>= mCharacters.length()) {
+            if (sel == null || textCenters.indexOf(sel) >= mCharacters.length()) {
                 return mCharacters.charAt(0);
             }
             return mCharacters.charAt(textCenters.indexOf(sel));
@@ -415,7 +460,7 @@ public class ZoomCharacterView extends View {
         }
 
         public boolean equals(CharacterArea a) {
-            if(a == null){
+            if (a == null) {
                 return false;
             }
             return this.mCharacters.compareTo(a.getChars()) == 0;

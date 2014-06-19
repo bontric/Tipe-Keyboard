@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English -->
+<resources>
+    <string-array
+            name="key_alternatives">
+        <item>aàâãåæä</item>
+        <item>AÁÂÃÅÆÀ</item>
+        <item>cç©¢œ</item>
+        <item>CÇŒ</item>
+        <item>e€Œèéêë</item>
+        <item>EÈÉÊË</item>
+        <item>IÌÍÎÏ</item>
+        <item>iìíîï</item>
+        <item>NÑ</item>
+        <item>nñ</item>
+        <item>OÒÓÔÕØ</item>
+        <item>oòóôõøö</item>
+        <item>r®</item>
+        <item>UÙÚÛÜ</item>
+        <item>uùúûü</item>
+        <item>YŸ</item>
+        <item>yýÿ</item>
+        <item>zž</item>
+        <item>ZŽ</item>
+        <item>uµ</item>
+        <item>t™</item>
+        <item>fƒ</item>
+        <item>p£</item>
+        <item>SŠ</item>
+        <item>1!</item>
+        <item>2@</item>
+        <item>3#</item>
+        <item>4$</item>
+        <item>5%</item>
+        <item>6^</item>
+        <item>7&amp;</item>
+        <item>8*</item>
+        <item>9(</item>
+        <item>0)</item>
+        <item>,&lt;</item>
+        <item>.&gt;</item>
+        <item>/?</item>
+    </string-array>
+</resources>

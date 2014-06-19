@@ -177,7 +177,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 
         //Copy current Suggestions and check for oversize
-        int maxStrLength = 8;            //Size at which strings are shortend
+        int maxStrLength = 13;            //Size at which strings are shortend
 
         List<String> tmpSuggstStrs = new ArrayList<String>();
         for (String singleStr : curSuggestions) {

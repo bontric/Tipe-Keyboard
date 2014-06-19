@@ -176,6 +176,7 @@ public class KeyboardHandler {
             charset_changed = true;
             mTipeView.invalidate();
         }
+
     }
 
     public static void handleSym() {

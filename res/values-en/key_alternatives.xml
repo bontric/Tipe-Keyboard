@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- German -->
 <resources>
     <string-array
             name="key_alternatives">
@@ -26,5 +27,17 @@
         <item>fƒ</item>
         <item>p£</item>
         <item>SŠ</item>
+        <item>1!</item>
+        <item>2"</item>
+        <item>3§</item>
+        <item>4$</item>
+        <item>5%</item>
+        <item>6&amp;</item>
+        <item>7/{</item>
+        <item>8([</item>
+        <item>9)]</item>
+        <item>0=}</item>
+        <item>ß?&#92;</item>
+
     </string-array>
 </resources>

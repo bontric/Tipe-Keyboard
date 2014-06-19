@@ -89,6 +89,8 @@ public class LowerBarView extends View {
                 KeyboardHandler.input_connection.handleSpace();
 
             }
+
+
         };
 
         tempIcon = BitmapFactory.decodeResource(getResources(),
@@ -113,20 +115,29 @@ public class LowerBarView extends View {
 
 	/*
      * ###############################################################
-	 * Unflexible longpress inmplementation
+	 * Unflexible longpress inmplementation TODO move this to Action area implementation!
 	 */
 
-    private Runnable longPressActionRunnable = new Runnable() {
+    private Runnable longPressDeleteRunnable = new Runnable() {
         public void run() {
             deleteButton.onTouch();
-            longPressHandler.postDelayed(longPressActionRunnable,
+            longPressHandler.postDelayed(longPressDeleteRunnable,
                     repeatIntervall);
+            wasLongPressed = true;
+
+        }
+    };
+    private Runnable longPressSpaceRunnable = new Runnable() {
+        public void run() {
+            KeyboardHandler.input_connection.handleSpaceOnly();
+            wasLongPressed = true;
 
         }
     };
     private Handler longPressHandler = new Handler();
     private final int longpressTimeout = 250; // final for now
     private final int repeatIntervall = 70;
+    private boolean wasLongPressed = false;
 
 	/*
      * ################################################################
@@ -134,29 +145,45 @@ public class LowerBarView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        PointF touched = Util.getEventMedianPos(event);
+        PointF touch = Util.getEventMedianPos(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (deleteButton.contains(touched)) {
-                    longPressHandler.postDelayed(longPressActionRunnable,
+                if (deleteButton.contains(touch)) {
+                    longPressHandler.postDelayed(longPressDeleteRunnable,
                             longpressTimeout);
+                }
+                if (spaceButton.contains(touch)) {
+                    longPressHandler.postDelayed(longPressSpaceRunnable,
+                            KeyboardHandler.longpress_timeout);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!deleteButton.contains(touched)) {
-                    longPressHandler.removeCallbacks(longPressActionRunnable);
-                    longPressHandler.postDelayed(longPressActionRunnable,
+                if (deleteButton.contains(touch)) {
+                    longPressHandler.removeCallbacks(longPressDeleteRunnable);
+                    longPressHandler.postDelayed(longPressDeleteRunnable,
                             longpressTimeout);
+                } else if (spaceButton.contains(touch)) {
+                    longPressHandler.removeCallbacks(longPressSpaceRunnable);
+
+                    longPressHandler.postDelayed(longPressSpaceRunnable,
+                            KeyboardHandler.longpress_timeout);
+                } else {
+                    wasLongPressed = false;
                 }
                 break;
             case MotionEvent.ACTION_UP:
 
-                longPressHandler.removeCallbacks(longPressActionRunnable);
-                if (shiftButton.contains(touched)) {
+                longPressHandler.removeCallbacks(longPressDeleteRunnable);
+                longPressHandler.removeCallbacks(longPressSpaceRunnable);
+                if (wasLongPressed) {
+                    wasLongPressed = false;
+                    return true;
+                }
+                if (shiftButton.contains(touch)) {
                     shiftButton.onTouch();
-                } else if (spaceButton.contains(touched)) {
+                } else if (spaceButton.contains(touch)) {
                     spaceButton.onTouch();
-                } else if (deleteButton.contains(touched)) {
+                } else if (deleteButton.contains(touch)) {
                     deleteButton.onTouch();
                 }
                 break;
