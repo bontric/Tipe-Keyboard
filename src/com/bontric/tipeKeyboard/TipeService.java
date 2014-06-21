@@ -38,7 +38,7 @@ public class TipeService extends InputMethodService {
     Vibrator mVibrator;
     TipeView mTipeView = null;
 
-    boolean showCandidates;
+    boolean showCandidates = true;
 
     public void onCreate() {
         super.onCreate();
@@ -58,13 +58,19 @@ public class TipeService extends InputMethodService {
 		 */
         mTipeView = (TipeView) this.getLayoutInflater().inflate(
                 R.layout.tipe_view, null);
+        if (KeyboardHandler.use_tap_tap_mode) {
+            mTipeView = (TapTapView) this.getLayoutInflater().inflate(
+                    R.layout.taptap_view, null);
 
-
+        }
+        if (KeyboardHandler.use_zoom_mode) {
+            mTipeView = (ZoomView) this.getLayoutInflater().inflate(
+                    R.layout.zoom_view, null);
+        }
         return mTipeView;
     }
 
     public void onFinishInput() {
-        //super.onFinishInput();
         if (KeyboardHandler.input_connection != null) {
             KeyboardHandler.input_connection.resetComposedWord();
         }
@@ -148,9 +154,7 @@ public class TipeService extends InputMethodService {
                     KeyboardHandler.input_connection.setComposedWord(s);
                 }
             }
-        } else
-
-        {
+        } else {
             //Calculate if you are in a word
             if (getCurrentInputConnection() == null) {
 

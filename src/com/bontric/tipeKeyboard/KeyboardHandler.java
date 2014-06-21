@@ -37,7 +37,8 @@ public class KeyboardHandler {
     public static int character_view_height;
     public static int lower_bar_view_height;
     public static int upper_bar_view_height;
-    public static float default_font_size; // Make this variable
+    public static float default_font_size;
+    public static float candidate_font_size = 35;
 
     public static boolean charset_changed = false;
     public static boolean shift_state = true;
