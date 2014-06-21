@@ -150,13 +150,14 @@ public class TipeService extends InputMethodService {
         if (newSelEnd - newSelStart > 0) {
             if (showCandidates) {
                 String s = getCurrentInputConnection().getSelectedText(0).toString();
+                Log.d("selection", s);
                 if (s != null) {
                     KeyboardHandler.input_connection.setComposedWord(s);
                 }
             }
         } else {
             //Calculate if you are in a word
-            if (getCurrentInputConnection() == null) {
+            if (getCurrentInputConnection() != null) {
 
                 String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
                 int spacePos = currentInputtxt.lastIndexOf(" ") + 1;

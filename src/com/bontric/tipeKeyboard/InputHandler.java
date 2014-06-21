@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 
+import java.security.Key;
+
 public class InputHandler {
 
     private TipeService mTipeService;
@@ -45,7 +47,9 @@ public class InputHandler {
 
     public void sendKey(char c) {
         smallVibrate();
+        if(KeyboardHandler.word_separators.contains(c+"")){
 
+        }
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
