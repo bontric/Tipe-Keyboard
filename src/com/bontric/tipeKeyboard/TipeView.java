@@ -1,5 +1,5 @@
 /**
- *@name TipeView
+ *@name TapTapCharacterView
  *@author Benedikt John Wieder, Jakob Frick
  *
  * Copyright  2014 Benedikt Wieder, Jakob Frick
@@ -23,9 +23,10 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 
-public class TipeView extends LinearLayout {
+public class TipeView extends LinearLayout{
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public TipeView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -50,9 +51,11 @@ public class TipeView extends LinearLayout {
         ((LowerBarView) findViewById(R.id.lower_bar_view)).init();
         ((UpperBarView) findViewById(R.id.upper_bar_view)).init();
     }
-
     public void initKeyboardHandler(Context context) {
         KeyboardHandler.init(context, this);
 
     }
+
+
+
 }

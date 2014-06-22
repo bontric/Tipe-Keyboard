@@ -34,13 +34,13 @@ import android.widget.LinearLayout.LayoutParams;
 
 import java.util.LinkedList;
 
-public class TapTapCharacterView extends View {
+class TapTapCharacterView extends View {
 
     private LinkedList<CharacterArea> characterAreas;
     private int mWidth;
     private int mHeight;
     private boolean isLevelDown;
-    Paint seperatorPaint = new Paint();
+    private Paint seperatorPaint = new Paint();
 
     public TapTapCharacterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);

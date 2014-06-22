@@ -32,7 +32,7 @@ import com.bontric.tipeSettings.TipeSettings;
 
 import java.util.Locale;
 
-public class KeyboardHandler {
+class KeyboardHandler {
     // constant for now -> is going to be a setting
     public static int character_view_height;
     public static int lower_bar_view_height;
@@ -46,7 +46,7 @@ public class KeyboardHandler {
     public static boolean use_haptic_feedback;
     public static boolean use_auto_capitalization;
     public static boolean show_suggestions;
-    public static boolean space_leaving_char_area;
+    public static boolean no_boundries;
     public static boolean use_tap_tap_mode = false;
     public static boolean use_zoom_mode = false;
 
@@ -64,7 +64,7 @@ public class KeyboardHandler {
 
     public static int longpress_timeout;
     public static int keyboard_width;
-    public static int keyboard_height;
+    private static int keyboard_height;
     public static float zoom_factor;
 
     public static InputHandler input_connection = new InputHandler();
@@ -110,8 +110,6 @@ public class KeyboardHandler {
         // ====== BOOLEANS ===
         use_tap_tap_mode = sharedPrefs.getBoolean(
                 TipeSettings.USE_TAP_TAP_MODE, false);
-        use_zoom_mode = sharedPrefs.getBoolean(
-                TipeSettings.USE_ZOOM_MODE, false);
 
         use_haptic_feedback = sharedPrefs.getBoolean(
                 TipeSettings.USE_HAPTIC_FEEDBACK, false);
@@ -120,8 +118,8 @@ public class KeyboardHandler {
         show_suggestions = sharedPrefs.getBoolean(
                 TipeSettings.SHOW_SUGGESTIONS, false);
         is_symbol_set = false;
-        space_leaving_char_area = sharedPrefs.getBoolean(
-                TipeSettings.SPACE_LEAVING_CHARACTER_AREA, false);
+        no_boundries = sharedPrefs.getBoolean(
+                TipeSettings.CHARACTER_AREA_NO_BOUNDS, false);
 
         // ======= ADVANCED ===
         longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(

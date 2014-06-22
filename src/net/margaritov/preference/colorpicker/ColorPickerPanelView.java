@@ -30,7 +30,7 @@ import android.view.View;
  *
  * @author Daniel Nilsson
  */
-public class ColorPickerPanelView extends View {
+class ColorPickerPanelView extends View {
 
     /**
      * The width in pixels of the border

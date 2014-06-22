@@ -47,14 +47,13 @@ public class TipeSettings extends PreferenceActivity {
     public final static String BACKGROUND_COLOR = "backgroundColor";
     public final static String CHARACTER_BG_LIGHT = "background_light";
 
-    public final static String SPACE_LEAVING_CHARACTER_AREA = "spaceLeavingCharacterArea";
+    public final static String CHARACTER_AREA_NO_BOUNDS = "charAreaNoBounds";
     public final static String USE_HAPTIC_FEEDBACK = "useHapticFeedback";
     public final static String USE_AUTO_CAPITALIZATION = "autocapitalization";
     public final static String USE_CUSTOM_SYMSET = "useCustomSymset";
     public final static String USE_CUSTOM_CHARSET = "useCustomCharset";
     public final static String SHOW_SUGGESTIONS = "showSuggestions";
     public final static String USE_TAP_TAP_MODE = "tapTapMode";
-    public final static String USE_ZOOM_MODE="zoomMode";
     public final static String ZOOM_FACTOR = "zoomFactor";
 
     public final static String KEYBOARD_HEIGHT = "keyboard_height";

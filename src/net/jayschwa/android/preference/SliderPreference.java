@@ -18,13 +18,13 @@ import com.bontric.tipeKeyboard.R;
 /**
  * @author Jay Weisskopf
  */
-public class SliderPreference extends DialogPreference {
+class SliderPreference extends DialogPreference {
 
-    protected final static int SEEKBAR_RESOLUTION = 10000;
+    private final static int SEEKBAR_RESOLUTION = 10000;
 
-    protected float mValue;
-    protected int mSeekBarValue;
-    protected CharSequence[] mSummaries;
+    private float mValue;
+    private int mSeekBarValue;
+    private CharSequence[] mSummaries;
 
     /**
      * @param context
@@ -77,7 +77,7 @@ public class SliderPreference extends DialogPreference {
         }
     }
 
-    public void setSummary(CharSequence[] summaries) {
+    void setSummary(CharSequence[] summaries) {
         mSummaries = summaries;
     }
 
@@ -100,7 +100,7 @@ public class SliderPreference extends DialogPreference {
         return mValue;
     }
 
-    public void setValue(float value) {
+    void setValue(float value) {
         value = Math.max(0, Math.min(value, 1)); // clamp to [0, 1]
         if (shouldPersist()) {
             persistFloat(value);

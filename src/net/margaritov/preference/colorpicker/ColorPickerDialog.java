@@ -184,7 +184,7 @@ public class ColorPickerDialog
         }
     }
 
-    public boolean getAlphaSliderVisible() {
+    boolean getAlphaSliderVisible() {
         return mColorPicker.getAlphaSliderVisible();
     }
 
@@ -198,7 +198,7 @@ public class ColorPickerDialog
         mListener = listener;
     }
 
-    public int getColor() {
+    int getColor() {
         return mColorPicker.getColor();
     }
 

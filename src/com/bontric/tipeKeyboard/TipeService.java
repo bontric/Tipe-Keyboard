@@ -35,10 +35,10 @@ import com.bontric.tipeSettings.TipeSettings;
 public class TipeService extends InputMethodService {
 
     static final boolean DEBUG = false;
-    Vibrator mVibrator;
-    TipeView mTipeView = null;
+    private Vibrator mVibrator;
+    private TipeView mTipeView = null;
 
-    boolean showCandidates = true;
+    private boolean showCandidates = true;
 
     public void onCreate() {
         super.onCreate();
@@ -63,10 +63,7 @@ public class TipeService extends InputMethodService {
                     R.layout.taptap_view, null);
 
         }
-        if (KeyboardHandler.use_zoom_mode) {
-            mTipeView = (ZoomView) this.getLayoutInflater().inflate(
-                    R.layout.zoom_view, null);
-        }
+
         return mTipeView;
     }
 
@@ -121,10 +118,7 @@ public class TipeService extends InputMethodService {
                     R.layout.taptap_view, null);
 
         }
-        if (KeyboardHandler.use_zoom_mode) {
-            mTipeView = (ZoomView) this.getLayoutInflater().inflate(
-                    R.layout.zoom_view, null);
-        }
+
 
         this.setInputView(mTipeView);
 
@@ -156,19 +150,19 @@ public class TipeService extends InputMethodService {
                 }
             }
         } else {
-            //Calculate if you are in a word
+            /*
+            Check where the cursor is and which part of a word it is selecting.
+            TODO Reconstruct the candidate view with more possible situations and useful behavior in mind. @Me
+             */
             if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
 
-                String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
-                int spacePos = currentInputtxt.lastIndexOf(" ") + 1;
+                String selectedWord = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
+                selectedWord = selectedWord.substring(selectedWord.lastIndexOf(" ") + 1);
+                if (showCandidates && selectedWord.length() > 0 && !Util.stringContainsSeperators(selectedWord)) {
+                    KeyboardHandler.input_connection.setComposedWord(selectedWord);
 
-
-                if (showCandidates && newSelStart - spacePos > 0) {
-                    KeyboardHandler.input_connection.setComposedWord(
-                            getCurrentInputConnection().getTextBeforeCursor(
-                                    newSelStart - spacePos, 0).toString()
-                    );
-
+                } else {
+                    KeyboardHandler.input_connection.resetComposedWord();
                 }
             }
         }

@@ -39,7 +39,6 @@ import android.view.textservice.*;
 import android.view.textservice.SpellCheckerSession.SpellCheckerSessionListener;
 import com.bontric.tipeSettings.TipeSettings;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +53,11 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     private List<String> curSuggestions;
     private RectF suggestionsArea = new RectF();
     private Paint mPaint;
-    Paint seperatorPaint = new Paint();
+    private Paint seperatorPaint = new Paint();
     private float mHeight;
     private float screenWidth;
     private SharedPreferences sharedPref;
-    int maxStrLength = 12;            //Size at which strings are shortend
+    private int maxStrLength = 12;            //Size at which strings are shortend
 
     public CandidateView(Context context) {
         super(context);
@@ -88,7 +87,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     }
 
     @SuppressLint("NewApi")
-    public void setScreenDimen() {
+    void setScreenDimen() {
         WindowManager wm = (WindowManager) ctx
                 .getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -97,7 +96,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         screenWidth = size.x;
     }
 
-    public void initView() {
+    void initView() {
 
         this.setBackgroundColor(KeyboardHandler.char_view_dark_color);
         curSuggestions = new ArrayList<String>();
@@ -105,7 +104,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    public void initPaint() {
+    void initPaint() {
 
         seperatorPaint.setStrokeWidth(5);
         mPaint = new Paint();
@@ -119,7 +118,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 
     // Prepare the first 3 Suggestions text before drawing it
-    public void prepareSuggestions() {
+    void prepareSuggestions() {
         curSuggestions.clear();
         if (mSuggestions.size() >= 3) {
             curSuggestions.add(mSuggestions.get(mSuggestions.size() - 1));
@@ -131,7 +130,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
 
     //Draw the suggestions into the view
-    public void drawSuggenstionsText(Canvas canvas) {
+    void drawSuggenstionsText(Canvas canvas) {
         prepareSuggestions();
         //Copy current Suggestions and check for oversize
         List<String> tmpSuggstStrs = new ArrayList<String>();
@@ -148,7 +147,7 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
             tmpArea.set(suggestionsArea);
             tmpArea.left = screenWidth / tmpSuggstStrs.size() * i;
             tmpArea.right = screenWidth / tmpSuggstStrs.size() * (i + 1);
-            if (i == 1) {
+            if (i == 1 && tmpSuggstStrs.size() > 2) {
                 mPaint.setColor(KeyboardHandler.highlight_font_color);
             } else {
                 mPaint.setColor(KeyboardHandler.default_font_color);
@@ -225,10 +224,9 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     }
 
 
-
     // Word suggestion from spell checking
 
-    public void initSpellCheckerSession() {
+    void initSpellCheckerSession() {
         final TextServicesManager tsm = (TextServicesManager) ctx.getSystemService(
                 Context.TEXT_SERVICES_MANAGER_SERVICE);
         //TODO make chosable
@@ -341,7 +339,8 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
     public void clear() {
         mSuggestions.clear();
-        invalidate();
+        //curSuggestions.clear();
+        this.invalidate();
     }
 
 }

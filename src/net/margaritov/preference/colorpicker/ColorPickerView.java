@@ -33,7 +33,7 @@ import android.view.View;
  *
  * @author Daniel Nilsson
  */
-public class ColorPickerView extends View {
+class ColorPickerView extends View {
 
     private final static int PANEL_SAT_VAL = 0;
     private final static int PANEL_HUE = 1;
@@ -880,7 +880,6 @@ public class ColorPickerView extends View {
             mSatShader = null;
             mHueShader = null;
             mAlphaShader = null;
-            ;
 
             requestLayout();
         }
@@ -920,7 +919,7 @@ public class ColorPickerView extends View {
      *
      * @param text Text that should be shown.
      */
-    public void setAlphaSliderText(String text) {
+    void setAlphaSliderText(String text) {
         mAlphaSliderText = text;
         invalidate();
     }

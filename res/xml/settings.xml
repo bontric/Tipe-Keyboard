@@ -11,51 +11,55 @@
                 android:entryValues="@array/lang_list_values"
                 android:key="languageCharset"
                 android:title="@string/chose_lang_title"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="tapTapMode"
-                android:title="TapTap Mode (Beta)"
-                android:summary="Double Tap instead of tab and swipe "/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="zoomMode"
-                android:title="Zoom Mode (Alpha)"
-                android:summary="Zooms in the selected area on touch (Do not activate TapTap and Zoom at the same Time!) "/>
-        <net.jayschwa.android.preference.SliderPreference
-                android:defaultValue="0.5"
-                android:dialogMessage="1-3"
-                android:key="zoomFactor"
-                android:dependency="zoomMode"
-                android:title="Zoom Factor"
-                android:summary="factor by which areas are zoomed"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="showSuggestions"
-                android:title="Display Suggestions (Beta)"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="spaceLeavingCharacterArea"
-                android:title="Fast Space"
-                android:summary="Type space when swiping off the Character Area"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="useHapticFeedback"
-                android:title="Vibrate on touch"/>
-        <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="autocapitalization"
-                android:summary="Capital Letters after &apos;.&apos;"
-                android:title="Automatic capitalization"/>
+        <PreferenceScreen android:title="Behavior">
 
-        <net.jayschwa.android.preference.SliderPreference
-                android:defaultValue="0.5"
-                android:dialogMessage="250-750ms"
-                android:key="longpress_timeout"
-                android:title="Long press timeout"/>
+            <net.jayschwa.android.preference.SliderPreference
+                    android:defaultValue="0.5"
+                    android:dialogMessage="1-3"
+                    android:key="zoomFactor"
+                    android:title="Zoom Factor"
+                    android:summary="factor by which areas are zoomed"/>
+            <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="tapTapMode"
+                    android:title="TapTap Mode (Beta)"
+                    android:summary="Double Tap instead of tab and swipe "/>
+
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="showSuggestions"
+                    android:title="Display Suggestions (Beta)"/>
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="charAreaNoBounds"
+                    android:title="No Boundries"
+                    android:summary="Type Character even if you swiped off the character area"/>
+            <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="useHapticFeedback"
+                    android:title="Vibrate on touch"/>
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="autocapitalization"
+                    android:summary="Capital Letters after &apos;.&apos;"
+                    android:title="Automatic capitalization"/>
+
+            <net.jayschwa.android.preference.SliderPreference
+                    android:defaultValue="0.5"
+                    android:dialogMessage="250-750ms"
+                    android:key="longpress_timeout"
+                    android:title="Long press timeout"/>
+        </PreferenceScreen>
 
 
 
-        <PreferenceScreen android:title="Custom Colors">
+
+        <PreferenceScreen android:title="Appearance">
+            <net.jayschwa.android.preference.SliderPreference
+                    android:defaultValue="0.4"
+                    android:dialogMessage="30-60% Screen height"
+                    android:key="keyboard_height"
+                    android:title="Keyboard Height"/>
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                     alphaSlider="false"
                     android:defaultValue="@color/normTextColor"
@@ -86,11 +90,6 @@
             android:key="others"
             android:title="Sonstiges">
         <PreferenceScreen android:title="Extended Settings">
-            <net.jayschwa.android.preference.SliderPreference
-                    android:defaultValue="0.4"
-                    android:dialogMessage="30-60% Screen height"
-                    android:key="keyboard_height"
-                    android:title="Keyboard Height"/>
 
             <CheckBoxPreference
                     android:defaultValue="false"

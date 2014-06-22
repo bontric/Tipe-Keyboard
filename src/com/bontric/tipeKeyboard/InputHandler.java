@@ -21,12 +21,9 @@ limitations under the License.
 package com.bontric.tipeKeyboard;
 
 import android.inputmethodservice.InputMethodService;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
-
-import java.security.Key;
 
 public class InputHandler {
 
@@ -47,9 +44,22 @@ public class InputHandler {
 
     public void sendKey(char c) {
         smallVibrate();
-        if(KeyboardHandler.word_separators.contains(c+"")){
+        mTipeService.getCurrentInputConnection().commitText("" + c, 1);
+        if ((c == '.' || c == '!' || c == '?')) {
 
+            if (KeyboardHandler.use_auto_capitalization) {
+                KeyboardHandler.shift_state = true;
+                KeyboardHandler.handleShift();
+            }
+            resetComposedWord();
+            return;
+        } else {
+            if (!KeyboardHandler.word_separators.contains("" + c)) {
+                KeyboardHandler.shift_state = false;
+                KeyboardHandler.handleShift();
+            }
         }
+
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
@@ -57,31 +67,21 @@ public class InputHandler {
         }
 
 
-        mTipeService.getCurrentInputConnection().commitText("" + c, 1);
-
-		/*
-         * Handle capitalization okay this is hardcoded.. but i want to test
-		 * this feature fore now :)
-		 */
-        if (KeyboardHandler.use_auto_capitalization
-                && (c == '.' || c == '!' || c == '?')) {
-            KeyboardHandler.shift_state = true;
-            KeyboardHandler.handleShift();
-        } else {
-            if (!KeyboardHandler.word_separators.contains("" + c)) {
-                KeyboardHandler.shift_state = false;
-                KeyboardHandler.handleShift();
-            }
-        }
     }
 
     public void handleSpace() {
+        Log.d("main","ping");
         smallVibrate();
         if (mCandidateView.count() >= 3) {
             mCandidateView.pickSuggestions(1);
         } else {
             sendKey((char) 32);
         }
+        resetComposedWord();
+    }
+
+    public void handleSpaceOnly() {
+        sendKey((char) 32);
         resetComposedWord();
     }
 
@@ -127,7 +127,7 @@ public class InputHandler {
     }
 
 	/*------------------------------------------------------------
-	 *	From here functions for candidate view
+     *	From here functions for candidate view
 	 *	@Jakob Frick
 	 *------------------------------------------------------------*/
 
@@ -145,6 +145,7 @@ public class InputHandler {
     public void resetComposedWord() {
         composedWord = "";
         if (mCandidateView != null) {
+            Log.d("main","pong");
             mCandidateView.clear();
             mCandidateView.setVisibility(mCandidateView.INVISIBLE);
         }
@@ -169,15 +170,12 @@ public class InputHandler {
     /*
      * This could be somewhere else :)
      */
-    public void smallVibrate() {
+    void smallVibrate() {
         if (KeyboardHandler.use_haptic_feedback) {
             mTipeService.getCurVibrator().vibrate(30);
         }
     }
 
 
-    public void handleSpaceOnly() {
-        sendKey((char) 32);
-        resetComposedWord();
-    }
+
 }

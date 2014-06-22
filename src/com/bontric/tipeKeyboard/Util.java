@@ -28,7 +28,7 @@ import android.view.MotionEvent;
 /**
  * @author koogle Class for some usefull definitions used across classes
  */
-public class Util {
+class Util {
 
     public static PointF getTextCenterToDraw(String text, RectF region,
                                              Paint paint) {
@@ -52,6 +52,16 @@ public class Util {
             medianPoint.y = (medianPoint.y + event.getY(c)) / 2;
         }
         return medianPoint;
+    }
+
+    public static boolean stringContainsSeperators(String str){
+            for(char s : KeyboardHandler.word_separators.toCharArray() ){
+                if(str.contains(s+"")){
+                    return true;
+                }
+            }
+        return false;
+
     }
 
 }

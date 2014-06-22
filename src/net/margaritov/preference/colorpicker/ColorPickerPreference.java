@@ -42,8 +42,8 @@ public class ColorPickerPreference
         Preference.OnPreferenceClickListener,
         ColorPickerDialog.OnColorChangedListener {
 
-    View mView;
-    ColorPickerDialog mDialog;
+    private View mView;
+    private ColorPickerDialog mDialog;
     private int mValue = Color.BLACK;
     private float mDensity = 0;
     private boolean mAlphaSliderEnabled = false;
@@ -152,7 +152,7 @@ public class ColorPickerPreference
         return false;
     }
 
-    protected void showDialog(Bundle state) {
+    void showDialog(Bundle state) {
         mDialog = new ColorPickerDialog(getContext(), mValue);
         mDialog.setOnColorChangedListener(this);
         if (mAlphaSliderEnabled) {
