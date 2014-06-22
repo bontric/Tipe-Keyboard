@@ -157,7 +157,7 @@ public class TipeService extends InputMethodService {
             }
         } else {
             //Calculate if you are in a word
-            if (getCurrentInputConnection() != null) {
+            if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
 
                 String currentInputtxt = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
                 int spacePos = currentInputtxt.lastIndexOf(" ") + 1;
