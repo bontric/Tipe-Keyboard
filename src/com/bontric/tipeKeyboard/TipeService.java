@@ -147,25 +147,30 @@ public class TipeService extends InputMethodService {
                 CharSequence cs = getCurrentInputConnection().getSelectedText(0);
                 if (cs == null) return;
                 String s = cs.toString();
-                Log.d("selection", s);
-                if (s != null) {
-                    KeyboardHandler.input_connection.setComposedWord(s);
-                }
+                KeyboardHandler.input_connection.setComposedWord(s);
             }
         } else {
             /*
             Check where the cursor is and which part of a word it is selecting.
             TODO Reconstruct the candidates with more possible situations and useful behavior in mind. @Me
+            This should probably make a suggestion 4 the whole word not only for the characters behind the selection
              */
 
             if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
-                CharSequence cs = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0);
-                if (cs == null) return;
-                String selectedWord = cs.toString();
-                int lastIndex = Util.getIndexOfLastSeperator(selectedWord);
+                CharSequence csBefore = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0);
+                CharSequence csAfter = getCurrentInputConnection().getTextAfterCursor(newSelStart, 0);
+                if(csAfter == null || csAfter == null) return;
+                /*int lastIndex = Util.getIndexOfLastSeperator(selectedWord);
                 selectedWord = selectedWord.substring(lastIndex + 1);
                 if (showCandidates && selectedWord.length() > 0) {
                     KeyboardHandler.input_connection.setComposedWord(selectedWord);
+
+                } else {
+                    KeyboardHandler.input_connection.resetComposedWord();
+                }*/
+                String selected = Util.getWordBetweenSeperators(csBefore.toString(),csAfter.toString());
+                if (showCandidates && selected != null) {
+                    KeyboardHandler.input_connection.setComposedWord(selected);
 
                 } else {
                     KeyboardHandler.input_connection.resetComposedWord();

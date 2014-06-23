@@ -64,20 +64,34 @@ class Util {
 
     }
 
-    public static int getIndexOfLastSeperator(String s) {
-        if (s.length() == 0) {
-            return -1;
-        }
-        int lastIndex = 0;
+    /**
+     * Returns the word surrounding the cursor by checking for word seperators
+     *
+     * @param s         string to check
+     * @param cursorPos current cursor position
+     * @return selected word
+     */
+    public static String getWordBetweenSeperators(String beforeSel, String afterSel) {
+        //if (beforeSel.length() == 0) {
+        //    return null;
+        //}
+
+        int beginIndex = -1;
+        int endIndex = afterSel.length();
+
         for (char c : KeyboardHandler.word_separators.toCharArray()) {
-            if (s.contains(c + "") && s.lastIndexOf(c) > lastIndex) {
-                lastIndex = s.lastIndexOf(c);
+            if (beforeSel.length() > 0 && beforeSel.contains(c + "") && beforeSel.lastIndexOf(c) > beginIndex) {
+                beginIndex = beforeSel.lastIndexOf(c);
+            }
+            if (afterSel.length() > 0 && afterSel.contains(c + "") && afterSel.indexOf(c) < endIndex) {
+                endIndex = afterSel.indexOf(c);
             }
         }
-        if (!KeyboardHandler.word_separators.contains(s.charAt(lastIndex) + "")) {
-            return -1;
-        }
-        return lastIndex;
+        String a = beforeSel.substring(beginIndex+1);
+        String b = afterSel.substring(0, endIndex);
+
+        return a + b;
+
     }
 
 }
