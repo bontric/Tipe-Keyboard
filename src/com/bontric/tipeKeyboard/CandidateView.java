@@ -57,7 +57,6 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     private float mHeight;
     private float screenWidth;
     private SharedPreferences sharedPref;
-    private int maxStrLength = 12;            //Size at which strings are shortend
 
     public CandidateView(Context context) {
         super(context);
@@ -132,6 +131,8 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
     //Draw the suggestions into the view
     void drawSuggenstionsText(Canvas canvas) {
         prepareSuggestions();
+
+        int maxStrLength = 12;
         //Copy current Suggestions and check for oversize
         List<String> tmpSuggstStrs = new ArrayList<String>();
         for (String singleStr : curSuggestions) {
@@ -160,19 +161,23 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
+        seperatorPaint.setColor(KeyboardHandler.default_font_color);
+        canvas.drawLine(2, getHeight(), screenWidth, getHeight(), seperatorPaint);
         if (mSuggestions == null || mSuggestions.size() == 0) return;
 
-
-        seperatorPaint.setColor(KeyboardHandler.highlight_font_color);
-        canvas.drawLine(getWidth() / 3f, 0, getWidth() / 3f, getHeight(), seperatorPaint);
-        canvas.drawLine(2 * getWidth() / 3f, 0, 2 * getWidth() / 3f, getHeight(), seperatorPaint);
-        seperatorPaint.setColor(KeyboardHandler.default_font_color);
-        canvas.drawLine(0, getHeight(), screenWidth, getHeight(), seperatorPaint);
-        //No suggestions nothing to do
         suggestionsArea.set(0, (int) (mHeight - mPaint.getTextSize() * 2),
                 screenWidth, (int) mHeight);
+
         drawSuggenstionsText(canvas);
+        if (curSuggestions.size() > 2) {
+            seperatorPaint.setColor(KeyboardHandler.highlight_font_color);
+            canvas.drawLine(getWidth() / 3f, 0, getWidth() / 3f, getHeight(), seperatorPaint);
+            canvas.drawLine(2 * getWidth() / 3f, 0, 2 * getWidth() / 3f, getHeight(), seperatorPaint);
+        }
+
+        seperatorPaint.setColor(KeyboardHandler.default_font_color);
+        canvas.drawLine(0, getHeight(), screenWidth, getHeight(), seperatorPaint);
+
     }
 
     //Picks a suggestion on touch
@@ -285,7 +290,6 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         for (int i = 0; i < arg0.length; ++i) {
             for (int c = 0; c < arg0[0].getSuggestionsCount(); c++) {
                 mSuggestions.add(arg0[0].getSuggestionAt(c));
-                //		Log.d("TAG sentence suggests", mSuggestions.get(mSuggestions.size()-1));
             }
         }
         invalidate();
@@ -339,7 +343,6 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
 
     public void clear() {
         mSuggestions.clear();
-        //curSuggestions.clear();
         this.invalidate();
     }
 

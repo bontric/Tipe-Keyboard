@@ -35,7 +35,7 @@ class Util {
         //well this thing is bs
         Rect textBounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), textBounds);
-        float x = region.centerX() ;//- textBounds.width() * 0.4f;
+        float x = region.centerX();//- textBounds.width() * 0.4f;
         float y = region.centerY() + textBounds.height() * 0.4f;
         return new PointF(x, y);
     }
@@ -54,14 +54,30 @@ class Util {
         return medianPoint;
     }
 
-    public static boolean stringContainsSeperators(String str){
-            for(char s : KeyboardHandler.word_separators.toCharArray() ){
-                if(str.contains(s+"")){
-                    return true;
-                }
+    public static boolean stringContainsSeperators(String str) {
+        for (char s : KeyboardHandler.word_separators.toCharArray()) {
+            if (str.contains(s + "")) {
+                return true;
             }
+        }
         return false;
 
+    }
+
+    public static int getIndexOfLastSeperator(String s) {
+        if (s.length() == 0) {
+            return -1;
+        }
+        int lastIndex = 0;
+        for (char c : KeyboardHandler.word_separators.toCharArray()) {
+            if (s.contains(c + "") && s.lastIndexOf(c) > lastIndex) {
+                lastIndex = s.lastIndexOf(c);
+            }
+        }
+        if (!KeyboardHandler.word_separators.contains(s.charAt(lastIndex) + "")) {
+            return -1;
+        }
+        return lastIndex;
     }
 
 }

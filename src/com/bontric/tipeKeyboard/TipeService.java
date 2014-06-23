@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import com.bontric.tipeSettings.TipeSettings;
 
 public class TipeService extends InputMethodService {
@@ -137,13 +138,15 @@ public class TipeService extends InputMethodService {
                                   int newSelStart, int newSelEnd, int candidatesStart,
                                   int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-        if (getCurrentInputConnection().getSelectedText(0) == "") {
+        if (getCurrentInputConnection() == null || getCurrentInputConnection().getSelectedText(0) == "") {
             return;
         }
         // Check if text was selected
         if (newSelEnd - newSelStart > 0) {
             if (showCandidates) {
-                String s = getCurrentInputConnection().getSelectedText(0).toString();
+                CharSequence cs = getCurrentInputConnection().getSelectedText(0);
+                if (cs == null) return;
+                String s = cs.toString();
                 Log.d("selection", s);
                 if (s != null) {
                     KeyboardHandler.input_connection.setComposedWord(s);
@@ -152,13 +155,16 @@ public class TipeService extends InputMethodService {
         } else {
             /*
             Check where the cursor is and which part of a word it is selecting.
-            TODO Reconstruct the candidate view with more possible situations and useful behavior in mind. @Me
+            TODO Reconstruct the candidates with more possible situations and useful behavior in mind. @Me
              */
-            if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
 
-                String selectedWord = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0).toString();
-                selectedWord = selectedWord.substring(selectedWord.lastIndexOf(" ") + 1);
-                if (showCandidates && selectedWord.length() > 0 && !Util.stringContainsSeperators(selectedWord)) {
+            if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
+                CharSequence cs = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0);
+                if (cs == null) return;
+                String selectedWord = cs.toString();
+                int lastIndex = Util.getIndexOfLastSeperator(selectedWord);
+                selectedWord = selectedWord.substring(lastIndex + 1);
+                if (showCandidates && selectedWord.length() > 0) {
                     KeyboardHandler.input_connection.setComposedWord(selectedWord);
 
                 } else {
@@ -173,6 +179,18 @@ public class TipeService extends InputMethodService {
     public View onCreateCandidatesView() {
         mTipeView.initKeyboardHandler(this);
         return KeyboardHandler.input_connection.initCandidateView(this);
+    }
+
+    /*
+     * Make sure keyboard is not covering any content. Ref.:
+     * https://groups.google.com/forum/#!topic/android-developers/yp7c7zsUSlo
+     */
+    @Override
+    public void onComputeInsets(InputMethodService.Insets outInsets) {
+        super.onComputeInsets(outInsets);
+        if (!isFullscreenMode()) {
+            outInsets.contentTopInsets = outInsets.visibleTopInsets;
+        }
     }
 
 

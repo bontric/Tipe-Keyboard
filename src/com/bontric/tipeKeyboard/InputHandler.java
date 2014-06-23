@@ -63,7 +63,7 @@ public class InputHandler {
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
-            mCandidateView.setVisibility(mCandidateView.VISIBLE);
+            mCandidateView.setVisibility(CandidateView.VISIBLE);
         }
 
 
@@ -92,7 +92,7 @@ public class InputHandler {
         if (isComposing) {
             if (composedWord.length() <= 1) {
                 composedWord = "";
-                mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+                //mCandidateView.setVisibility(CandidateView.INVISIBLE);
             } else {
                 composedWord = composedWord.substring(0, composedWord.length() - 1);
                 mCandidateView.getSuggestionsForWord(composedWord);
@@ -145,25 +145,22 @@ public class InputHandler {
     public void resetComposedWord() {
         composedWord = "";
         if (mCandidateView != null) {
-            Log.d("main","pong");
             mCandidateView.clear();
-            mCandidateView.setVisibility(mCandidateView.INVISIBLE);
+           // mCandidateView.setVisibility(CandidateView.INVISIBLE);
         }
     }
 
 
     public void setComposedWord(String soFarComposed) {
         composedWord = soFarComposed;
-        //  Log.d("setComposedWord", composedWord);
         mCandidateView.getSuggestionsForWord(composedWord);
-        mCandidateView.setVisibility(mCandidateView.VISIBLE);
+        mCandidateView.setVisibility(CandidateView.VISIBLE);
     }
 
     public void getSuggestionFromCandView(String suggestion) {
         InputConnection ic = mTipeService.getCurrentInputConnection();
-        // Log.d("getSuggestionFromCand", composedWord);
         ic.deleteSurroundingText(composedWord.length(), 0);
-        ic.commitText(suggestion + (char) 32, suggestion.length() + 2);
+        ic.commitText(suggestion + (char) 32, suggestion.length() + 1);
         resetComposedWord();
     }
 
