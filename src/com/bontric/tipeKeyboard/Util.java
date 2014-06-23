@@ -67,8 +67,8 @@ class Util {
     /**
      * Returns the word surrounding the cursor by checking for word seperators
      *
-     * @param s         string to check
-     * @param cursorPos current cursor position
+     * @param beforeSel         string before cursor
+     * @param afterSel current string after cursor
      * @return selected word
      */
     public static String getWordBetweenSeperators(String beforeSel, String afterSel) {
