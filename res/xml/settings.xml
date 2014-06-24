@@ -20,15 +20,15 @@
                     android:title="Zoom Factor"
                     android:summary="factor by which areas are zoomed"/>
             <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="tapTapMode"
-                    android:title="TapTap Mode (Beta)"
-                    android:summary="Double Tap instead of tab and swipe "/>
-
-            <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="showSuggestions"
                     android:title="Display Suggestions (Beta)"/>
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:dependency="showSuggestions"
+                    android:key="autoCorrection"
+                    android:title="Auto correction"
+                    android:summary="Automatically select the highlighted suggestion when pressing space. A long press on space will not select the suggestion"/>
             <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="charAreaNoBounds"
@@ -49,9 +49,12 @@
                     android:dialogMessage="250-750ms"
                     android:key="longpress_timeout"
                     android:title="Long press timeout"/>
+            <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="tapTapMode"
+                    android:title="TapTap Mode (Beta)"
+                    android:summary="Double Tap instead of tab and swipe "/>
         </PreferenceScreen>
-
-
 
 
         <PreferenceScreen android:title="Appearance">
@@ -66,7 +69,7 @@
                     android:key="normFontColor"
                     android:summary="@string/fontColor_summary"
                     android:title="@string/fontColor_title"/>
-           <net.margaritov.preference.colorpicker.ColorPickerPreference
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
                     alphaSlider="false"
                     android:defaultValue="@color/highTextColor"
                     android:key="highFontColor"

@@ -43,12 +43,13 @@ class KeyboardHandler {
     public static boolean charset_changed = false;
     public static boolean shift_state = true;
     public static boolean is_symbol_set = false;
-    public static boolean use_haptic_feedback;
-    public static boolean use_auto_capitalization;
-    public static boolean show_suggestions;
-    public static boolean no_boundries;
+    public static boolean use_haptic_feedback = false;
+    public static boolean use_auto_capitalization = true;
+    public static boolean show_suggestions = true;
+    public static boolean no_boundries = true;
     public static boolean use_tap_tap_mode = false;
     public static boolean use_zoom_mode = false;
+    public static boolean use_auto_correction = true;
 
 
     public static String symbol_set;
@@ -114,12 +115,14 @@ class KeyboardHandler {
         use_haptic_feedback = sharedPrefs.getBoolean(
                 TipeSettings.USE_HAPTIC_FEEDBACK, false);
         use_auto_capitalization = sharedPrefs.getBoolean(
-                TipeSettings.USE_AUTO_CAPITALIZATION, false);
+                TipeSettings.USE_AUTO_CAPITALIZATION, true);
         show_suggestions = sharedPrefs.getBoolean(
-                TipeSettings.SHOW_SUGGESTIONS, false);
+                TipeSettings.SHOW_SUGGESTIONS, true);
         is_symbol_set = false;
         no_boundries = sharedPrefs.getBoolean(
-                TipeSettings.CHARACTER_AREA_NO_BOUNDS, false);
+                TipeSettings.CHARACTER_AREA_NO_BOUNDS, true);
+
+        use_auto_correction = sharedPrefs.getBoolean(TipeSettings.AUTO_CORRECTION,true);
 
         // ======= ADVANCED ===
         longpress_timeout = (int) (250 + 500 * sharedPrefs.getFloat(

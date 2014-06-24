@@ -63,16 +63,15 @@ public class InputHandler {
         if (isComposing) {
             composedWord += c;
             mCandidateView.getSuggestionsForWord(composedWord);
-            mCandidateView.setVisibility(CandidateView.VISIBLE);
+            // mCandidateView.setVisibility(CandidateView.VISIBLE);
         }
 
 
     }
 
     public void handleSpace() {
-        Log.d("main","ping");
         smallVibrate();
-        if (mCandidateView.count() >= 3) {
+        if (mCandidateView.count() >= 3 && !composedWord.equals(mCandidateView.getSuggestionFromIndex(1))) {
             mCandidateView.pickSuggestions(1);
         } else {
             sendKey((char) 32);
@@ -146,7 +145,7 @@ public class InputHandler {
         composedWord = "";
         if (mCandidateView != null) {
             mCandidateView.clear();
-           // mCandidateView.setVisibility(CandidateView.INVISIBLE);
+            // mCandidateView.setVisibility(CandidateView.INVISIBLE);
         }
     }
 
@@ -157,11 +156,21 @@ public class InputHandler {
         mCandidateView.setVisibility(CandidateView.VISIBLE);
     }
 
+
+    public int[] beforeAfterLength = new int[2];
+
     public void getSuggestionFromCandView(String suggestion) {
         InputConnection ic = mTipeService.getCurrentInputConnection();
-        ic.deleteSurroundingText(composedWord.length(), 0);
-        ic.commitText(suggestion + (char) 32, suggestion.length() + 1);
+        CharSequence s = ic.getTextAfterCursor(beforeAfterLength[1] + 1, 0);
+        ic.deleteSurroundingText(beforeAfterLength[0], beforeAfterLength[1]);
+        if (s.length() > 0 && KeyboardHandler.word_separators.contains(s.charAt(s.length() - 1) + "")) {
+            ic.commitText(suggestion, suggestion.length() + 1);
+
+        } else {
+            ic.commitText(suggestion + (char) 32, suggestion.length() + 1);
+        }
         resetComposedWord();
+
     }
 
     /*
@@ -172,7 +181,6 @@ public class InputHandler {
             mTipeService.getCurVibrator().vibrate(30);
         }
     }
-
 
 
 }

@@ -153,22 +153,16 @@ public class TipeService extends InputMethodService {
             /*
             Check where the cursor is and which part of a word it is selecting.
             TODO Reconstruct the candidates with more possible situations and useful behavior in mind. @Me
-            This should probably make a suggestion 4 the whole word not only for the characters behind the selection
              */
 
-            if (getCurrentInputConnection() != null && getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0) != null) {
+            if (getCurrentInputConnection() != null) {
                 CharSequence csBefore = getCurrentInputConnection().getTextBeforeCursor(newSelStart, 0);
-                CharSequence csAfter = getCurrentInputConnection().getTextAfterCursor(newSelStart, 0);
+                CharSequence csAfter = getCurrentInputConnection().getTextAfterCursor(100, 0);// sorry for this, but this is temporary until I fix the whole thing
                 if(csAfter == null || csAfter == null) return;
-                /*int lastIndex = Util.getIndexOfLastSeperator(selectedWord);
-                selectedWord = selectedWord.substring(lastIndex + 1);
-                if (showCandidates && selectedWord.length() > 0) {
-                    KeyboardHandler.input_connection.setComposedWord(selectedWord);
 
-                } else {
-                    KeyboardHandler.input_connection.resetComposedWord();
-                }*/
                 String selected = Util.getWordBetweenSeperators(csBefore.toString(),csAfter.toString());
+                KeyboardHandler.input_connection.beforeAfterLength = Util.getBeforeAfterLength(csBefore.toString(),csAfter.toString());
+
                 if (showCandidates && selected != null) {
                     KeyboardHandler.input_connection.setComposedWord(selected);
 

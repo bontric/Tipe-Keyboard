@@ -67,14 +67,11 @@ class Util {
     /**
      * Returns the word surrounding the cursor by checking for word seperators
      *
-     * @param beforeSel         string before cursor
-     * @param afterSel current string after cursor
+     * @param beforeSel string before cursor
+     * @param afterSel  current string after cursor
      * @return selected word
      */
     public static String getWordBetweenSeperators(String beforeSel, String afterSel) {
-        //if (beforeSel.length() == 0) {
-        //    return null;
-        //}
 
         int beginIndex = -1;
         int endIndex = afterSel.length();
@@ -87,11 +84,38 @@ class Util {
                 endIndex = afterSel.indexOf(c);
             }
         }
-        String a = beforeSel.substring(beginIndex+1);
+        String a = beforeSel.substring(beginIndex + 1);
         String b = afterSel.substring(0, endIndex);
 
         return a + b;
 
     }
 
+
+    public static int[] getBeforeAfterLength(String beforeSel, String afterSel) {
+        /*
+         * TODO this needs proper documentation
+          *
+         */
+        int[] beforeAfterLength = new int[2];
+        beforeAfterLength[0] = -1;
+        beforeAfterLength[1] = afterSel.length();
+        for (char c : KeyboardHandler.word_separators.toCharArray()) {
+            if (beforeSel.length() > 0 && beforeSel.contains(c + "") && beforeSel.lastIndexOf(c) > beforeAfterLength[0]) {
+                beforeAfterLength[0] = beforeSel.lastIndexOf(c);
+            }
+            if (afterSel.length() > 0 && afterSel.contains(c + "") && afterSel.indexOf(c) < beforeAfterLength[1]) {
+                beforeAfterLength[1] = afterSel.indexOf(c);
+            }
+        }
+
+        beforeAfterLength[0] = (beforeSel.length() - beforeAfterLength[0]);
+        if (beforeAfterLength[0] > 0) {
+            beforeAfterLength[0]--;
+        }
+        if (beforeAfterLength[0] == 0) {
+            beforeAfterLength[0]++;
+        }
+        return beforeAfterLength;
+    }
 }

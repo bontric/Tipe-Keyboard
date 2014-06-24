@@ -228,6 +228,13 @@ public class CandidateView extends View implements SpellCheckerSessionListener {
         return true;
     }
 
+    public String getSuggestionFromIndex(int i) {
+        if (i < curSuggestions.size()) {
+            return curSuggestions.get(i);
+        }
+        return null;
+    }
+
 
     // Word suggestion from spell checking
 
