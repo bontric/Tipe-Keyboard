@@ -14,9 +14,9 @@
 
     </string-array>
     <string-array name="lang_list_values">
-        <item>qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-</item>
-        <item>qweasdrtufghiopjklzxc\';[vbn@!?my],.-</item>
-        <item>qweasdrtufghiopjklyxcäöüvbn@!?mzß,.-</item>
+        <item>qweasdrtufghiopjklzxc\';$vbn@!?my&amp;-,.</item>
+        <item>qweasdrtufghiopjklzxc\';$vbn@!?my&amp;-,.</item>
+        <item>qweasdrtufghiopjklyxcäöüvbn@!?mzß-,.</item>
         <item>edxjq.zstyßh?fa@gäbp,iw-öcvonküul!mr</item>
         <item>123qwe4567rtzu890iopasdyxcfghjvbnmklößüä</item>
         <item>123qwe4567rtyu890iopasdzxcfghjvbnmkl;,./</item>
