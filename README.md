@@ -27,7 +27,5 @@ When using Tipe you should issue any idea you have to improve the concept.
 When holding down one buton the characters inside that button get distributed on all the buttons. While still holding down you swipe to the character you want to type. 
 When using this keyboard you should learn the *moves* pretty fast. As soon as you know where single characters are placed you'll be able to type easily as fast as with a normal softkeyboard. The biggest differnece is, due to the bigger buttons, that you'll be able to type with percision. 
 
-## Join the devteam
-We are grateful for any help. Just send us an email and we'll answer as fast as we can. You don't need to be a professional since we ourselfes are rather newbies to android developing.
 
 ##About
