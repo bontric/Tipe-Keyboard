@@ -1,6 +1,5 @@
 #Tipe Keyboard
-###Join the Beta!
-https://plus.google.com/communities/107656278694546527715
+**This Project is not active anymore**
 ##Copyright
 ####Copyright  2014 Benedikt Wieder, Jakob Frick
 
@@ -26,6 +25,3 @@ When using Tipe you should issue any idea you have to improve the concept.
 ## How to use
 When holding down one buton the characters inside that button get distributed on all the buttons. While still holding down you swipe to the character you want to type. 
 When using this keyboard you should learn the *moves* pretty fast. As soon as you know where single characters are placed you'll be able to type easily as fast as with a normal softkeyboard. The biggest differnece is, due to the bigger buttons, that you'll be able to type with percision. 
-
-
-##About
